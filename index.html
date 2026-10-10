@@ -6,15 +6,7 @@
 <title>FORTECH CONTROL</title>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-/* =========================================================
-   RESET
-   ========================================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
   --accent-1: #b46cff;
@@ -28,18 +20,25 @@
 }
 
 html, body {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-family: 'Inter', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+  width: 100%; min-height: 100vh; overflow-x: hidden;
+  font-family: 'Inter','Segoe UI','Roboto',system-ui,sans-serif;
   color: var(--text);
   background: #06000d;
   -webkit-font-smoothing: antialiased;
 }
 
 /* =========================================================
-   BACKGROUND VIDEO + BLOBS
+   BACKGROUND — VIDEO + FALLBACK GRADIENT
    ========================================================= */
+#bgLayer {
+  position: fixed; inset: 0;
+  z-index: -4;
+  background:
+    radial-gradient(circle at 20% 20%, #3a0070 0%, transparent 55%),
+    radial-gradient(circle at 80% 80%, #2a0050 0%, transparent 55%),
+    linear-gradient(135deg, #1a0033 0%, #0a0014 50%, #1a0033 100%);
+}
+
 #bgVideo {
   position: fixed;
   inset: 0;
@@ -48,13 +47,15 @@ html, body {
   object-fit: cover;
   z-index: -3;
   filter: brightness(0.5) saturate(1.2);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
 }
 
+#bgVideo.loaded { opacity: 1; }
+
 .bg-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background:
     radial-gradient(circle at 15% 15%, rgba(140,60,230,0.35), transparent 55%),
     radial-gradient(circle at 85% 85%, rgba(90,20,180,0.35), transparent 55%),
@@ -62,60 +63,43 @@ html, body {
 }
 
 .blob {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(90px);
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.55;
+  position: fixed; border-radius: 50%;
+  filter: blur(90px); z-index: -1;
+  pointer-events: none; opacity: 0.55;
   will-change: transform;
 }
 .blob-1 {
-  width: 45vw; height: 45vw;
-  max-width: 500px; max-height: 500px;
+  width: 45vw; height: 45vw; max-width: 500px; max-height: 500px;
   background: radial-gradient(circle, #7a2bd6, transparent 70%);
   top: -10%; left: -10%;
   animation: float1 18s ease-in-out infinite;
 }
 .blob-2 {
-  width: 40vw; height: 40vw;
-  max-width: 460px; max-height: 460px;
+  width: 40vw; height: 40vw; max-width: 460px; max-height: 460px;
   background: radial-gradient(circle, #b46cff, transparent 70%);
   bottom: -10%; right: -10%;
   animation: float2 22s ease-in-out infinite;
 }
 .blob-3 {
-  width: 30vw; height: 30vw;
-  max-width: 340px; max-height: 340px;
+  width: 30vw; height: 30vw; max-width: 340px; max-height: 340px;
   background: radial-gradient(circle, #4a0f96, transparent 70%);
   top: 40%; left: 50%;
   animation: float3 26s ease-in-out infinite;
 }
 
-@keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.1); }
-}
-@keyframes float2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-60px, -40px) scale(1.15); }
-}
-@keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-40px, 60px) scale(0.9); }
-}
+@keyframes float1 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(60px,40px) scale(1.1);} }
+@keyframes float2 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-60px,-40px) scale(1.15);} }
+@keyframes float3 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-40px,60px) scale(0.9);} }
 
 /* =========================================================
    LIQUID GLASS
    ========================================================= */
 .glass {
   position: relative;
-  background: linear-gradient(
-    135deg,
+  background: linear-gradient(135deg,
     rgba(255,255,255,0.10) 0%,
     rgba(255,255,255,0.025) 45%,
-    rgba(255,255,255,0.06) 100%
-  );
+    rgba(255,255,255,0.06) 100%);
   backdrop-filter: blur(26px) saturate(180%) contrast(110%);
   -webkit-backdrop-filter: blur(26px) saturate(180%) contrast(110%);
   border-radius: 24px;
@@ -128,645 +112,372 @@ html, body {
   overflow: hidden;
   isolation: isolate;
 }
-
 .glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit; padding: 1px;
+  background: linear-gradient(135deg,
     rgba(255,255,255,0.45) 0%,
     rgba(180,108,255,0.35) 30%,
     rgba(255,255,255,0.05) 60%,
-    rgba(180,108,255,0.25) 100%
-  );
+    rgba(180,108,255,0.25) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  pointer-events: none;
-  z-index: 2;
+  pointer-events: none; z-index: 2;
 }
-
 .glass::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 55%;
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 55%;
   background: linear-gradient(180deg,
     rgba(255,255,255,0.08) 0%,
     rgba(255,255,255,0.02) 60%,
     transparent 100%);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
+  border-radius: inherit; pointer-events: none; z-index: 1;
 }
-
-.glass > * {
-  position: relative;
-  z-index: 3;
-}
+.glass > * { position: relative; z-index: 3; }
 
 /* =========================================================
-   APP SHELL
+   APP
    ========================================================= */
 .app {
-  min-height: 100vh;
-  padding: 20px;
-  max-width: 1500px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  min-height: 100vh; padding: 20px;
+  max-width: 1500px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 18px;
 }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* HEADER */
 header.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 22px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 22px; flex-wrap: wrap;
 }
-
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 900;
-  font-size: clamp(16px, 2.2vw, 22px);
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 900; font-size: clamp(16px,2.2vw,22px);
   letter-spacing: 2.5px;
 }
-
 .brand-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+  width: 42px; height: 42px; border-radius: 14px;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-  display: grid;
-  place-items: center;
-  box-shadow:
-    0 6px 22px rgba(140,60,230,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  display: grid; place-items: center;
+  box-shadow: 0 6px 22px rgba(140,60,230,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.3);
 }
-
-.brand-badge svg {
-  width: 22px;
-  height: 22px;
-  color: #fff;
-  stroke-width: 2.2;
-}
-
+.brand-badge svg { width: 22px; height: 22px; color: #fff; stroke-width: 2.2; }
 .brand-text {
   background: linear-gradient(135deg, #fff 0%, #d3b8ff 50%, #fff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 30px rgba(180,108,255,0.4);
 }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+.header-right { display: flex; align-items: center; gap: 10px; }
 .status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
-  font-size: 11.5px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-size: 11.5px; letter-spacing: 1px;
+  text-transform: uppercase; font-weight: 700;
   color: var(--text-dim);
-  transition: all 0.25s ease;
-  white-space: nowrap;
+  transition: all 0.25s ease; white-space: nowrap;
 }
-
 .status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ok);
-  box-shadow: 0 0 12px var(--ok);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ok); box-shadow: 0 0 12px var(--ok);
   animation: pulse 1.8s ease-in-out infinite;
 }
-
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: 0.5; transform: scale(0.8); }
 }
-
 .status-chip.busy .status-dot { background: var(--warn); box-shadow: 0 0 12px var(--warn); }
-.status-chip.error .status-dot { background: var(--err); box-shadow: 0 0 12px var(--err); }
-.status-chip.ok .status-dot { background: var(--ok); }
+.status-chip.error .status-dot { background: var(--err);  box-shadow: 0 0 12px var(--err); }
+.status-chip.ok .status-dot    { background: var(--ok);   box-shadow: 0 0 12px var(--ok); }
 
-/* =========================================================
-   GRID LAYOUT
-   ========================================================= */
+/* LAYOUT */
 .layout {
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 18px;
-  flex: 1;
-  min-height: 0;
+  display: grid; grid-template-columns: 380px 1fr;
+  gap: 18px; flex: 1; min-height: 0;
 }
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.panel {
-  padding: 18px;
-}
-
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.panel { padding: 18px; }
 .panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  gap: 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; gap: 8px;
 }
-
 .panel-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-dim);
   font-weight: 800;
 }
-
 .panel-title .icon-wrap {
-  width: 26px; height: 26px;
-  border-radius: 8px;
+  width: 26px; height: 26px; border-radius: 8px;
   background: linear-gradient(135deg, rgba(180,108,255,0.35), rgba(74,15,150,0.35));
   display: grid; place-items: center;
   border: 1px solid rgba(180,108,255,0.4);
   box-shadow: 0 0 10px rgba(180,108,255,0.3);
 }
+.panel-title .icon-wrap svg { width: 14px; height: 14px; color: #dcc0ff; stroke-width: 2.5; }
 
-.panel-title .icon-wrap svg {
-  width: 14px; height: 14px;
-  color: #dcc0ff;
-  stroke-width: 2.5;
-}
-
-/* =========================================================
-   FORM ELEMENTS
-   ========================================================= */
-.input-wrap {
-  display: flex;
-  gap: 8px;
-}
-
-input[type="text"],
-input[type="password"],
-textarea {
+/* INPUTS */
+.input-wrap { display: flex; gap: 8px; }
+input[type="text"], input[type="password"], textarea {
   width: 100%;
   background: rgba(0,0,0,0.35);
   border: 1px solid rgba(180,108,255,0.28);
   color: var(--text);
-  padding: 12px 14px;
-  border-radius: 12px;
-  font-size: 13.5px;
-  outline: none;
-  transition: 0.2s ease;
-  font-family: inherit;
+  padding: 12px 14px; border-radius: 12px;
+  font-size: 13.5px; outline: none;
+  transition: 0.2s ease; font-family: inherit;
 }
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-textarea:focus {
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
   border-color: var(--accent-1);
   box-shadow: 0 0 0 3px rgba(180,108,255,0.18);
   background: rgba(0,0,0,0.5);
 }
+input::placeholder, textarea::placeholder { color: #7d68a8; }
 
-input::placeholder,
-textarea::placeholder { color: #7d68a8; }
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* BUTTONS */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  font-size: 12.5px;
-  color: #fff;
-  padding: 11px 16px;
-  border-radius: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; border: none; cursor: pointer;
+  font-family: inherit; font-weight: 700;
+  letter-spacing: 0.8px; font-size: 12.5px;
+  color: #fff; padding: 11px 16px; border-radius: 12px;
   background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
-  box-shadow:
-    0 4px 14px rgba(120,40,200,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 4px 14px rgba(120,40,200,0.45),
+              inset 0 1px 0 rgba(255,255,255,0.18);
   transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
-  white-space: nowrap;
-  user-select: none;
+  white-space: nowrap; user-select: none;
 }
-
-.btn svg {
-  width: 15px; height: 15px;
-  stroke-width: 2.5;
-  flex-shrink: 0;
-}
-
+.btn svg { width: 15px; height: 15px; stroke-width: 2.5; flex-shrink: 0; }
 .btn:hover:not(:disabled) {
   filter: brightness(1.15);
-  box-shadow:
-    0 6px 20px rgba(140,60,230,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.25);
+  box-shadow: 0 6px 20px rgba(140,60,230,0.6),
+              inset 0 1px 0 rgba(255,255,255,0.25);
 }
 .btn:active:not(:disabled) { transform: scale(0.96); }
 .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
 .btn.ghost {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: none;
-  color: var(--text-dim);
+  box-shadow: none; color: var(--text-dim);
 }
 .btn.ghost:hover:not(:disabled) {
-  background: rgba(180,108,255,0.15);
-  color: #fff;
+  background: rgba(180,108,255,0.15); color: #fff;
   border-color: rgba(180,108,255,0.5);
 }
-
 .btn.danger {
   background: linear-gradient(135deg, #e5405a, #8b0f22);
-  box-shadow:
-    0 4px 14px rgba(220,50,80,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 4px 14px rgba(220,50,80,0.5),
+              inset 0 1px 0 rgba(255,255,255,0.18);
 }
-
 .btn.ok {
   background: linear-gradient(135deg, #2ecc71, #0e8a44);
-  box-shadow:
-    0 4px 14px rgba(40,200,120,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 4px 14px rgba(40,200,120,0.5),
+              inset 0 1px 0 rgba(255,255,255,0.18);
 }
-
-.btn.icon-only {
-  padding: 11px;
-  width: 42px;
-  height: 42px;
-}
+.btn.icon-only { padding: 11px; width: 42px; height: 42px; }
 .btn.icon-only svg { width: 17px; height: 17px; }
-
 .btn.full { width: 100%; }
 
-/* =========================================================
-   MODE TOGGLE
-   ========================================================= */
+/* MODE */
 .mode-toggle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 5px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.08);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  padding: 5px; background: rgba(0,0,0,0.3);
+  border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);
 }
-
 .mode-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 10px;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  user-select: none;
-  color: var(--text-dim);
-  transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 10px; border-radius: 12px;
+  font-weight: 800; font-size: 12px; letter-spacing: 1.5px;
+  cursor: pointer; user-select: none;
+  color: var(--text-dim); transition: all 0.25s ease;
   border: 1px solid transparent;
 }
-
 .mode-btn svg { width: 15px; height: 15px; stroke-width: 2.5; }
-
 .mode-btn:hover { color: #fff; }
-
 .mode-btn.active {
   color: #fff;
   background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
   border-color: rgba(180,108,255,0.6);
-  box-shadow:
-    0 6px 20px rgba(140,60,230,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 20px rgba(140,60,230,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.2);
 }
-
 .mode-btn.maint.active {
   background: linear-gradient(135deg, #ff9d3b, #b35100);
   border-color: rgba(255,157,59,0.6);
-  box-shadow:
-    0 6px 20px rgba(255,140,40,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 20px rgba(255,140,40,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.2);
 }
-
 .mode-hint {
-  margin-top: 10px;
-  font-size: 11.5px;
-  color: var(--text-dim);
-  letter-spacing: 0.4px;
-  text-align: center;
-  line-height: 1.5;
+  margin-top: 10px; font-size: 11.5px;
+  color: var(--text-dim); letter-spacing: 0.4px;
+  text-align: center; line-height: 1.5;
 }
 
-/* =========================================================
-   FILE LIST
-   ========================================================= */
+/* FILE LIST */
 .file-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 12px;
 }
-
 .file-list {
-  max-height: 380px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 4px;
+  max-height: 380px; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 6px; padding-right: 4px;
 }
-
 .file-list::-webkit-scrollbar,
 .editor-area::-webkit-scrollbar { width: 6px; }
 .file-list::-webkit-scrollbar-track,
 .editor-area::-webkit-scrollbar-track { background: transparent; }
 .file-list::-webkit-scrollbar-thumb,
 .editor-area::-webkit-scrollbar-thumb {
-  background: rgba(180,108,255,0.45);
-  border-radius: 6px;
+  background: rgba(180,108,255,0.45); border-radius: 6px;
 }
 .file-list::-webkit-scrollbar-thumb:hover,
-.editor-area::-webkit-scrollbar-thumb:hover {
-  background: rgba(180,108,255,0.7);
-}
+.editor-area::-webkit-scrollbar-thumb:hover { background: rgba(180,108,255,0.7); }
 
 .file-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.06);
-  cursor: pointer;
-  font-size: 12.5px;
+  cursor: pointer; font-size: 12.5px;
   transition: all 0.18s ease;
-  word-break: break-all;
-  min-width: 0;
+  word-break: break-all; min-width: 0;
 }
-
 .file-item:hover {
   background: rgba(180,108,255,0.14);
   border-color: rgba(180,108,255,0.4);
   transform: translateX(3px);
 }
-
 .file-item.active {
   background: rgba(180,108,255,0.25);
   border-color: var(--accent-1);
   box-shadow: 0 0 14px rgba(180,108,255,0.35);
 }
-
 .file-item .file-icon {
-  width: 24px; height: 24px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  color: #b46cff;
+  width: 24px; height: 24px; flex-shrink: 0;
+  display: grid; place-items: center; color: #b46cff;
 }
 .file-item .file-icon svg { width: 16px; height: 16px; stroke-width: 2.2; }
-
 .file-item .file-name {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #e0d3ff;
-  font-weight: 500;
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: #e0d3ff; font-weight: 500;
 }
-
 .file-item .file-size {
-  font-size: 10.5px;
-  color: var(--text-dim);
-  opacity: 0.7;
-  flex-shrink: 0;
+  font-size: 10.5px; color: var(--text-dim);
+  opacity: 0.7; flex-shrink: 0;
 }
-
 .empty-state {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 12.5px;
-  padding: 26px 12px;
-  font-style: italic;
-  line-height: 1.6;
+  text-align: center; color: var(--text-dim);
+  font-size: 12.5px; padding: 26px 12px;
+  font-style: italic; line-height: 1.6;
 }
-
 .empty-state svg {
-  display: block;
-  margin: 0 auto 10px;
+  display: block; margin: 0 auto 10px;
   width: 32px; height: 32px;
-  opacity: 0.5;
-  stroke-width: 1.5;
+  opacity: 0.5; stroke-width: 1.5;
 }
 
-/* =========================================================
-   EDITOR
-   ========================================================= */
+/* EDITOR */
 .editor-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 18px;
-  min-height: 0;
+  display: flex; flex-direction: column;
+  padding: 18px; min-height: 0;
 }
-
 .editor-head {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  align-items: center;
-  flex-wrap: wrap;
+  display: flex; gap: 8px;
+  margin-bottom: 12px; align-items: center; flex-wrap: wrap;
 }
-
-.editor-head .path-input {
-  flex: 1;
-  min-width: 180px;
-}
-
+.editor-head .path-input { flex: 1; min-width: 180px; }
 .editor-head .file-status {
-  font-size: 11px;
-  color: var(--text-dim);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
+  font-size: 11px; color: var(--text-dim);
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
   background: rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.08);
   letter-spacing: 0.6px;
 }
-
 .editor-head .file-status svg { width: 12px; height: 12px; }
-
 .editor-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 400px;
-  border-radius: 14px;
-  overflow: hidden;
+  position: relative; flex: 1; min-height: 400px;
+  border-radius: 14px; overflow: hidden;
   border: 1px solid rgba(180,108,255,0.25);
   background: rgba(0,0,0,0.45);
   box-shadow: inset 0 2px 12px rgba(0,0,0,0.5);
   transition: border-color 0.2s;
 }
-
 .editor-wrap:focus-within {
   border-color: var(--accent-1);
-  box-shadow:
-    inset 0 2px 12px rgba(0,0,0,0.5),
-    0 0 0 3px rgba(180,108,255,0.18);
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.5),
+              0 0 0 3px rgba(180,108,255,0.18);
 }
-
 .editor-area {
-  width: 100%;
-  height: 100%;
-  min-height: 400px;
-  resize: none;
-  border: none !important;
-  background: transparent;
-  color: #e6dcff;
+  width: 100%; height: 100%; min-height: 400px;
+  resize: none; border: none !important;
+  background: transparent; color: #e6dcff;
   padding: 16px 18px;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
-  font-size: 13px;
-  line-height: 1.65;
-  outline: none;
-  white-space: pre;
-  overflow: auto;
-  tab-size: 2;
+  font-family: 'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
+  font-size: 13px; line-height: 1.65;
+  outline: none; white-space: pre;
+  overflow: auto; tab-size: 2;
   box-shadow: none !important;
 }
-
 .editor-area:focus { background: transparent; }
-
 .editor-actions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 14px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin-top: 14px;
 }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
+/* TOAST */
 .toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
+  position: fixed; bottom: 28px; left: 50%;
   transform: translateX(-50%) translateY(140px);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 22px;
-  border-radius: 999px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 22px; border-radius: 999px;
   background: rgba(28,10,52,0.92);
   backdrop-filter: blur(20px) saturate(1.5);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   border: 1px solid var(--accent-1);
-  color: #fff;
-  font-size: 13px;
-  letter-spacing: 0.4px;
+  color: #fff; font-size: 13px; letter-spacing: 0.4px;
   font-weight: 500;
   box-shadow: 0 12px 38px rgba(120,40,220,0.55);
   opacity: 0;
   transition: all 0.4s cubic-bezier(.2,.9,.3,1.2);
-  z-index: 999;
-  pointer-events: none;
-  max-width: 90vw;
+  z-index: 999; pointer-events: none; max-width: 90vw;
 }
-
-.toast svg {
-  width: 16px; height: 16px;
-  stroke-width: 2.5;
-  flex-shrink: 0;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-.toast.error {
-  border-color: var(--err);
-  box-shadow: 0 12px 38px rgba(220,50,80,0.55);
-}
+.toast svg { width: 16px; height: 16px; stroke-width: 2.5; flex-shrink: 0; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { border-color: var(--err); box-shadow: 0 12px 38px rgba(220,50,80,0.55); }
 .toast.error svg { color: var(--err); }
-.toast.ok {
-  border-color: var(--ok);
-  box-shadow: 0 12px 38px rgba(80,220,150,0.5);
-}
+.toast.ok { border-color: var(--ok); box-shadow: 0 12px 38px rgba(80,220,150,0.5); }
 .toast.ok svg { color: var(--ok); }
 
-/* =========================================================
-   SPINNER
-   ========================================================= */
+/* SPINNER */
 .spinner {
   width: 16px; height: 16px;
   border: 2px solid rgba(180,108,255,0.3);
   border-top-color: var(--accent-1);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
+  display: inline-block; vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .spin-icon { animation: spin 1s linear infinite; }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 @media (max-width: 960px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
+  .layout { grid-template-columns: 1fr; }
   .app { padding: 14px; gap: 14px; }
   header.topbar { padding: 12px 16px; }
   .panel { padding: 15px; }
-  .editor-actions {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .editor-actions { grid-template-columns: repeat(2,1fr); }
   .file-list { max-height: 300px; }
   .brand { font-size: 16px; letter-spacing: 1.5px; }
   .brand-badge { width: 36px; height: 36px; border-radius: 12px; }
   .brand-badge svg { width: 19px; height: 19px; }
 }
-
 @media (max-width: 480px) {
   .input-wrap { flex-direction: column; }
   .input-wrap .btn { width: 100%; }
@@ -775,17 +486,14 @@ textarea::placeholder { color: #7d68a8; }
   .editor-actions .btn span.btn-label { display: none; }
   .editor-actions .btn svg { width: 17px; height: 17px; }
 }
-
-/* Hidden inputs */
 .hidden-input { display: none; }
 </style>
 </head>
 <body>
 
 <!-- ============ BACKGROUND ============ -->
-<video id="bgVideo" autoplay muted loop playsinline>
-  <source src="/wp.mp4" type="video/mp4" />
-</video>
+<div id="bgLayer"></div>
+<video id="bgVideo" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"></video>
 <div class="bg-overlay"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
@@ -794,15 +502,11 @@ textarea::placeholder { color: #7d68a8; }
 <!-- ============ APP ============ -->
 <div class="app">
 
-  <!-- ======== TOPBAR ======== -->
   <header class="topbar glass">
     <div class="brand">
-      <div class="brand-badge">
-        <i data-lucide="terminal-square"></i>
-      </div>
+      <div class="brand-badge"><i data-lucide="terminal-square"></i></div>
       <span class="brand-text">FORTECH CONTROL</span>
     </div>
-
     <div class="header-right">
       <div class="status-chip" id="statusChip">
         <span class="status-dot"></span>
@@ -814,13 +518,10 @@ textarea::placeholder { color: #7d68a8; }
     </div>
   </header>
 
-  <!-- ======== LAYOUT ======== -->
   <div class="layout">
 
-    <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
 
-      <!-- Border 1: Repository -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
@@ -829,8 +530,7 @@ textarea::placeholder { color: #7d68a8; }
           </div>
         </div>
         <div class="input-wrap">
-          <input type="text" id="repoInput"
-                 placeholder="owner/repo"
+          <input type="text" id="repoInput" placeholder="owner/repo"
                  autocomplete="off" spellcheck="false" />
           <button class="btn icon-only" id="btnLoadRepo" title="Load repository">
             <i data-lucide="download"></i>
@@ -838,7 +538,6 @@ textarea::placeholder { color: #7d68a8; }
         </div>
       </section>
 
-      <!-- Border 2: Mode -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
@@ -848,12 +547,10 @@ textarea::placeholder { color: #7d68a8; }
         </div>
         <div class="mode-toggle">
           <div class="mode-btn active" id="btnEdit" data-mode="edit">
-            <i data-lucide="pencil-line"></i>
-            EDIT
+            <i data-lucide="pencil-line"></i> EDIT
           </div>
           <div class="mode-btn maint" id="btnMaint" data-mode="maint">
-            <i data-lucide="wrench"></i>
-            MAINTANANCE
+            <i data-lucide="wrench"></i> MAINTANANCE
           </div>
         </div>
         <div class="mode-hint" id="modeHint">
@@ -861,7 +558,6 @@ textarea::placeholder { color: #7d68a8; }
         </div>
       </section>
 
-      <!-- Border 3: File list -->
       <section class="panel glass" style="flex:1; min-height:0; display:flex; flex-direction:column;">
         <div class="panel-head">
           <div class="panel-title">
@@ -873,12 +569,10 @@ textarea::placeholder { color: #7d68a8; }
 
         <div class="file-actions">
           <button class="btn" id="btnNewFile">
-            <i data-lucide="file-plus-2"></i>
-            BUAT FILE
+            <i data-lucide="file-plus-2"></i> BUAT FILE
           </button>
           <button class="btn ok" id="btnUploadFile">
-            <i data-lucide="upload"></i>
-            TAMBAH FILE
+            <i data-lucide="upload"></i> TAMBAH FILE
           </button>
         </div>
 
@@ -895,17 +589,14 @@ textarea::placeholder { color: #7d68a8; }
 
     </aside>
 
-    <!-- ========== EDITOR ========== -->
     <main class="editor-panel glass">
-
       <div class="editor-head">
         <div class="panel-title">
           <span class="icon-wrap"><i data-lucide="code-2"></i></span>
           Viewer / Editor
         </div>
         <span class="file-status" id="editorStatus">
-          <i data-lucide="circle-dot"></i>
-          NO FILE
+          <i data-lucide="circle-dot"></i> NO FILE
         </span>
       </div>
 
@@ -924,29 +615,23 @@ placeholder="// Pilih file dari daftar di kiri,
 
       <div class="editor-actions">
         <button class="btn ok" id="btnSave">
-          <i data-lucide="save"></i>
-          <span class="btn-label">SAVE</span>
+          <i data-lucide="save"></i> <span class="btn-label">SAVE</span>
         </button>
         <button class="btn danger" id="btnDelete">
-          <i data-lucide="trash-2"></i>
-          <span class="btn-label">DELETE</span>
+          <i data-lucide="trash-2"></i> <span class="btn-label">DELETE</span>
         </button>
         <button class="btn ghost" id="btnCopy">
-          <i data-lucide="copy"></i>
-          <span class="btn-label">COPY</span>
+          <i data-lucide="copy"></i> <span class="btn-label">COPY</span>
         </button>
         <button class="btn ghost" id="btnClear">
-          <i data-lucide="eraser"></i>
-          <span class="btn-label">CLEAR</span>
+          <i data-lucide="eraser"></i> <span class="btn-label">CLEAR</span>
         </button>
       </div>
-
     </main>
 
   </div>
 </div>
 
-<!-- ============ TOAST ============ -->
 <div class="toast" id="toast">
   <i data-lucide="info"></i>
   <span id="toastMsg">Message</span>
@@ -955,7 +640,6 @@ placeholder="// Pilih file dari daftar di kiri,
 <script>
 /* =========================================================
    FORTECH CONTROL — Frontend
-   Semua request lewat /api/github (serverless proxy)
    ========================================================= */
 (() => {
   'use strict';
@@ -963,12 +647,8 @@ placeholder="// Pilih file dari daftar di kiri,
   const LS_REPO = 'fortech.github.repo';
 
   const state = {
-    repo: null,
-    branch: 'main',
-    mode: 'edit',
-    files: [],
-    activeFile: null,
-    activeSha: null
+    repo: null, branch: 'main', mode: 'edit',
+    files: [], activeFile: null, activeSha: null
   };
 
   const $ = id => document.getElementById(id);
@@ -997,7 +677,87 @@ placeholder="// Pilih file dari daftar di kiri,
   const toastEl      = $('toast');
   const toastMsg     = $('toastMsg');
 
-  /* ---------- LUCIDE INIT ---------- */
+  /* =========================================================
+     BACKGROUND VIDEO LOADER
+     Coba beberapa path, kalau semua gagal → fallback gradient
+     ========================================================= */
+  const VIDEO_CANDIDATES = [
+    '/wp.mp4',
+    '/public/wp.mp4',
+    './wp.mp4',
+    'wp.mp4',
+    '/assets/wp.mp4',
+    '/wp.MP4',
+    '/WP.mp4'
+  ];
+
+  function tryLoadVideo() {
+    let idx = 0;
+
+    const tryNext = () => {
+      if (idx >= VIDEO_CANDIDATES.length) {
+        console.warn('[Fortech] Semua path video gagal, pakai fallback gradient.');
+        return;
+      }
+      const url = VIDEO_CANDIDATES[idx++];
+      const testVideo = document.createElement('video');
+      testVideo.muted = true;
+      testVideo.playsInline = true;
+
+      const cleanup = () => {
+        testVideo.removeAttribute('src');
+        testVideo.load();
+        testVideo.oncanplay = null;
+        testVideo.onerror = null;
+      };
+
+      testVideo.oncanplay = () => {
+        console.log('[Fortech] Video OK →', url);
+        video.src = url;
+        video.load();
+        video.play().catch(() => {});
+        cleanup();
+      };
+      testVideo.onerror = () => {
+        cleanup();
+        tryNext();
+      };
+      testVideo.src = url;
+    };
+
+    tryNext();
+  }
+
+  video.addEventListener('loadeddata', () => {
+    video.classList.add('loaded');
+    console.log('[Fortech] Video background aktif.');
+  });
+
+  video.addEventListener('error', () => {
+    video.classList.remove('loaded');
+    console.warn('[Fortech] Video error setelah load, fallback tetap tampil.');
+  });
+
+  // Autoplay fallback untuk mobile
+  const tryPlay = () => {
+    const p = video.play();
+    if (p && p.catch) {
+      p.catch(() => {
+        const once = () => {
+          video.play().catch(() => {});
+          document.removeEventListener('touchstart', once);
+          document.removeEventListener('click', once);
+        };
+        document.addEventListener('touchstart', once, { once: true });
+        document.addEventListener('click', once, { once: true });
+      });
+    }
+  };
+
+  tryLoadVideo();
+  setTimeout(tryPlay, 800);
+
+  /* ---------- LUCIDE ---------- */
   function refreshIcons() {
     if (window.lucide && lucide.createIcons) lucide.createIcons();
   }
@@ -1009,8 +769,7 @@ placeholder="// Pilih file dari daftar di kiri,
   }
 
   function setEditorStatus(txt, ok) {
-    editorStatus.innerHTML =
-      `<i data-lucide="circle-dot"></i> <span>${txt}</span>`;
+    editorStatus.innerHTML = `<i data-lucide="circle-dot"></i> <span>${txt}</span>`;
     if (ok === false) editorStatus.style.color = 'var(--err)';
     else if (ok === true) editorStatus.style.color = 'var(--ok)';
     else editorStatus.style.color = '';
@@ -1022,10 +781,8 @@ placeholder="// Pilih file dari daftar di kiri,
   function toast(msg, type = '') {
     toastMsg.textContent = msg;
     toastEl.className = 'toast show ' + type;
-    const icon = toastEl.querySelector('svg');
-    if (icon) {
-      icon.parentNode.removeChild(icon);
-    }
+    const oldIcon = toastEl.querySelector('svg');
+    if (oldIcon) oldIcon.parentNode.removeChild(oldIcon);
     const iconName = type === 'error' ? 'alert-circle'
                    : type === 'ok'    ? 'check-circle-2'
                    : 'info';
@@ -1038,15 +795,10 @@ placeholder="// Pilih file dari daftar di kiri,
   }
 
   /* ---------- BASE64 ---------- */
-  function b64encode(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+  function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
   function b64decode(str) {
-    try {
-      return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
-    } catch (e) {
-      return atob(str.replace(/\n/g, ''));
-    }
+    try { return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
+    catch { return atob(str.replace(/\n/g, '')); }
   }
 
   /* ---------- FILE TYPE ---------- */
@@ -1114,12 +866,6 @@ placeholder="// Pilih file dari daftar di kiri,
     });
   }
 
-  /* ---------- VIDEO FALLBACK ---------- */
-  video.addEventListener('error', () => {
-    document.body.style.background =
-      'linear-gradient(135deg, #1a0033, #3a0070, #0a0014)';
-  });
-
   /* ---------- MODE ---------- */
   function setMode(mode) {
     state.mode = mode;
@@ -1134,9 +880,9 @@ placeholder="// Pilih file dari daftar di kiri,
     if (editable) editor.removeAttribute('readonly');
     else editor.setAttribute('readonly', 'true');
 
-    btnSave.disabled    = !editable;
-    btnDelete.disabled  = !editable;
-    btnNewFile.disabled = !editable;
+    btnSave.disabled       = !editable;
+    btnDelete.disabled     = !editable;
+    btnNewFile.disabled    = !editable;
     btnUploadFile.disabled = !editable;
     editor.style.opacity = editable ? '1' : '0.75';
   }
@@ -1173,7 +919,6 @@ placeholder="// Pilih file dari daftar di kiri,
       }
       const info = await infoRes.json();
       state.branch = info.default_branch || 'main';
-
       await fetchTree();
       setStatus('CONNECTED · ' + state.branch, 'ok');
       toast('Repository dimuat ✓', 'ok');
@@ -1210,7 +955,6 @@ placeholder="// Pilih file dari daftar di kiri,
     const res = await ghFetch(
       `/repos/${state.repo}/git/trees/${encodeURIComponent(state.branch)}?recursive=1`
     );
-
     if (!res.ok) {
       const r2 = await ghFetch('/repos/' + state.repo + '/contents');
       if (!r2.ok) throw new Error('Gagal ambil daftar file');
@@ -1225,10 +969,8 @@ placeholder="// Pilih file dari daftar di kiri,
         .filter(t => t.type === 'blob')
         .map(t => ({
           name: t.path.split('/').pop(),
-          path: t.path,
-          type: 'file',
-          sha: t.sha,
-          size: t.size
+          path: t.path, type: 'file',
+          sha: t.sha, size: t.size
         }));
     }
     renderFiles();
@@ -1391,8 +1133,7 @@ placeholder="// Pilih file dari daftar di kiri,
   fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
-
-    if (!confirm(`Upload ${files.length} file ke ${state.repo}?\nSemua file akan di-commit langsung ke branch ${state.branch}.`)) {
+    if (!confirm(`Upload ${files.length} file ke ${state.repo}?`)) {
       fileInput.value = '';
       return;
     }
@@ -1405,10 +1146,8 @@ placeholder="// Pilih file dari daftar di kiri,
       setStatus(`UPLOAD ${i + 1}/${files.length}`, 'busy');
       try {
         const content = await readFileAsBase64(f);
-        // path = nama file saja (root repo). Kalau user mau subfolder, dia harus rename dulu.
         const path = f.name;
 
-        // Cek apakah file sudah ada → butuh sha untuk overwrite
         let sha = null;
         const chk = await ghFetch(
           `/repos/${state.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(state.branch)}`
@@ -1420,8 +1159,7 @@ placeholder="// Pilih file dari daftar di kiri,
 
         const body = {
           message: (sha ? 'update: ' : 'upload: ') + path + ' [Fortech Control]',
-          content,
-          branch: state.branch
+          content, branch: state.branch
         };
         if (sha) body.sha = sha;
 
@@ -1430,8 +1168,7 @@ placeholder="// Pilih file dari daftar di kiri,
           { method: 'PUT', body }
         );
 
-        if (res.ok) okCount++;
-        else failCount++;
+        if (res.ok) okCount++; else failCount++;
       } catch (err) {
         console.error('upload fail:', f.name, err);
         failCount++;
@@ -1442,21 +1179,14 @@ placeholder="// Pilih file dari daftar di kiri,
     await fetchTree();
     setStatus('CONNECTED · ' + state.branch, 'ok');
 
-    if (failCount === 0) {
-      toast(`Upload sukses ${okCount}/${files.length} ✓`, 'ok');
-    } else {
-      toast(`Upload: ${okCount} sukses, ${failCount} gagal`, 'error');
-    }
+    if (failCount === 0) toast(`Upload sukses ${okCount}/${files.length} ✓`, 'ok');
+    else toast(`Upload: ${okCount} sukses, ${failCount} gagal`, 'error');
   });
 
   function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => {
-        const result = String(reader.result);
-        const base64 = result.split(',')[1] || '';
-        resolve(base64);
-      };
+      reader.onload = () => resolve(String(reader.result).split(',')[1] || '');
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
@@ -1478,8 +1208,7 @@ placeholder="// Pilih file dari daftar di kiri,
           method: 'DELETE',
           body: {
             message: 'delete: ' + state.activeFile + ' [Fortech Control]',
-            sha: state.activeSha,
-            branch: state.branch
+            sha: state.activeSha, branch: state.branch
           }
         }
       );
@@ -1533,8 +1262,7 @@ placeholder="// Pilih file dari daftar di kiri,
   /* ---------- SHORTCUTS ---------- */
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-      e.preventDefault();
-      saveFile();
+      e.preventDefault(); saveFile();
     }
     if (e.target === editor && e.key === 'Tab') {
       e.preventDefault();
@@ -1550,22 +1278,12 @@ placeholder="// Pilih file dari daftar di kiri,
     refreshIcons();
     setMode('edit');
     setEditorStatus('NO FILE');
-
     const saved = localStorage.getItem(LS_REPO);
     if (saved) repoInput.value = saved;
-
     setStatus('READY');
-
-    const p = video.play();
-    if (p && p.catch) p.catch(() => {
-      document.addEventListener('touchstart', function once() {
-        video.play();
-        document.removeEventListener('touchstart', once);
-      }, { once: true });
-    });
   })();
 
 })();
 </script>
 </body>
-  </html>
+</html>
