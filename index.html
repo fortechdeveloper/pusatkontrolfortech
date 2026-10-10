@@ -8,8 +8,7 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
 /* =========================================================
-   FORTECH CONTROL — LIGHT BLUE EDITION
-   Video wallpaper + Repo picker
+   FORTECH CONTROL — LIGHT BLUE EDITION + AUTH GATE
    ========================================================= */
 
 :root {
@@ -48,7 +47,6 @@
   --safe-r: env(safe-area-inset-right, 0px);
 }
 
-/* ---------- RESET ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -212,6 +210,214 @@ svg {
   padding-left: calc(var(--safe-l) + 20px);
   padding-right: calc(var(--safe-r) + 20px);
 }
+.app.hide { display: none; }
+
+/* =========================================================
+   AUTH SCREEN
+   ========================================================= */
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--safe-t) + 24px) 20px calc(var(--safe-b) + 24px);
+  animation: authIn 0.5s var(--ease-out);
+}
+.auth-screen.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+}
+@keyframes authIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: 34px 26px 26px;
+  background: var(--glass-2);
+  border: 1px solid var(--glass-line-2);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2), 0 0 60px rgba(56,189,248,0.2);
+  contain: layout style;
+  overflow: hidden;
+  isolation: isolate;
+}
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .auth-card {
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+  }
+}
+.auth-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(56,189,248,0.5) 30%,
+    rgba(255,255,255,0.05) 60%,
+    rgba(56,189,248,0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+.auth-card > * { position: relative; z-index: 3; }
+
+.auth-logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
+  box-shadow:
+    0 10px 30px rgba(56,189,248,0.5),
+    inset 0 2px 0 rgba(255,255,255,0.4);
+  animation: lockPulse 3s ease-in-out infinite;
+}
+.auth-logo svg {
+  width: 34px;
+  height: 34px;
+  color: #041a2e;
+  stroke-width: 2.3;
+}
+@keyframes lockPulse {
+  0%, 100% { box-shadow: 0 10px 30px rgba(56,189,248,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
+  50%      { box-shadow: 0 10px 40px rgba(56,189,248,0.75), inset 0 2px 0 rgba(255,255,255,0.4); }
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  margin: 0 0 6px;
+  background: linear-gradient(135deg, #fff 0%, #bae6fd 50%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.auth-sub {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin: 0 0 22px;
+  letter-spacing: 0.5px;
+}
+
+.auth-field { margin-bottom: 12px; position: relative; }
+.auth-field input {
+  width: 100%;
+  padding: 14px 44px 14px 46px;
+  border-radius: var(--r-md);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid var(--glass-line);
+  color: var(--text);
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  transition: 0.2s var(--ease);
+}
+.auth-field input:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+  background: rgba(0,0,0,0.5);
+}
+.auth-field input::placeholder { color: var(--mut); letter-spacing: 0.5px; }
+.auth-field .ic-left,
+.auth-field .ic-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mut);
+  pointer-events: none;
+  transition: color 0.2s var(--ease);
+}
+.auth-field .ic-left { left: 15px; }
+.auth-field .ic-right { right: 15px; }
+.auth-field .ic-left svg,
+.auth-field .ic-right svg { width: 16px; height: 16px; stroke-width: 2.2; }
+.auth-field input:focus ~ .ic-left,
+.auth-field input:focus ~ .ic-right { color: var(--accent-1); }
+
+.auth-field .ic-right.toggle {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.auth-field .ic-right.toggle:hover { color: var(--accent-1); }
+
+.auth-btn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #041a2e;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
+  box-shadow:
+    0 6px 22px rgba(56,189,248,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: transform 0.12s var(--ease), filter 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.auth-btn svg { width: 16px; height: 16px; stroke-width: 2.5; }
+.auth-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.auth-btn:active:not(:disabled) { transform: scale(0.97); }
+.auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.auth-btn.loading .btn-label { display: none; }
+.auth-btn .spinner { display: none; }
+.auth-btn.loading .spinner { display: inline-block; }
+
+.auth-error {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--err);
+  text-align: center;
+  min-height: 18px;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+.auth-error.show { opacity: 1; }
+.auth-error svg { width: 14px; height: 14px; stroke-width: 2.5; flex-shrink: 0; }
+
+.auth-foot {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--mut);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* Shake animation */
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.auth-card.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97); }
 
 /* =========================================================
    GLASS
@@ -544,9 +750,7 @@ textarea::placeholder { color: var(--mut); }
   color: var(--mut);
 }
 .repo-search-wrap .search-ic svg { width: 14px; height: 14px; }
-.repo-search-wrap input {
-  padding-left: 36px;
-}
+.repo-search-wrap input { padding-left: 36px; }
 
 .repo-list {
   max-height: 260px;
@@ -661,7 +865,6 @@ textarea::placeholder { color: var(--mut); }
   background: rgba(74,222,128,0.1);
 }
 
-/* Active repo banner */
 .active-repo {
   display: none;
   align-items: center;
@@ -909,12 +1112,14 @@ textarea::placeholder { color: var(--mut); }
 .perf-low .bg-grain,
 .perf-low .bg-tint,
 .perf-low .blob { display: none; }
-.perf-low .glass {
+.perf-low .glass,
+.perf-low .auth-card {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-  background: rgba(10,25,45,0.88) !important;
+  background: rgba(10,25,45,0.92) !important;
 }
-.perf-low .glass::before { opacity: 0.5; }
+.perf-low .glass::before,
+.perf-low .auth-card::before { opacity: 0.5; }
 
 /* =========================================================
    RESPONSIVE
@@ -936,6 +1141,10 @@ textarea::placeholder { color: var(--mut); }
   .editor-actions { grid-template-columns: 1fr 1fr; }
   .editor-actions .btn span.btn-label { display: none; }
   .editor-actions .btn svg { width: 17px; height: 17px; }
+  .auth-card { padding: 28px 20px 20px; border-radius: 22px; }
+  .auth-logo { width: 60px; height: 60px; border-radius: 18px; }
+  .auth-logo svg { width: 28px; height: 28px; }
+  .auth-title { font-size: 18px; letter-spacing: 2px; }
 }
 
 /* =========================================================
@@ -957,7 +1166,9 @@ textarea::placeholder { color: var(--mut); }
 </head>
 <body>
 
-<!-- BACKGROUND STACK -->
+<!-- =========================================================
+     BACKGROUND STACK
+     ========================================================= -->
 <video
   class="bg-video"
   id="bgVideo"
@@ -982,8 +1193,48 @@ textarea::placeholder { color: var(--mut); }
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
-<!-- APP -->
-<div class="app">
+<!-- =========================================================
+     AUTH SCREEN
+     ========================================================= -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card" id="authCard">
+    <div class="auth-logo">
+      <i data-lucide="shield-check"></i>
+    </div>
+    <h1 class="auth-title">FORTECH CONTROL</h1>
+    <p class="auth-sub">Masukkan password untuk melanjutkan</p>
+
+    <form id="authForm" autocomplete="on">
+      <div class="auth-field">
+        <input
+          type="password"
+          id="pwInput"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+          spellcheck="false"
+        />
+        <span class="ic-left"><i data-lucide="key-round"></i></span>
+        <span class="ic-right toggle" id="pwToggle"><i data-lucide="eye"></i></span>
+      </div>
+
+      <button type="submit" class="auth-btn" id="authBtn">
+        <span class="spinner"></span>
+        <i data-lucide="unlock"></i>
+        <span class="btn-label">UNLOCK</span>
+      </button>
+
+      <div class="auth-error" id="authError"></div>
+    </form>
+
+    <div class="auth-foot">Protected · FortechDev</div>
+  </div>
+</div>
+
+<!-- =========================================================
+     APP
+     ========================================================= -->
+<div class="app hide" id="app">
 
   <header class="topbar glass">
     <div class="brand">
@@ -997,6 +1248,9 @@ textarea::placeholder { color: var(--mut); }
       </div>
       <button class="btn ghost icon-only" id="btnRefresh" title="Refresh file list">
         <i data-lucide="refresh-cw"></i>
+      </button>
+      <button class="btn ghost icon-only" id="btnLogout" title="Logout">
+        <i data-lucide="log-out"></i>
       </button>
     </div>
   </header>
@@ -1142,12 +1396,13 @@ placeholder="// Pilih repository dari panel kiri,
 
 <script>
 /* =========================================================
-   FORTECH CONTROL — Repo Picker Edition
+   FORTECH CONTROL — Auth + Repo Picker + Editor
    ========================================================= */
 (() => {
   'use strict';
 
   const LS_REPO = 'fortech.github.repo';
+  const SS_AUTH = 'fortech.auth.token';
 
   const state = {
     repo: null,
@@ -1156,15 +1411,28 @@ placeholder="// Pilih repository dari panel kiri,
     files: [],
     activeFile: null,
     activeSha: null,
-    allRepos: [],       // cache semua repo
-    repoFilter: ''      // filter text
+    allRepos: [],
+    repoFilter: '',
+    authenticated: false
   };
 
   const $ = id => document.getElementById(id);
 
+  /* ---------- AUTH DOM ---------- */
+  const authScreen = $('authScreen');
+  const authCard   = $('authCard');
+  const authForm   = $('authForm');
+  const pwInput    = $('pwInput');
+  const pwToggle   = $('pwToggle');
+  const authBtn    = $('authBtn');
+  const authError  = $('authError');
+
+  /* ---------- APP DOM ---------- */
+  const app          = $('app');
   const video        = $('bgVideo');
   const statusChip   = $('statusChip');
   const statusText   = $('statusText');
+  const btnLogout    = $('btnLogout');
   const btnLoadRepos = $('btnLoadRepos');
   const repoSearch   = $('repoSearch');
   const repoList     = $('repoList');
@@ -1188,6 +1456,13 @@ placeholder="// Pilih repository dari panel kiri,
   const btnClear     = $('btnClear');
   const toastEl      = $('toast');
   const toastMsg     = $('toastMsg');
+
+  /* =========================================================
+     ICONS
+     ========================================================= */
+  function refreshIcons() {
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  }
 
   /* =========================================================
      VIDEO AUTOPLAY FALLBACK
@@ -1223,13 +1498,6 @@ placeholder="// Pilih repository dari panel kiri,
   })();
 
   /* =========================================================
-     LUCIDE
-     ========================================================= */
-  function refreshIcons() {
-    if (window.lucide && lucide.createIcons) lucide.createIcons();
-  }
-
-  /* =========================================================
      STATUS
      ========================================================= */
   function setStatus(txt, cls) {
@@ -1263,6 +1531,141 @@ placeholder="// Pilih repository dari panel kiri,
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
   }
+
+  /* =========================================================
+     AUTH ERROR HELPER
+     ========================================================= */
+  function showAuthError(msg) {
+    authError.innerHTML = `<i data-lucide="alert-circle"></i> <span>${msg}</span>`;
+    authError.classList.add('show');
+    refreshIcons();
+    authCard.classList.remove('shake');
+    void authCard.offsetWidth;
+    authCard.classList.add('shake');
+  }
+  function clearAuthError() {
+    authError.classList.remove('show');
+    authError.innerHTML = '';
+  }
+
+  /* =========================================================
+     PASSWORD VISIBILITY TOGGLE
+     ========================================================= */
+  pwToggle.addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+    pwToggle.innerHTML = `<i data-lucide="${isPw ? 'eye-off' : 'eye'}"></i>`;
+    refreshIcons();
+    pwInput.focus();
+  });
+
+  /* =========================================================
+     UNLOCK APP
+     ========================================================= */
+  function unlockApp() {
+    state.authenticated = true;
+    authScreen.classList.add('hide');
+    setTimeout(() => authScreen.style.display = 'none', 400);
+    app.classList.remove('hide');
+
+    // Auto-load repos setelah unlock
+    const cachedRepo = localStorage.getItem(LS_REPO);
+    loadRepositories().then(() => {
+      if (cachedRepo) {
+        const el = repoList.querySelector(`[data-full="${CSS.escape(cachedRepo)}"]`);
+        if (el) selectRepo(cachedRepo);
+      }
+    });
+  }
+
+  /* =========================================================
+     AUTH SUBMIT
+     ========================================================= */
+  authForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearAuthError();
+
+    const pw = pwInput.value;
+    if (!pw) {
+      showAuthError('Password wajib diisi.');
+      return;
+    }
+
+    authBtn.classList.add('loading');
+    authBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || 'Password salah.');
+      }
+
+      // Simpan token untuk auto-login
+      if (data.token) {
+        sessionStorage.setItem(SS_AUTH, data.token);
+      }
+
+      pwInput.value = '';
+      authBtn.classList.remove('loading');
+      authBtn.disabled = false;
+      unlockApp();
+    } catch (err) {
+      console.error(err);
+      showAuthError(err.message || 'Gagal memverifikasi.');
+      pwInput.value = '';
+      pwInput.focus();
+      authBtn.classList.remove('loading');
+      authBtn.disabled = false;
+    }
+  });
+
+  /* =========================================================
+     AUTO-LOGIN via TOKEN
+     ========================================================= */
+  async function tryAutoLogin() {
+    const token = sessionStorage.getItem(SS_AUTH);
+    if (!token) return false;
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok && data.valid) {
+        return true;
+      }
+      // Token invalid → hapus
+      sessionStorage.removeItem(SS_AUTH);
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  /* =========================================================
+     LOGOUT
+     ========================================================= */
+  btnLogout.addEventListener('click', () => {
+    if (!confirm('Logout dari Fortech Control?')) return;
+    sessionStorage.removeItem(SS_AUTH);
+    state.authenticated = false;
+    // Reset UI
+    app.classList.add('hide');
+    authScreen.style.display = '';
+    setTimeout(() => authScreen.classList.remove('hide'), 20);
+    pwInput.value = '';
+    pwInput.focus();
+    clearAuthError();
+  });
 
   /* =========================================================
      BASE64
@@ -1355,7 +1758,7 @@ placeholder="// Pilih repository dari panel kiri,
   }
 
   /* =========================================================
-     LOAD REPOSITORIES
+     LOAD REPOS
      ========================================================= */
   async function loadRepositories() {
     setStatus('LOAD REPOS...', 'busy');
@@ -1388,8 +1791,6 @@ placeholder="// Pilih repository dari panel kiri,
      ========================================================= */
   function renderRepoList() {
     let list = state.allRepos;
-
-    // Filter
     if (state.repoFilter) {
       const q = state.repoFilter.toLowerCase();
       list = list.filter(r =>
@@ -1401,7 +1802,7 @@ placeholder="// Pilih repository dari panel kiri,
 
     if (!list.length) {
       repoList.innerHTML =
-        `<div class="empty-state"><i data-lucide="search-x"></i>${state.repoFilter ? 'Tidak ada repo cocok dengan filter.' : 'Belum ada repository dimuat.'}</div>`;
+        `<div class="empty-state"><i data-lucide="search-x"></i>${state.repoFilter ? 'Tidak ada repo cocok.' : 'Belum ada repository dimuat.'}</div>`;
       refreshIcons();
       return;
     }
@@ -1436,12 +1837,11 @@ placeholder="// Pilih repository dari panel kiri,
   }
 
   /* =========================================================
-     SELECT REPOSITORY
+     SELECT REPO
      ========================================================= */
   async function selectRepo(fullName) {
     if (!fullName) return;
 
-    // Update visual selection
     repoList.querySelectorAll('.repo-item').forEach(el => {
       el.classList.toggle('active', el.dataset.full === fullName);
     });
@@ -1463,10 +1863,8 @@ placeholder="// Pilih repository dari panel kiri,
     setStatus('LOADING FILES...', 'busy');
 
     try {
-      // Cari default branch dari cache repo
       const repo = state.allRepos.find(r => r.full_name === fullName);
       state.branch = repo?.default_branch || 'main';
-
       await fetchTree();
       setStatus('CONNECTED · ' + state.branch, 'ok');
       toast('Repository dibuka ✓', 'ok');
@@ -1490,9 +1888,6 @@ placeholder="// Pilih repository dari panel kiri,
     searchTimer = setTimeout(renderRepoList, 150);
   });
 
-  /* =========================================================
-     LOAD REPOS BUTTON
-     ========================================================= */
   btnLoadRepos.addEventListener('click', loadRepositories);
 
   /* =========================================================
@@ -1542,7 +1937,7 @@ placeholder="// Pilih repository dari panel kiri,
   }
 
   /* =========================================================
-     RENDER FILE LIST
+     RENDER FILES
      ========================================================= */
   function renderFiles() {
     fileCount.textContent = state.files.length + ' file' + (state.files.length === 1 ? '' : 's');
@@ -1697,7 +2092,7 @@ placeholder="// Pilih repository dari panel kiri,
   });
 
   /* =========================================================
-     TAMBAH FILE
+     UPLOAD FILE
      ========================================================= */
   btnUploadFile.addEventListener('click', () => {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
@@ -1872,7 +2267,7 @@ placeholder="// Pilih repository dari panel kiri,
      SHORTCUTS
      ========================================================= */
   document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && state.authenticated) {
       e.preventDefault();
       saveFile();
     }
@@ -1888,20 +2283,20 @@ placeholder="// Pilih repository dari panel kiri,
   /* =========================================================
      INIT
      ========================================================= */
-  (function init() {
+  (async function init() {
     refreshIcons();
     setMode('edit');
     setEditorStatus('NO FILE');
     setStatus('READY');
 
-    // Auto-load repos pas pertama buka
-    const cachedRepo = localStorage.getItem(LS_REPO);
-    loadRepositories().then(() => {
-      if (cachedRepo) {
-        const el = repoList.querySelector(`[data-full="${CSS.escape(cachedRepo)}"]`);
-        if (el) selectRepo(cachedRepo);
-      }
-    });
+    // Fokus ke input password
+    setTimeout(() => pwInput.focus(), 300);
+
+    // Coba auto-login pakai token dari sessionStorage
+    const ok = await tryAutoLogin();
+    if (ok) {
+      unlockApp();
+    }
   })();
 
 })();
