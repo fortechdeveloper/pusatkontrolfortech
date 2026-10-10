@@ -3,32 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#06000d" />
+<meta name="theme-color" content="#050f1e" />
 <title>FORTECH CONTROL</title>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
 /* =========================================================
-   FORTECH CONTROL — LIQUID GLASS + VIDEO WALLPAPER
-   Referensi: GMAILCUAN 4DEV stacking system
+   FORTECH CONTROL — LIGHT BLUE EDITION
+   Video wallpaper + Repo picker
    ========================================================= */
 
-/* ---------- ROOT ---------- */
 :root {
-  --accent-1: #b46cff;
-  --accent-2: #7a2bd6;
-  --accent-3: #4a0f96;
-  --accent-glow: rgba(180,108,255,0.55);
-  --ok: #7CFFB2;
-  --err: #ff5c6c;
-  --warn: #ff9d3b;
-  --text: #f2ecff;
-  --text-dim: #b9a5dc;
-  --mut: #7b6ba0;
+  --accent-1: #7dd3fc;
+  --accent-2: #38bdf8;
+  --accent-3: #0284c7;
+  --accent-4: #0369a1;
+  --accent-glow: rgba(56,189,248,0.55);
 
-  --glass: rgba(24,10,46,0.55);
-  --glass-2: rgba(30,14,54,0.65);
-  --glass-line: rgba(180,108,255,0.18);
-  --glass-line-2: rgba(180,108,255,0.32);
+  --ok: #4ade80;
+  --err: #f87171;
+  --warn: #fbbf24;
+  --text: #eaf6ff;
+  --text-dim: #9dc4dd;
+  --mut: #6a90ab;
+
+  --glass: rgba(10,30,52,0.55);
+  --glass-2: rgba(14,38,64,0.65);
+  --glass-line: rgba(125,211,252,0.20);
+  --glass-line-2: rgba(125,211,252,0.35);
 
   --r-sm: 10px;
   --r-md: 14px;
@@ -57,7 +58,7 @@ html, body { margin: 0; padding: 0; }
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background: #06000d;
+  background: #050f1e;
   min-height: 100%;
   overscroll-behavior-y: none;
 }
@@ -78,37 +79,21 @@ body {
   touch-action: manipulation;
 }
 
-input, button, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-}
+input, button, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
 button { border: 0; background: none; cursor: pointer; padding: 0; }
 a { color: inherit; text-decoration: none; }
 img, svg { display: block; max-width: 100%; }
 svg {
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
 :focus { outline: none; }
 :focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
-::selection { background: var(--accent-1); color: #0b0014; }
+::selection { background: var(--accent-2); color: #021222; }
 
 /* =========================================================
-   BACKGROUND STACK — VIDEO WALLPAPER
-   z-index map:
-   -10 : video
-   -9  : shade
-   -8  : tint
-   -7  : grain
-   -6  : vignette
-    0  : konten app
+   BACKGROUND STACK
    ========================================================= */
-
-/* --- Video layer --- */
 .bg-video {
   position: fixed;
   top: 0; left: 0;
@@ -119,19 +104,16 @@ svg {
   object-position: center center;
   z-index: -10;
   pointer-events: none;
-  background: #06000d;                 /* fallback kalau video gagal */
+  background: #050f1e;
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   margin: 0; padding: 0; border: 0;
-  max-width: none;
-  max-height: none;
-  min-width: 100vw;
-  min-height: 100vh;
+  max-width: none; max-height: none;
+  min-width: 100vw; min-height: 100vh;
   display: block;
 }
 
-/* --- Overlay layers --- */
 .bg-shade,
 .bg-tint,
 .bg-grain,
@@ -148,16 +130,16 @@ svg {
 .bg-shade {
   z-index: -9;
   background: linear-gradient(180deg,
-    rgba(6,0,15,0.62) 0%,
-    rgba(6,0,15,0.72) 40%,
-    rgba(6,0,15,0.82) 100%);
+    rgba(5,15,30,0.62) 0%,
+    rgba(5,15,30,0.72) 40%,
+    rgba(5,15,30,0.82) 100%);
 }
 
 .bg-tint {
   z-index: -8;
   background:
-    radial-gradient(120% 80% at 15% 5%, rgba(180,108,255,0.18), transparent 60%),
-    radial-gradient(100% 70% at 100% 100%, rgba(120,60,230,0.14), transparent 60%);
+    radial-gradient(120% 80% at 15% 5%, rgba(56,189,248,0.20), transparent 60%),
+    radial-gradient(100% 70% at 100% 100%, rgba(14,165,233,0.18), transparent 60%);
   mix-blend-mode: screen;
 }
 
@@ -179,7 +161,6 @@ svg {
     rgba(0,0,0,0.65) 100%);
 }
 
-/* Blobs dekoratif (opsional, halus) */
 .blob {
   position: fixed;
   border-radius: 50%;
@@ -192,14 +173,14 @@ svg {
 .blob-1 {
   width: 40vw; height: 40vw;
   max-width: 460px; max-height: 460px;
-  background: radial-gradient(circle, #7a2bd6, transparent 70%);
+  background: radial-gradient(circle, #38bdf8, transparent 70%);
   top: -10%; left: -10%;
   animation: float1 20s ease-in-out infinite;
 }
 .blob-2 {
   width: 36vw; height: 36vw;
   max-width: 420px; max-height: 420px;
-  background: radial-gradient(circle, #b46cff, transparent 70%);
+  background: radial-gradient(circle, #7dd3fc, transparent 70%);
   bottom: -10%; right: -10%;
   animation: float2 24s ease-in-out infinite;
 }
@@ -257,9 +238,9 @@ svg {
   padding: 1px;
   background: linear-gradient(135deg,
     rgba(255,255,255,0.30) 0%,
-    rgba(180,108,255,0.35) 30%,
+    rgba(56,189,248,0.38) 30%,
     rgba(255,255,255,0.04) 60%,
-    rgba(180,108,255,0.20) 100%);
+    rgba(56,189,248,0.22) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
@@ -303,19 +284,19 @@ header.topbar {
 .brand-badge {
   width: 42px; height: 42px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
   display: grid; place-items: center;
   box-shadow:
-    0 6px 22px rgba(140,60,230,0.55),
+    0 6px 22px rgba(56,189,248,0.55),
     inset 0 1px 0 rgba(255,255,255,0.3);
 }
-.brand-badge svg { width: 22px; height: 22px; color: #fff; stroke-width: 2.2; }
+.brand-badge svg { width: 22px; height: 22px; color: #041a2e; stroke-width: 2.4; }
 .brand-text {
-  background: linear-gradient(135deg, #fff 0%, #d3b8ff 50%, #fff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #bae6fd 50%, #ffffff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(180,108,255,0.4);
+  text-shadow: 0 0 30px rgba(56,189,248,0.4);
 }
 .header-right { display: flex; align-items: center; gap: 10px; }
 
@@ -355,7 +336,7 @@ header.topbar {
    ========================================================= */
 .layout {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 400px 1fr;
   gap: 18px;
   flex: 1;
   min-height: 0;
@@ -383,19 +364,19 @@ header.topbar {
 .panel-title .icon-wrap {
   width: 26px; height: 26px;
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(180,108,255,0.35), rgba(74,15,150,0.35));
+  background: linear-gradient(135deg, rgba(56,189,248,0.35), rgba(2,132,199,0.35));
   display: grid; place-items: center;
-  border: 1px solid rgba(180,108,255,0.4);
-  box-shadow: 0 0 10px rgba(180,108,255,0.3);
+  border: 1px solid rgba(56,189,248,0.4);
+  box-shadow: 0 0 10px rgba(56,189,248,0.3);
 }
-.panel-title .icon-wrap svg { width: 14px; height: 14px; color: #dcc0ff; stroke-width: 2.5; }
+.panel-title .icon-wrap svg { width: 14px; height: 14px; color: #bae6fd; stroke-width: 2.5; }
 
 /* =========================================================
    INPUT
    ========================================================= */
-.input-wrap { display: flex; gap: 8px; }
 input[type="text"],
 input[type="password"],
+input[type="search"],
 textarea {
   width: 100%;
   background: rgba(0,0,0,0.35);
@@ -410,9 +391,10 @@ textarea {
 }
 input[type="text"]:focus,
 input[type="password"]:focus,
+input[type="search"]:focus,
 textarea:focus {
   border-color: var(--accent-1);
-  box-shadow: 0 0 0 3px rgba(180,108,255,0.18);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.18);
   background: rgba(0,0,0,0.5);
 }
 input::placeholder,
@@ -432,23 +414,23 @@ textarea::placeholder { color: var(--mut); }
   font-weight: 700;
   letter-spacing: 0.8px;
   font-size: 12.5px;
-  color: #fff;
+  color: #041a2e;
   padding: 11px 16px;
   border-radius: var(--r-md);
-  background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
   box-shadow:
-    0 4px 14px rgba(120,40,200,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+    0 4px 14px rgba(56,189,248,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.3);
   transition: transform 0.12s var(--ease), filter 0.2s var(--ease), box-shadow 0.2s var(--ease);
   white-space: nowrap;
   user-select: none;
 }
-.btn svg { width: 15px; height: 15px; stroke-width: 2.5; flex-shrink: 0; }
+.btn svg { width: 15px; height: 15px; stroke-width: 2.5; flex-shrink: 0; color: #041a2e; }
 .btn:hover:not(:disabled) {
-  filter: brightness(1.15);
+  filter: brightness(1.1);
   box-shadow:
-    0 6px 20px rgba(140,60,230,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.25);
+    0 6px 20px rgba(56,189,248,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.35);
 }
 .btn:active:not(:disabled) { transform: scale(0.96); }
 .btn:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -459,23 +441,32 @@ textarea::placeholder { color: var(--mut); }
   box-shadow: none;
   color: var(--text-dim);
 }
+.btn.ghost svg { color: var(--text-dim); }
 .btn.ghost:hover:not(:disabled) {
-  background: rgba(180,108,255,0.15);
+  background: rgba(56,189,248,0.15);
   color: #fff;
-  border-color: rgba(180,108,255,0.5);
+  border-color: rgba(56,189,248,0.5);
 }
+.btn.ghost:hover:not(:disabled) svg { color: #fff; }
+
 .btn.danger {
-  background: linear-gradient(135deg, #e5405a, #8b0f22);
+  background: linear-gradient(135deg, #f87171, #b91c1c);
+  color: #fff;
   box-shadow:
-    0 4px 14px rgba(220,50,80,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+    0 4px 14px rgba(248,113,113,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
+.btn.danger svg { color: #fff; }
+
 .btn.ok {
-  background: linear-gradient(135deg, #2ecc71, #0e8a44);
+  background: linear-gradient(135deg, #4ade80, #15803d);
+  color: #04210f;
   box-shadow:
-    0 4px 14px rgba(40,200,120,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+    0 4px 14px rgba(74,222,128,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
+.btn.ok svg { color: #04210f; }
+
 .btn.icon-only { padding: 11px; width: 42px; height: 42px; }
 .btn.icon-only svg { width: 17px; height: 17px; }
 .btn.full { width: 100%; }
@@ -511,20 +502,23 @@ textarea::placeholder { color: var(--mut); }
 .mode-btn svg { width: 15px; height: 15px; stroke-width: 2.5; }
 .mode-btn:hover { color: #fff; }
 .mode-btn.active {
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
-  border-color: rgba(180,108,255,0.6);
+  color: #041a2e;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
+  border-color: rgba(56,189,248,0.6);
   box-shadow:
-    0 6px 20px rgba(140,60,230,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 6px 20px rgba(56,189,248,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
+.mode-btn.active svg { color: #041a2e; }
 .mode-btn.maint.active {
-  background: linear-gradient(135deg, #ff9d3b, #b35100);
-  border-color: rgba(255,157,59,0.6);
+  color: #1a1000;
+  background: linear-gradient(135deg, #fbbf24, #b45309);
+  border-color: rgba(251,191,36,0.6);
   box-shadow:
-    0 6px 20px rgba(255,140,40,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 6px 20px rgba(251,191,36,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
+.mode-btn.maint.active svg { color: #1a1000; }
 .mode-hint {
   margin-top: 10px;
   font-size: 11.5px;
@@ -532,6 +526,178 @@ textarea::placeholder { color: var(--mut); }
   letter-spacing: 0.4px;
   text-align: center;
   line-height: 1.5;
+}
+
+/* =========================================================
+   REPO PICKER
+   ========================================================= */
+.repo-search-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+.repo-search-wrap .search-ic {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--mut);
+}
+.repo-search-wrap .search-ic svg { width: 14px; height: 14px; }
+.repo-search-wrap input {
+  padding-left: 36px;
+}
+
+.repo-list {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.repo-list::-webkit-scrollbar,
+.file-list::-webkit-scrollbar,
+.editor-area::-webkit-scrollbar { width: 6px; }
+.repo-list::-webkit-scrollbar-track,
+.file-list::-webkit-scrollbar-track,
+.editor-area::-webkit-scrollbar-track { background: transparent; }
+.repo-list::-webkit-scrollbar-thumb,
+.file-list::-webkit-scrollbar-thumb,
+.editor-area::-webkit-scrollbar-thumb {
+  background: rgba(56,189,248,0.45);
+  border-radius: 6px;
+}
+.repo-list::-webkit-scrollbar-thumb:hover,
+.file-list::-webkit-scrollbar-thumb:hover,
+.editor-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(56,189,248,0.7);
+}
+
+.repo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+  min-width: 0;
+  text-align: left;
+}
+.repo-item:hover {
+  background: rgba(56,189,248,0.12);
+  border-color: rgba(56,189,248,0.4);
+  transform: translateX(3px);
+}
+.repo-item.active {
+  background: rgba(56,189,248,0.22);
+  border-color: var(--accent-1);
+  box-shadow: 0 0 14px rgba(56,189,248,0.4);
+}
+.repo-item .repo-ic {
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: 9px;
+  background: rgba(56,189,248,0.14);
+  color: var(--accent-1);
+  margin-top: 1px;
+}
+.repo-item .repo-ic svg { width: 16px; height: 16px; stroke-width: 2.2; }
+.repo-item .repo-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.repo-item .repo-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #eaf6ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.repo-item .repo-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+.repo-item .repo-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--mut);
+  margin-top: 3px;
+}
+.repo-item .repo-meta .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.repo-item .repo-meta .badge.private {
+  color: #fbbf24;
+  border-color: rgba(251,191,36,0.3);
+  background: rgba(251,191,36,0.1);
+}
+.repo-item .repo-meta .badge.public {
+  color: #4ade80;
+  border-color: rgba(74,222,128,0.3);
+  background: rgba(74,222,128,0.1);
+}
+
+/* Active repo banner */
+.active-repo {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(2,132,199,0.08));
+  border: 1px solid rgba(56,189,248,0.4);
+  margin-bottom: 10px;
+}
+.active-repo.show { display: flex; }
+.active-repo .ar-ic {
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  background: rgba(56,189,248,0.2);
+  color: var(--accent-1);
+}
+.active-repo .ar-ic svg { width: 14px; height: 14px; stroke-width: 2.4; }
+.active-repo .ar-info { flex: 1; min-width: 0; }
+.active-repo .ar-label {
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-1);
+  font-weight: 800;
+  opacity: 0.85;
+}
+.active-repo .ar-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #eaf6ff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
 }
 
 /* =========================================================
@@ -544,7 +710,7 @@ textarea::placeholder { color: var(--mut); }
   margin-bottom: 12px;
 }
 .file-list {
-  max-height: 380px;
+  max-height: 320px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -552,20 +718,6 @@ textarea::placeholder { color: var(--mut); }
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
-.file-list::-webkit-scrollbar,
-.editor-area::-webkit-scrollbar { width: 6px; }
-.file-list::-webkit-scrollbar-track,
-.editor-area::-webkit-scrollbar-track { background: transparent; }
-.file-list::-webkit-scrollbar-thumb,
-.editor-area::-webkit-scrollbar-thumb {
-  background: rgba(180,108,255,0.45);
-  border-radius: 6px;
-}
-.file-list::-webkit-scrollbar-thumb:hover,
-.editor-area::-webkit-scrollbar-thumb:hover {
-  background: rgba(180,108,255,0.7);
-}
-
 .file-item {
   display: flex;
   align-items: center;
@@ -581,14 +733,14 @@ textarea::placeholder { color: var(--mut); }
   min-width: 0;
 }
 .file-item:hover {
-  background: rgba(180,108,255,0.14);
-  border-color: rgba(180,108,255,0.4);
+  background: rgba(56,189,248,0.14);
+  border-color: rgba(56,189,248,0.4);
   transform: translateX(3px);
 }
 .file-item.active {
-  background: rgba(180,108,255,0.25);
+  background: rgba(56,189,248,0.25);
   border-color: var(--accent-1);
-  box-shadow: 0 0 14px rgba(180,108,255,0.35);
+  box-shadow: 0 0 14px rgba(56,189,248,0.4);
 }
 .file-item .file-icon {
   width: 24px; height: 24px;
@@ -603,7 +755,7 @@ textarea::placeholder { color: var(--mut); }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #e0d3ff;
+  color: #dbeeff;
   font-weight: 500;
 }
 .file-item .file-size {
@@ -673,7 +825,7 @@ textarea::placeholder { color: var(--mut); }
   border-color: var(--accent-1);
   box-shadow:
     inset 0 2px 12px rgba(0,0,0,0.5),
-    0 0 0 3px rgba(180,108,255,0.18);
+    0 0 0 3px rgba(56,189,248,0.18);
 }
 .editor-area {
   width: 100%;
@@ -682,7 +834,7 @@ textarea::placeholder { color: var(--mut); }
   resize: none;
   border: none !important;
   background: transparent;
-  color: #e6dcff;
+  color: #dbeeff;
   padding: 16px 18px;
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
   font-size: 13px;
@@ -715,7 +867,7 @@ textarea::placeholder { color: var(--mut); }
   gap: 10px;
   padding: 13px 22px;
   border-radius: 999px;
-  background: rgba(28,10,52,0.92);
+  background: rgba(8,25,45,0.92);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   backdrop-filter: blur(20px) saturate(1.5);
   border: 1px solid var(--accent-1);
@@ -723,7 +875,7 @@ textarea::placeholder { color: var(--mut); }
   font-size: 13px;
   letter-spacing: 0.4px;
   font-weight: 500;
-  box-shadow: 0 12px 38px rgba(120,40,220,0.55);
+  box-shadow: 0 12px 38px rgba(56,189,248,0.55);
   opacity: 0;
   transition: all 0.4s var(--ease-out);
   z-index: 999;
@@ -732,9 +884,9 @@ textarea::placeholder { color: var(--mut); }
 }
 .toast svg { width: 16px; height: 16px; stroke-width: 2.5; flex-shrink: 0; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.error { border-color: var(--err); box-shadow: 0 12px 38px rgba(220,50,80,0.55); }
+.toast.error { border-color: var(--err); box-shadow: 0 12px 38px rgba(248,113,113,0.55); }
 .toast.error svg { color: var(--err); }
-.toast.ok { border-color: var(--ok); box-shadow: 0 12px 38px rgba(80,220,150,0.5); }
+.toast.ok { border-color: var(--ok); box-shadow: 0 12px 38px rgba(74,222,128,0.5); }
 .toast.ok svg { color: var(--ok); }
 
 /* =========================================================
@@ -742,7 +894,7 @@ textarea::placeholder { color: var(--mut); }
    ========================================================= */
 .spinner {
   width: 16px; height: 16px;
-  border: 2px solid rgba(180,108,255,0.3);
+  border: 2px solid rgba(56,189,248,0.3);
   border-top-color: var(--accent-1);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
@@ -760,7 +912,7 @@ textarea::placeholder { color: var(--mut); }
 .perf-low .glass {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-  background: rgba(20,10,40,0.88) !important;
+  background: rgba(10,25,45,0.88) !important;
 }
 .perf-low .glass::before { opacity: 0.5; }
 
@@ -773,14 +925,13 @@ textarea::placeholder { color: var(--mut); }
   header.topbar { padding: 12px 16px; }
   .panel { padding: 15px; }
   .editor-actions { grid-template-columns: repeat(2, 1fr); }
-  .file-list { max-height: 300px; }
+  .file-list { max-height: 260px; }
+  .repo-list { max-height: 220px; }
   .brand { font-size: 16px; letter-spacing: 1.5px; }
   .brand-badge { width: 36px; height: 36px; border-radius: 12px; }
   .brand-badge svg { width: 19px; height: 19px; }
 }
 @media (max-width: 480px) {
-  .input-wrap { flex-direction: column; }
-  .input-wrap .btn { width: 100%; }
   .file-actions { grid-template-columns: 1fr; }
   .editor-actions { grid-template-columns: 1fr 1fr; }
   .editor-actions .btn span.btn-label { display: none; }
@@ -806,9 +957,7 @@ textarea::placeholder { color: var(--mut); }
 </head>
 <body>
 
-<!-- =========================================================
-     BACKGROUND STACK — VIDEO WALLPAPER
-     ========================================================= -->
+<!-- BACKGROUND STACK -->
 <video
   class="bg-video"
   id="bgVideo"
@@ -833,12 +982,9 @@ textarea::placeholder { color: var(--mut); }
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
-<!-- =========================================================
-     APP
-     ========================================================= -->
+<!-- APP -->
 <div class="app">
 
-  <!-- ======== TOPBAR ======== -->
   <header class="topbar glass">
     <div class="brand">
       <div class="brand-badge"><i data-lucide="terminal-square"></i></div>
@@ -855,28 +1001,46 @@ textarea::placeholder { color: var(--mut); }
     </div>
   </header>
 
-  <!-- ======== LAYOUT ======== -->
   <div class="layout">
 
-    <!-- ====== SIDEBAR ====== -->
     <aside class="sidebar">
 
+      <!-- REPO PICKER -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
             <span class="icon-wrap"><i data-lucide="folder-git-2"></i></span>
             Repository
           </div>
-        </div>
-        <div class="input-wrap">
-          <input type="text" id="repoInput" placeholder="owner/repo"
-                 autocomplete="off" spellcheck="false" />
-          <button class="btn icon-only" id="btnLoadRepo" title="Load repository">
-            <i data-lucide="download"></i>
+          <button class="btn ghost icon-only" id="btnLoadRepos" title="Load repositories" style="width:34px;height:34px;">
+            <i data-lucide="download-cloud"></i>
           </button>
+        </div>
+
+        <div class="active-repo" id="activeRepo">
+          <div class="ar-ic"><i data-lucide="check-circle-2"></i></div>
+          <div class="ar-info">
+            <div class="ar-label">ACTIVE REPO</div>
+            <div class="ar-name" id="activeRepoName">-</div>
+          </div>
+        </div>
+
+        <div class="repo-search-wrap">
+          <span class="search-ic"><i data-lucide="search"></i></span>
+          <input type="search" id="repoSearch" placeholder="Filter repository..."
+                 autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="repo-list" id="repoList">
+          <div class="empty-state">
+            <i data-lucide="github"></i>
+            Belum ada repository dimuat.<br>
+            Klik ikon <b>download-cloud</b> di atas.
+          </div>
         </div>
       </section>
 
+      <!-- MODE -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
@@ -897,6 +1061,7 @@ textarea::placeholder { color: var(--mut); }
         </div>
       </section>
 
+      <!-- FILE LIST -->
       <section class="panel glass" style="flex:1; min-height:0; display:flex; flex-direction:column;">
         <div class="panel-head">
           <div class="panel-title">
@@ -918,8 +1083,7 @@ textarea::placeholder { color: var(--mut); }
         <div class="file-list" id="fileList" style="flex:1;">
           <div class="empty-state">
             <i data-lucide="folder-open"></i>
-            Belum ada repository dimuat.<br>
-            Masukkan <b>owner/repo</b> di atas.
+            Pilih repository dulu di atas.
           </div>
         </div>
 
@@ -928,7 +1092,6 @@ textarea::placeholder { color: var(--mut); }
 
     </aside>
 
-    <!-- ====== EDITOR ====== -->
     <main class="editor-panel glass">
       <div class="editor-head">
         <div class="panel-title">
@@ -948,9 +1111,9 @@ textarea::placeholder { color: var(--mut); }
 
       <div class="editor-wrap">
         <textarea class="editor-area" id="editorArea" spellcheck="false"
-placeholder="// Pilih file dari daftar di kiri,
-// atau klik 'BUAT FILE' untuk bikin file baru,
-// atau klik 'TAMBAH FILE' untuk upload dari perangkat lu."></textarea>
+placeholder="// Pilih repository dari panel kiri,
+// lalu pilih file untuk diedit,
+// atau klik 'BUAT FILE' untuk bikin file baru."></textarea>
       </div>
 
       <div class="editor-actions">
@@ -972,7 +1135,6 @@ placeholder="// Pilih file dari daftar di kiri,
   </div>
 </div>
 
-<!-- ======== TOAST ======== -->
 <div class="toast" id="toast">
   <i data-lucide="info"></i>
   <span id="toastMsg">Message</span>
@@ -980,8 +1142,7 @@ placeholder="// Pilih file dari daftar di kiri,
 
 <script>
 /* =========================================================
-   FORTECH CONTROL — Frontend
-   Video wallpaper via HTML (CSS-based stacking)
+   FORTECH CONTROL — Repo Picker Edition
    ========================================================= */
 (() => {
   'use strict';
@@ -994,7 +1155,9 @@ placeholder="// Pilih file dari daftar di kiri,
     mode: 'edit',
     files: [],
     activeFile: null,
-    activeSha: null
+    activeSha: null,
+    allRepos: [],       // cache semua repo
+    repoFilter: ''      // filter text
   };
 
   const $ = id => document.getElementById(id);
@@ -1002,8 +1165,11 @@ placeholder="// Pilih file dari daftar di kiri,
   const video        = $('bgVideo');
   const statusChip   = $('statusChip');
   const statusText   = $('statusText');
-  const repoInput    = $('repoInput');
-  const btnLoadRepo  = $('btnLoadRepo');
+  const btnLoadRepos = $('btnLoadRepos');
+  const repoSearch   = $('repoSearch');
+  const repoList     = $('repoList');
+  const activeRepo   = $('activeRepo');
+  const activeRepoName = $('activeRepoName');
   const btnRefresh   = $('btnRefresh');
   const btnEdit      = $('btnEdit');
   const btnMaint     = $('btnMaint');
@@ -1025,82 +1191,35 @@ placeholder="// Pilih file dari daftar di kiri,
 
   /* =========================================================
      VIDEO AUTOPLAY FALLBACK
-     Cuma handle kasus autoplay diblokir browser.
-     Tidak ada path-probing — biar browser handle <source> sendiri.
      ========================================================= */
   function ensureVideoPlay() {
     video.muted = true;
     video.volume = 0;
     video.playsInline = true;
-
     const p = video.play();
     if (p && p.catch) {
-      p.catch(err => {
-        console.warn('[Fortech] Autoplay diblokir:', err.name);
-        // Fallback: begitu user interaksi apapun, play
+      p.catch(() => {
         const kick = () => {
           video.muted = true;
           video.play().catch(() => {});
-          document.removeEventListener('touchstart', kick);
-          document.removeEventListener('click', kick);
-          document.removeEventListener('keydown', kick);
-          document.removeEventListener('scroll', kick);
+          ['touchstart','click','keydown','scroll'].forEach(evt =>
+            document.removeEventListener(evt, kick));
         };
-        document.addEventListener('touchstart', kick, { once: true, passive: true });
-        document.addEventListener('click', kick, { once: true });
-        document.addEventListener('keydown', kick, { once: true });
-        document.addEventListener('scroll', kick, { once: true, passive: true });
+        ['touchstart','click','keydown','scroll'].forEach(evt =>
+          document.addEventListener(evt, kick, { once: true, passive: true }));
       });
     }
   }
-
-  // Coba play pas metadata ready
-  if (video.readyState >= 1) {
-    ensureVideoPlay();
-  } else {
-    video.addEventListener('loadedmetadata', ensureVideoPlay, { once: true });
-  }
-
-  // Log status video untuk debug
-  video.addEventListener('loadeddata', () => {
-    console.log('[Fortech] Video loaded:',
-      video.videoWidth + 'x' + video.videoHeight,
-      '| src:', video.currentSrc);
-    if (video.videoWidth === 0) {
-      console.warn('[Fortech] Video 0x0 → codec mungkin unsupported (HEVC/H.265/AV1). Convert ke H.264.');
-    }
-  });
-
-  video.addEventListener('error', (e) => {
-    const err = video.error;
-    let msg = 'unknown';
-    if (err) {
-      switch (err.code) {
-        case 1: msg = 'ABORTED'; break;
-        case 2: msg = 'NETWORK'; break;
-        case 3: msg = 'DECODE'; break;
-        case 4: msg = 'SRC_NOT_SUPPORTED'; break;
-      }
-    }
-    console.error('[Fortech] Video error:', msg, err, '| currentSrc:', video.currentSrc);
-  });
+  if (video.readyState >= 1) ensureVideoPlay();
+  else video.addEventListener('loadedmetadata', ensureVideoPlay, { once: true });
 
   /* =========================================================
-     PERF AUTO-DETECT (opsional)
+     PERF AUTO-DETECT
      ========================================================= */
   (function detectPerf() {
-    // Device low-end: RAM kecil atau CPU core sedikit
     const mem = navigator.deviceMemory || 4;
     const cores = navigator.hardwareConcurrency || 4;
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-
-    if (mem <= 2 || cores <= 2) {
-      document.body.classList.add('perf-low');
-      console.log('[Fortech] Perf mode: LOW (mem:', mem, 'cores:', cores + ')');
-    } else if (isMobile && (mem <= 4 || cores <= 4)) {
-      document.body.classList.add('perf-low');
-      console.log('[Fortech] Perf mode: LOW (mobile)');
-    }
+    if (mem <= 2 || cores <= 2) document.body.classList.add('perf-low');
   })();
 
   /* =========================================================
@@ -1117,7 +1236,6 @@ placeholder="// Pilih file dari daftar di kiri,
     statusText.textContent = txt;
     statusChip.className = 'status-chip' + (cls ? ' ' + cls : '');
   }
-
   function setEditorStatus(txt, ok) {
     editorStatus.innerHTML = `<i data-lucide="circle-dot"></i> <span>${txt}</span>`;
     if (ok === false) editorStatus.style.color = 'var(--err)';
@@ -1149,9 +1267,7 @@ placeholder="// Pilih file dari daftar di kiri,
   /* =========================================================
      BASE64
      ========================================================= */
-  function b64encode(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+  function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
   function b64decode(str) {
     try { return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
     catch { return atob(str.replace(/\n/g, '')); }
@@ -1214,6 +1330,18 @@ placeholder="// Pilih file dari daftar di kiri,
     return (bytes / 1024 / 1024).toFixed(1) + 'MB';
   }
 
+  function timeAgo(dateStr) {
+    if (!dateStr) return '';
+    const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
+    if (diff < 60) return 'baru saja';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm lalu';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h lalu';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'h lalu';
+    if (diff < 2592000) return Math.floor(diff / 604800) + 'w lalu';
+    if (diff < 31536000) return Math.floor(diff / 2592000) + 'bln lalu';
+    return Math.floor(diff / 31536000) + 'thn lalu';
+  }
+
   /* =========================================================
      PROXY FETCH
      ========================================================= */
@@ -1227,65 +1355,121 @@ placeholder="// Pilih file dari daftar di kiri,
   }
 
   /* =========================================================
-     MODE
+     LOAD REPOSITORIES
      ========================================================= */
-  function setMode(mode) {
-    state.mode = mode;
-    btnEdit.classList.toggle('active', mode === 'edit');
-    btnMaint.classList.toggle('active', mode === 'maint');
+  async function loadRepositories() {
+    setStatus('LOAD REPOS...', 'busy');
+    repoList.innerHTML =
+      '<div class="empty-state"><span class="spinner"></span><br>Memuat repositories...</div>';
 
-    const editable = mode === 'edit';
-    modeHint.textContent = editable
-      ? 'Mode EDIT aktif — bisa ubah, tambah, hapus file.'
-      : 'Mode MAINTANANCE — read-only, hanya untuk melihat.';
-
-    if (editable) editor.removeAttribute('readonly');
-    else editor.setAttribute('readonly', 'true');
-
-    btnSave.disabled       = !editable;
-    btnDelete.disabled     = !editable;
-    btnNewFile.disabled    = !editable;
-    btnUploadFile.disabled = !editable;
-    editor.style.opacity = editable ? '1' : '0.75';
+    try {
+      const res = await ghFetch('/user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member');
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error(e.message || e.error || ('HTTP ' + res.status + ' — pastikan GITHUB_TOKEN punya scope "repo"'));
+      }
+      const repos = await res.json();
+      state.allRepos = repos;
+      renderRepoList();
+      setStatus('READY · ' + repos.length + ' repos', 'ok');
+      toast(repos.length + ' repository dimuat ✓', 'ok');
+    } catch (err) {
+      console.error(err);
+      setStatus('ERROR', 'error');
+      repoList.innerHTML =
+        `<div class="empty-state" style="color:var(--err)">❌ ${escapeHtml(err.message)}</div>`;
+      refreshIcons();
+      toast(err.message, 'error');
+    }
   }
 
-  btnEdit.addEventListener('click', () => setMode('edit'));
-  btnMaint.addEventListener('click', () => setMode('maint'));
-
   /* =========================================================
-     LOAD REPO
+     RENDER REPO LIST
      ========================================================= */
-  async function loadRepo() {
-    const raw = repoInput.value.trim();
-    if (!raw) { toast('Isi dulu owner/repo', 'error'); return; }
-    if (!/^[^\/\s]+\/[^\/\s]+$/.test(raw)) {
-      toast('Format harus owner/repo', 'error'); return;
+  function renderRepoList() {
+    let list = state.allRepos;
+
+    // Filter
+    if (state.repoFilter) {
+      const q = state.repoFilter.toLowerCase();
+      list = list.filter(r =>
+        r.name.toLowerCase().includes(q) ||
+        (r.full_name || '').toLowerCase().includes(q) ||
+        (r.description || '').toLowerCase().includes(q)
+      );
     }
 
-    state.repo = raw;
+    if (!list.length) {
+      repoList.innerHTML =
+        `<div class="empty-state"><i data-lucide="search-x"></i>${state.repoFilter ? 'Tidak ada repo cocok dengan filter.' : 'Belum ada repository dimuat.'}</div>`;
+      refreshIcons();
+      return;
+    }
+
+    repoList.innerHTML = list.map(r => {
+      const isActive = state.repo === r.full_name;
+      return `
+        <div class="repo-item${isActive ? ' active' : ''}" data-full="${escapeHtml(r.full_name)}">
+          <div class="repo-ic">
+            <i data-lucide="${r.private ? 'lock' : 'github'}"></i>
+          </div>
+          <div class="repo-body">
+            <div class="repo-name">${escapeHtml(r.name)}</div>
+            ${r.description ? `<div class="repo-desc">${escapeHtml(r.description)}</div>` : ''}
+            <div class="repo-meta">
+              <span class="badge ${r.private ? 'private' : 'public'}">
+                ${r.private ? 'PRIVATE' : 'PUBLIC'}
+              </span>
+              ${r.language ? `<span>${escapeHtml(r.language)}</span>` : ''}
+              <span>${timeAgo(r.updated_at)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    refreshIcons();
+
+    repoList.querySelectorAll('.repo-item').forEach(el => {
+      el.addEventListener('click', () => selectRepo(el.dataset.full));
+    });
+  }
+
+  /* =========================================================
+     SELECT REPOSITORY
+     ========================================================= */
+  async function selectRepo(fullName) {
+    if (!fullName) return;
+
+    // Update visual selection
+    repoList.querySelectorAll('.repo-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.full === fullName);
+    });
+
+    activeRepo.classList.add('show');
+    activeRepoName.textContent = fullName;
+
+    state.repo = fullName;
     state.files = [];
     state.activeFile = null;
     state.activeSha = null;
-    localStorage.setItem(LS_REPO, raw);
+    localStorage.setItem(LS_REPO, fullName);
 
-    setStatus('LOADING...', 'busy');
     fileList.innerHTML =
-      '<div class="empty-state"><span class="spinner"></span><br>Memuat repository...</div>';
+      '<div class="empty-state"><span class="spinner"></span><br>Memuat file...</div>';
     editor.value = '';
     filePath.value = '';
     setEditorStatus('NO FILE');
+    setStatus('LOADING FILES...', 'busy');
 
     try {
-      const infoRes = await ghFetch('/repos/' + state.repo);
-      if (!infoRes.ok) {
-        const e = await infoRes.json().catch(() => ({}));
-        throw new Error(e.message || e.error || ('HTTP ' + infoRes.status));
-      }
-      const info = await infoRes.json();
-      state.branch = info.default_branch || 'main';
+      // Cari default branch dari cache repo
+      const repo = state.allRepos.find(r => r.full_name === fullName);
+      state.branch = repo?.default_branch || 'main';
+
       await fetchTree();
       setStatus('CONNECTED · ' + state.branch, 'ok');
-      toast('Repository dimuat ✓', 'ok');
+      toast('Repository dibuka ✓', 'ok');
     } catch (err) {
       console.error(err);
       setStatus('ERROR', 'error');
@@ -1296,13 +1480,26 @@ placeholder="// Pilih file dari daftar di kiri,
     }
   }
 
-  btnLoadRepo.addEventListener('click', loadRepo);
-  repoInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') loadRepo();
+  /* =========================================================
+     REPO SEARCH
+     ========================================================= */
+  let searchTimer = null;
+  repoSearch.addEventListener('input', (e) => {
+    state.repoFilter = e.target.value.trim();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(renderRepoList, 150);
   });
 
+  /* =========================================================
+     LOAD REPOS BUTTON
+     ========================================================= */
+  btnLoadRepos.addEventListener('click', loadRepositories);
+
+  /* =========================================================
+     REFRESH FILE LIST
+     ========================================================= */
   btnRefresh.addEventListener('click', async () => {
-    if (!state.repo) { toast('Belum ada repo dimuat', 'error'); return; }
+    if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
     setStatus('REFRESHING...', 'busy');
     try {
       await fetchTree();
@@ -1422,7 +1619,7 @@ placeholder="// Pilih file dari daftar di kiri,
      ========================================================= */
   async function saveFile() {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
-    if (!state.repo) { toast('Belum pilih repository', 'error'); return; }
+    if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
 
     const path = filePath.value.trim().replace(/^\/+/, '');
     if (!path) { toast('Isi path file dulu', 'error'); return; }
@@ -1500,7 +1697,7 @@ placeholder="// Pilih file dari daftar di kiri,
   });
 
   /* =========================================================
-     TAMBAH FILE (UPLOAD)
+     TAMBAH FILE
      ========================================================= */
   btnUploadFile.addEventListener('click', () => {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
@@ -1572,7 +1769,7 @@ placeholder="// Pilih file dari daftar di kiri,
   }
 
   /* =========================================================
-     DELETE FILE
+     DELETE
      ========================================================= */
   async function deleteFile() {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
@@ -1646,6 +1843,32 @@ placeholder="// Pilih file dari daftar di kiri,
   });
 
   /* =========================================================
+     MODE
+     ========================================================= */
+  function setMode(mode) {
+    state.mode = mode;
+    btnEdit.classList.toggle('active', mode === 'edit');
+    btnMaint.classList.toggle('active', mode === 'maint');
+
+    const editable = mode === 'edit';
+    modeHint.textContent = editable
+      ? 'Mode EDIT aktif — bisa ubah, tambah, hapus file.'
+      : 'Mode MAINTANANCE — read-only, hanya untuk melihat.';
+
+    if (editable) editor.removeAttribute('readonly');
+    else editor.setAttribute('readonly', 'true');
+
+    btnSave.disabled       = !editable;
+    btnDelete.disabled     = !editable;
+    btnNewFile.disabled    = !editable;
+    btnUploadFile.disabled = !editable;
+    editor.style.opacity = editable ? '1' : '0.75';
+  }
+
+  btnEdit.addEventListener('click', () => setMode('edit'));
+  btnMaint.addEventListener('click', () => setMode('maint'));
+
+  /* =========================================================
      SHORTCUTS
      ========================================================= */
   document.addEventListener('keydown', e => {
@@ -1669,9 +1892,16 @@ placeholder="// Pilih file dari daftar di kiri,
     refreshIcons();
     setMode('edit');
     setEditorStatus('NO FILE');
-    const saved = localStorage.getItem(LS_REPO);
-    if (saved) repoInput.value = saved;
     setStatus('READY');
+
+    // Auto-load repos pas pertama buka
+    const cachedRepo = localStorage.getItem(LS_REPO);
+    loadRepositories().then(() => {
+      if (cachedRepo) {
+        const el = repoList.querySelector(`[data-full="${CSS.escape(cachedRepo)}"]`);
+        if (el) selectRepo(cachedRepo);
+      }
+    });
   })();
 
 })();
