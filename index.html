@@ -7,52 +7,37 @@
 <title>FORTECH CONTROL</title>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-/* =========================================================
-   FORTECH CONTROL — LIGHT BLUE EDITION + AUTH GATE
-   ========================================================= */
-
 :root {
   --accent-1: #7dd3fc;
   --accent-2: #38bdf8;
   --accent-3: #0284c7;
   --accent-4: #0369a1;
-  --accent-glow: rgba(56,189,248,0.55);
-
   --ok: #4ade80;
   --err: #f87171;
   --warn: #fbbf24;
   --text: #eaf6ff;
   --text-dim: #9dc4dd;
   --mut: #6a90ab;
-
   --glass: rgba(10,30,52,0.55);
   --glass-2: rgba(14,38,64,0.65);
   --glass-line: rgba(125,211,252,0.20);
   --glass-line-2: rgba(125,211,252,0.35);
-
   --r-sm: 10px;
   --r-md: 14px;
   --r-lg: 20px;
   --r-xl: 26px;
-
   --sh-1: 0 2px 10px rgba(0,0,0,0.4);
   --sh-2: 0 10px 30px rgba(0,0,0,0.5);
-
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
-
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-l: env(safe-area-inset-left, 0px);
   --safe-r: env(safe-area-inset-right, 0px);
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; }
-
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -60,79 +45,46 @@ html {
   min-height: 100%;
   overscroll-behavior-y: none;
 }
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto,
-               'Helvetica Neue', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px; line-height: 1.5; color: var(--text);
   background: transparent !important;
-  min-height: 100vh;
-  min-height: 100dvh;
-  overflow-x: hidden;
-  position: relative;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh; min-height: 100dvh;
+  overflow-x: hidden; position: relative;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
 }
-
 input, button, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
 button { border: 0; background: none; cursor: pointer; padding: 0; }
 a { color: inherit; text-decoration: none; }
 img, svg { display: block; max-width: 100%; }
-svg {
-  stroke: currentColor; fill: none;
-  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
-}
+svg { stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 :focus { outline: none; }
 :focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
 ::selection { background: var(--accent-2); color: #021222; }
 
-/* =========================================================
-   BACKGROUND STACK
-   ========================================================= */
+/* BACKGROUND */
 .bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  object-fit: cover;
-  object-position: center center;
-  z-index: -10;
-  pointer-events: none;
-  background: #050f1e;
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh; height: 100dvh;
+  object-fit: cover; object-position: center center;
+  z-index: -10; pointer-events: none; background: #050f1e;
   transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
   margin: 0; padding: 0; border: 0;
   max-width: none; max-height: none;
   min-width: 100vw; min-height: 100vh;
   display: block;
 }
-
-.bg-shade,
-.bg-tint,
-.bg-grain,
-.bg-vignette {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  pointer-events: none;
-  margin: 0; padding: 0; border: 0;
+.bg-shade, .bg-tint, .bg-grain, .bg-vignette {
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh; height: 100dvh;
+  pointer-events: none; margin: 0; padding: 0; border: 0;
 }
-
 .bg-shade {
   z-index: -9;
-  background: linear-gradient(180deg,
-    rgba(5,15,30,0.62) 0%,
-    rgba(5,15,30,0.72) 40%,
-    rgba(5,15,30,0.82) 100%);
+  background: linear-gradient(180deg, rgba(5,15,30,0.62) 0%, rgba(5,15,30,0.72) 40%, rgba(5,15,30,0.82) 100%);
 }
-
 .bg-tint {
   z-index: -8;
   background:
@@ -140,71 +92,42 @@ svg {
     radial-gradient(100% 70% at 100% 100%, rgba(14,165,233,0.18), transparent 60%);
   mix-blend-mode: screen;
 }
-
 .bg-grain {
-  z-index: -7;
-  opacity: 0.05;
+  z-index: -7; opacity: 0.05;
   background-image:
     radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px),
     radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
   background-size: 3px 3px, 5px 5px;
   background-position: 0 0, 1px 2px;
 }
-
 .bg-vignette {
   z-index: -6;
-  background: radial-gradient(120% 100% at 50% 50%,
-    transparent 45%,
-    rgba(0,0,0,0.35) 75%,
-    rgba(0,0,0,0.65) 100%);
+  background: radial-gradient(120% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.65) 100%);
 }
-
 .blob {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(90px);
-  z-index: -5;
-  pointer-events: none;
-  opacity: 0.35;
-  will-change: transform;
+  position: fixed; border-radius: 50%;
+  filter: blur(90px); z-index: -5;
+  pointer-events: none; opacity: 0.35; will-change: transform;
 }
 .blob-1 {
-  width: 40vw; height: 40vw;
-  max-width: 460px; max-height: 460px;
+  width: 40vw; height: 40vw; max-width: 460px; max-height: 460px;
   background: radial-gradient(circle, #38bdf8, transparent 70%);
-  top: -10%; left: -10%;
-  animation: float1 20s ease-in-out infinite;
+  top: -10%; left: -10%; animation: float1 20s ease-in-out infinite;
 }
 .blob-2 {
-  width: 36vw; height: 36vw;
-  max-width: 420px; max-height: 420px;
+  width: 36vw; height: 36vw; max-width: 420px; max-height: 420px;
   background: radial-gradient(circle, #7dd3fc, transparent 70%);
-  bottom: -10%; right: -10%;
-  animation: float2 24s ease-in-out infinite;
+  bottom: -10%; right: -10%; animation: float2 24s ease-in-out infinite;
 }
-@keyframes float1 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  50%     { transform: translate(60px,40px) scale(1.1); }
-}
-@keyframes float2 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  50%     { transform: translate(-60px,-40px) scale(1.15); }
-}
+@keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,40px) scale(1.1); } }
+@keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-60px,-40px) scale(1.15); } }
 
-/* =========================================================
-   APP SHELL
-   ========================================================= */
+/* APP SHELL */
 .app {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: 20px;
-  max-width: 1500px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  position: relative; z-index: 1;
+  min-height: 100vh; min-height: 100dvh;
+  padding: 20px; max-width: 1500px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 18px;
   padding-top: calc(var(--safe-t) + 20px);
   padding-bottom: calc(var(--safe-b) + 20px);
   padding-left: calc(var(--safe-l) + 20px);
@@ -212,41 +135,23 @@ svg {
 }
 .app.hide { display: none; }
 
-/* =========================================================
-   AUTH SCREEN
-   ========================================================= */
+/* AUTH SCREEN */
 .auth-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
   padding: calc(var(--safe-t) + 24px) 20px calc(var(--safe-b) + 24px);
   animation: authIn 0.5s var(--ease-out);
 }
-.auth-screen.hide {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s var(--ease);
-}
-@keyframes authIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
+.auth-screen.hide { opacity: 0; pointer-events: none; transition: opacity 0.35s var(--ease); }
+@keyframes authIn { from { opacity: 0; } to { opacity: 1; } }
 .auth-card {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
+  position: relative; width: 100%; max-width: 400px;
   padding: 34px 26px 26px;
   background: var(--glass-2);
   border: 1px solid var(--glass-line-2);
   border-radius: var(--r-xl);
   box-shadow: var(--sh-2), 0 0 60px rgba(56,189,248,0.2);
-  contain: layout style;
-  overflow: hidden;
-  isolation: isolate;
+  contain: layout style; overflow: hidden; isolation: isolate;
 }
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .auth-card {
@@ -255,11 +160,8 @@ svg {
   }
 }
 .auth-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit; padding: 1px;
   background: linear-gradient(135deg,
     rgba(255,255,255,0.45) 0%,
     rgba(56,189,248,0.5) 30%,
@@ -268,65 +170,37 @@ svg {
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  pointer-events: none;
-  z-index: 2;
+  pointer-events: none; z-index: 2;
 }
 .auth-card > * { position: relative; z-index: 3; }
-
 .auth-logo {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 18px;
-  border-radius: 22px;
-  display: grid;
-  place-items: center;
+  width: 70px; height: 70px; margin: 0 auto 18px;
+  border-radius: 22px; display: grid; place-items: center;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
-  box-shadow:
-    0 10px 30px rgba(56,189,248,0.5),
-    inset 0 2px 0 rgba(255,255,255,0.4);
+  box-shadow: 0 10px 30px rgba(56,189,248,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
   animation: lockPulse 3s ease-in-out infinite;
 }
-.auth-logo svg {
-  width: 34px;
-  height: 34px;
-  color: #041a2e;
-  stroke-width: 2.3;
-}
+.auth-logo svg { width: 34px; height: 34px; color: #041a2e; stroke-width: 2.3; }
 @keyframes lockPulse {
   0%, 100% { box-shadow: 0 10px 30px rgba(56,189,248,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
   50%      { box-shadow: 0 10px 40px rgba(56,189,248,0.75), inset 0 2px 0 rgba(255,255,255,0.4); }
 }
-
 .auth-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 2.5px;
-  margin: 0 0 6px;
+  text-align: center; font-size: 22px; font-weight: 900;
+  letter-spacing: 2.5px; margin: 0 0 6px;
   background: linear-gradient(135deg, #fff 0%, #bae6fd 50%, #fff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.auth-sub {
-  text-align: center;
-  font-size: 12.5px;
-  color: var(--text-dim);
-  margin: 0 0 22px;
-  letter-spacing: 0.5px;
-}
-
+.auth-sub { text-align: center; font-size: 12.5px; color: var(--text-dim); margin: 0 0 22px; letter-spacing: 0.5px; }
 .auth-field { margin-bottom: 12px; position: relative; }
 .auth-field input {
-  width: 100%;
-  padding: 14px 44px 14px 46px;
+  width: 100%; padding: 14px 44px 14px 46px;
   border-radius: var(--r-md);
   background: rgba(0,0,0,0.35);
   border: 1px solid var(--glass-line);
-  color: var(--text);
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  transition: 0.2s var(--ease);
+  color: var(--text); font-size: 14px;
+  letter-spacing: 1.5px; transition: 0.2s var(--ease);
 }
 .auth-field input:focus {
   border-color: var(--accent-1);
@@ -334,83 +208,41 @@ svg {
   background: rgba(0,0,0,0.5);
 }
 .auth-field input::placeholder { color: var(--mut); letter-spacing: 0.5px; }
-.auth-field .ic-left,
-.auth-field .ic-right {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--mut);
-  pointer-events: none;
-  transition: color 0.2s var(--ease);
+.auth-field .ic-left, .auth-field .ic-right {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  color: var(--mut); pointer-events: none; transition: color 0.2s var(--ease);
 }
 .auth-field .ic-left { left: 15px; }
 .auth-field .ic-right { right: 15px; }
-.auth-field .ic-left svg,
-.auth-field .ic-right svg { width: 16px; height: 16px; stroke-width: 2.2; }
+.auth-field .ic-left svg, .auth-field .ic-right svg { width: 16px; height: 16px; stroke-width: 2.2; }
 .auth-field input:focus ~ .ic-left,
 .auth-field input:focus ~ .ic-right { color: var(--accent-1); }
-
-.auth-field .ic-right.toggle {
-  pointer-events: auto;
-  cursor: pointer;
-}
+.auth-field .ic-right.toggle { pointer-events: auto; cursor: pointer; }
 .auth-field .ic-right.toggle:hover { color: var(--accent-1); }
-
 .auth-btn {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: var(--r-md);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #041a2e;
+  width: 100%; padding: 14px 18px; border-radius: var(--r-md);
+  font-size: 14px; font-weight: 800; letter-spacing: 2px; color: #041a2e;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-  box-shadow:
-    0 6px 22px rgba(56,189,248,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: 0 6px 22px rgba(56,189,248,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
   transition: transform 0.12s var(--ease), filter 0.2s var(--ease);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px;
 }
 .auth-btn svg { width: 16px; height: 16px; stroke-width: 2.5; }
 .auth-btn:hover:not(:disabled) { filter: brightness(1.1); }
 .auth-btn:active:not(:disabled) { transform: scale(0.97); }
 .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
 .auth-btn.loading .btn-label { display: none; }
 .auth-btn .spinner { display: none; }
 .auth-btn.loading .spinner { display: inline-block; }
-
 .auth-error {
-  margin-top: 14px;
-  font-size: 12.5px;
-  color: var(--err);
-  text-align: center;
-  min-height: 18px;
-  letter-spacing: 0.4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity 0.25s var(--ease);
+  margin-top: 14px; font-size: 12.5px; color: var(--err);
+  text-align: center; min-height: 18px; letter-spacing: 0.4px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  opacity: 0; transition: opacity 0.25s var(--ease);
 }
 .auth-error.show { opacity: 1; }
 .auth-error svg { width: 14px; height: 14px; stroke-width: 2.5; flex-shrink: 0; }
-
-.auth-foot {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 10.5px;
-  color: var(--mut);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-/* Shake animation */
+.auth-foot { margin-top: 20px; text-align: center; font-size: 10.5px; color: var(--mut); letter-spacing: 1.5px; text-transform: uppercase; }
 @keyframes shake {
   10%, 90% { transform: translateX(-2px); }
   20%, 80% { transform: translateX(3px); }
@@ -419,16 +251,12 @@ svg {
 }
 .auth-card.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97); }
 
-/* =========================================================
-   GLASS
-   ========================================================= */
+/* GLASS */
 .glass {
-  position: relative;
-  background: var(--glass);
+  position: relative; background: var(--glass);
   border: 1px solid var(--glass-line);
   border-radius: var(--r-lg);
-  contain: layout style;
-  box-shadow: var(--sh-1);
+  contain: layout style; box-shadow: var(--sh-1);
 }
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .glass {
@@ -437,11 +265,8 @@ svg {
   }
 }
 .glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit; padding: 1px;
   background: linear-gradient(135deg,
     rgba(255,255,255,0.30) 0%,
     rgba(56,189,248,0.38) 30%,
@@ -450,83 +275,51 @@ svg {
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  pointer-events: none;
-  z-index: 2;
+  pointer-events: none; z-index: 2;
 }
 .glass::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,0.07) 0%,
-    rgba(255,255,255,0.015) 60%,
-    transparent 100%);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.015) 60%, transparent 100%);
+  border-radius: inherit; pointer-events: none; z-index: 1;
 }
 .glass > * { position: relative; z-index: 3; }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* HEADER */
 header.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 22px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 22px; flex-wrap: wrap;
 }
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 900;
-  font-size: clamp(16px, 2.2vw, 22px);
-  letter-spacing: 2.5px;
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 900; font-size: clamp(16px, 2.2vw, 22px); letter-spacing: 2.5px;
 }
 .brand-badge {
-  width: 42px; height: 42px;
-  border-radius: 14px;
+  width: 42px; height: 42px; border-radius: 14px;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
   display: grid; place-items: center;
-  box-shadow:
-    0 6px 22px rgba(56,189,248,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 6px 22px rgba(56,189,248,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .brand-badge svg { width: 22px; height: 22px; color: #041a2e; stroke-width: 2.4; }
 .brand-text {
   background: linear-gradient(135deg, #ffffff 0%, #bae6fd 50%, #ffffff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 30px rgba(56,189,248,0.4);
 }
 .header-right { display: flex; align-items: center; gap: 10px; }
-
 .status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--glass-line);
-  font-size: 11.5px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-size: 11.5px; letter-spacing: 1px;
+  text-transform: uppercase; font-weight: 700;
   color: var(--text-dim);
-  transition: all 0.25s var(--ease);
-  white-space: nowrap;
+  transition: all 0.25s var(--ease); white-space: nowrap;
 }
 .status-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--ok);
-  box-shadow: 0 0 12px var(--ok);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ok); box-shadow: 0 0 12px var(--ok);
   animation: pulse 1.8s ease-in-out infinite;
 }
 @keyframes pulse {
@@ -537,39 +330,24 @@ header.topbar {
 .status-chip.error .status-dot { background: var(--err); box-shadow: 0 0 12px var(--err); }
 .status-chip.ok .status-dot { background: var(--ok); box-shadow: 0 0 12px var(--ok); }
 
-/* =========================================================
-   LAYOUT
-   ========================================================= */
+/* LAYOUT */
 .layout {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 18px;
-  flex: 1;
-  min-height: 0;
+  display: grid; grid-template-columns: 400px 1fr;
+  gap: 18px; flex: 1; min-height: 0;
 }
 .sidebar { display: flex; flex-direction: column; gap: 16px; }
 .panel { padding: 18px; }
-
 .panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  gap: 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; gap: 8px;
 }
 .panel-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-dim); font-weight: 800;
 }
 .panel-title .icon-wrap {
-  width: 26px; height: 26px;
-  border-radius: 8px;
+  width: 26px; height: 26px; border-radius: 8px;
   background: linear-gradient(135deg, rgba(56,189,248,0.35), rgba(2,132,199,0.35));
   display: grid; place-items: center;
   border: 1px solid rgba(56,189,248,0.4);
@@ -577,13 +355,8 @@ header.topbar {
 }
 .panel-title .icon-wrap svg { width: 14px; height: 14px; color: #bae6fd; stroke-width: 2.5; }
 
-/* =========================================================
-   INPUT
-   ========================================================= */
-input[type="text"],
-input[type="password"],
-input[type="search"],
-textarea {
+/* INPUT */
+input[type="text"], input[type="password"], input[type="search"], textarea {
   width: 100%;
   background: rgba(0,0,0,0.35);
   border: 1px solid var(--glass-line);
@@ -595,112 +368,71 @@ textarea {
   transition: 0.2s var(--ease);
   font-family: inherit;
 }
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="search"]:focus,
-textarea:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="search"]:focus, textarea:focus {
   border-color: var(--accent-1);
   box-shadow: 0 0 0 3px rgba(56,189,248,0.18);
   background: rgba(0,0,0,0.5);
 }
-input::placeholder,
-textarea::placeholder { color: var(--mut); }
+input::placeholder, textarea::placeholder { color: var(--mut); }
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* BUTTONS */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  font-size: 12.5px;
-  color: #041a2e;
-  padding: 11px 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; border: none; cursor: pointer;
+  font-family: inherit; font-weight: 700;
+  letter-spacing: 0.8px; font-size: 12.5px;
+  color: #041a2e; padding: 11px 16px;
   border-radius: var(--r-md);
   background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-  box-shadow:
-    0 4px 14px rgba(56,189,248,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 4px 14px rgba(56,189,248,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
   transition: transform 0.12s var(--ease), filter 0.2s var(--ease), box-shadow 0.2s var(--ease);
-  white-space: nowrap;
-  user-select: none;
+  white-space: nowrap; user-select: none;
 }
 .btn svg { width: 15px; height: 15px; stroke-width: 2.5; flex-shrink: 0; color: #041a2e; }
 .btn:hover:not(:disabled) {
   filter: brightness(1.1);
-  box-shadow:
-    0 6px 20px rgba(56,189,248,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.35);
+  box-shadow: 0 6px 20px rgba(56,189,248,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 .btn:active:not(:disabled) { transform: scale(0.96); }
 .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
 .btn.ghost {
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--glass-line);
-  box-shadow: none;
-  color: var(--text-dim);
+  box-shadow: none; color: var(--text-dim);
 }
 .btn.ghost svg { color: var(--text-dim); }
 .btn.ghost:hover:not(:disabled) {
-  background: rgba(56,189,248,0.15);
-  color: #fff;
+  background: rgba(56,189,248,0.15); color: #fff;
   border-color: rgba(56,189,248,0.5);
 }
 .btn.ghost:hover:not(:disabled) svg { color: #fff; }
-
 .btn.danger {
   background: linear-gradient(135deg, #f87171, #b91c1c);
   color: #fff;
-  box-shadow:
-    0 4px 14px rgba(248,113,113,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 4px 14px rgba(248,113,113,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .btn.danger svg { color: #fff; }
-
 .btn.ok {
   background: linear-gradient(135deg, #4ade80, #15803d);
   color: #04210f;
-  box-shadow:
-    0 4px 14px rgba(74,222,128,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 4px 14px rgba(74,222,128,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .btn.ok svg { color: #04210f; }
-
 .btn.icon-only { padding: 11px; width: 42px; height: 42px; }
 .btn.icon-only svg { width: 17px; height: 17px; }
 .btn.full { width: 100%; }
 
-/* =========================================================
-   MODE TOGGLE
-   ========================================================= */
+/* MODE TOGGLE */
 .mode-toggle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 5px;
-  background: rgba(0,0,0,0.3);
-  border-radius: var(--r-md);
-  border: 1px solid var(--glass-line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  padding: 5px; background: rgba(0,0,0,0.3);
+  border-radius: var(--r-md); border: 1px solid var(--glass-line);
 }
 .mode-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 10px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  user-select: none;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 12px 10px;
+  border-radius: 10px; font-weight: 800; font-size: 12px;
+  letter-spacing: 1.5px; cursor: pointer; user-select: none;
   color: var(--text-dim);
   transition: all 0.25s var(--ease);
   border: 1px solid transparent;
@@ -711,54 +443,33 @@ textarea::placeholder { color: var(--mut); }
   color: #041a2e;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
   border-color: rgba(56,189,248,0.6);
-  box-shadow:
-    0 6px 20px rgba(56,189,248,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 6px 20px rgba(56,189,248,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .mode-btn.active svg { color: #041a2e; }
 .mode-btn.maint.active {
   color: #1a1000;
   background: linear-gradient(135deg, #fbbf24, #b45309);
   border-color: rgba(251,191,36,0.6);
-  box-shadow:
-    0 6px 20px rgba(251,191,36,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 6px 20px rgba(251,191,36,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .mode-btn.maint.active svg { color: #1a1000; }
 .mode-hint {
-  margin-top: 10px;
-  font-size: 11.5px;
-  color: var(--text-dim);
-  letter-spacing: 0.4px;
-  text-align: center;
-  line-height: 1.5;
+  margin-top: 10px; font-size: 11.5px; color: var(--text-dim);
+  letter-spacing: 0.4px; text-align: center; line-height: 1.5;
 }
 
-/* =========================================================
-   REPO PICKER
-   ========================================================= */
-.repo-search-wrap {
-  position: relative;
-  margin-bottom: 10px;
-}
+/* REPO PICKER */
+.repo-search-wrap { position: relative; margin-bottom: 10px; }
 .repo-search-wrap .search-ic {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: var(--mut);
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--mut);
 }
 .repo-search-wrap .search-ic svg { width: 14px; height: 14px; }
 .repo-search-wrap input { padding-left: 36px; }
-
 .repo-list {
-  max-height: 260px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 4px;
+  max-height: 260px; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 6px; padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
 .repo-list::-webkit-scrollbar,
@@ -770,27 +481,18 @@ textarea::placeholder { color: var(--mut); }
 .repo-list::-webkit-scrollbar-thumb,
 .file-list::-webkit-scrollbar-thumb,
 .editor-area::-webkit-scrollbar-thumb {
-  background: rgba(56,189,248,0.45);
-  border-radius: 6px;
+  background: rgba(56,189,248,0.45); border-radius: 6px;
 }
 .repo-list::-webkit-scrollbar-thumb:hover,
 .file-list::-webkit-scrollbar-thumb:hover,
-.editor-area::-webkit-scrollbar-thumb:hover {
-  background: rgba(56,189,248,0.7);
-}
-
+.editor-area::-webkit-scrollbar-thumb:hover { background: rgba(56,189,248,0.7); }
 .repo-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.06);
-  cursor: pointer;
-  transition: all 0.18s var(--ease);
-  min-width: 0;
-  text-align: left;
+  cursor: pointer; transition: all 0.18s var(--ease);
+  min-width: 0; text-align: left;
 }
 .repo-item:hover {
   background: rgba(56,189,248,0.12);
@@ -803,77 +505,42 @@ textarea::placeholder { color: var(--mut); }
   box-shadow: 0 0 14px rgba(56,189,248,0.4);
 }
 .repo-item .repo-ic {
-  width: 30px; height: 30px;
-  flex-shrink: 0;
+  width: 30px; height: 30px; flex-shrink: 0;
   display: grid; place-items: center;
   border-radius: 9px;
   background: rgba(56,189,248,0.14);
-  color: var(--accent-1);
-  margin-top: 1px;
+  color: var(--accent-1); margin-top: 1px;
 }
 .repo-item .repo-ic svg { width: 16px; height: 16px; stroke-width: 2.2; }
-.repo-item .repo-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+.repo-item .repo-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .repo-item .repo-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: #eaf6ff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 13px; font-weight: 700; color: #eaf6ff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .repo-item .repo-desc {
-  font-size: 11px;
-  color: var(--text-dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 11px; color: var(--text-dim);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   opacity: 0.85;
 }
 .repo-item .repo-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 10px;
-  color: var(--mut);
-  margin-top: 3px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; color: var(--mut); margin-top: 3px;
 }
 .repo-item .repo-meta .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 1px 6px;
-  border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 1px 6px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.05);
-  font-weight: 700;
-  letter-spacing: 0.3px;
+  font-weight: 700; letter-spacing: 0.3px;
 }
-.repo-item .repo-meta .badge.private {
-  color: #fbbf24;
-  border-color: rgba(251,191,36,0.3);
-  background: rgba(251,191,36,0.1);
-}
-.repo-item .repo-meta .badge.public {
-  color: #4ade80;
-  border-color: rgba(74,222,128,0.3);
-  background: rgba(74,222,128,0.1);
-}
+.repo-item .repo-meta .badge.private { color: #fbbf24; border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.1); }
+.repo-item .repo-meta .badge.public { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.1); }
 
 .active-repo {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  display: none; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
   background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(2,132,199,0.08));
-  border: 1px solid rgba(56,189,248,0.4);
-  margin-bottom: 10px;
+  border: 1px solid rgba(56,189,248,0.4); margin-bottom: 10px;
 }
 .active-repo.show { display: flex; }
 .active-repo .ar-ic {
@@ -886,54 +553,35 @@ textarea::placeholder { color: var(--mut); }
 .active-repo .ar-ic svg { width: 14px; height: 14px; stroke-width: 2.4; }
 .active-repo .ar-info { flex: 1; min-width: 0; }
 .active-repo .ar-label {
-  font-size: 9.5px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--accent-1);
-  font-weight: 800;
-  opacity: 0.85;
+  font-size: 9.5px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--accent-1);
+  font-weight: 800; opacity: 0.85;
 }
 .active-repo .ar-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: #eaf6ff;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-top: 1px;
+  font-size: 13px; font-weight: 700; color: #eaf6ff;
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; margin-top: 1px;
 }
 
-/* =========================================================
-   FILE LIST
-   ========================================================= */
+/* FILE LIST */
 .file-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 12px;
 }
 .file-list {
-  max-height: 320px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 4px;
+  max-height: 320px; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 6px; padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
 .file-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.06);
-  cursor: pointer;
-  font-size: 12.5px;
+  cursor: pointer; font-size: 12.5px;
   transition: all 0.18s var(--ease);
-  word-break: break-all;
-  min-width: 0;
+  word-break: break-all; min-width: 0;
 }
 .file-item:hover {
   background: rgba(56,189,248,0.14);
@@ -946,79 +594,52 @@ textarea::placeholder { color: var(--mut); }
   box-shadow: 0 0 14px rgba(56,189,248,0.4);
 }
 .file-item .file-icon {
-  width: 24px; height: 24px;
-  flex-shrink: 0;
-  display: grid; place-items: center;
-  color: var(--accent-1);
+  width: 24px; height: 24px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--accent-1);
 }
 .file-item .file-icon svg { width: 16px; height: 16px; stroke-width: 2.2; }
 .file-item .file-name {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #dbeeff;
-  font-weight: 500;
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: #dbeeff; font-weight: 500;
 }
 .file-item .file-size {
-  font-size: 10.5px;
-  color: var(--text-dim);
-  opacity: 0.7;
-  flex-shrink: 0;
+  font-size: 10.5px; color: var(--text-dim);
+  opacity: 0.7; flex-shrink: 0;
 }
 .empty-state {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 12.5px;
-  padding: 26px 12px;
-  font-style: italic;
-  line-height: 1.6;
+  text-align: center; color: var(--text-dim);
+  font-size: 12.5px; padding: 26px 12px;
+  font-style: italic; line-height: 1.6;
 }
 .empty-state svg {
-  display: block;
-  margin: 0 auto 10px;
+  display: block; margin: 0 auto 10px;
   width: 32px; height: 32px;
-  opacity: 0.5;
-  stroke-width: 1.5;
+  opacity: 0.5; stroke-width: 1.5;
 }
 
-/* =========================================================
-   EDITOR
-   ========================================================= */
+/* EDITOR */
 .editor-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 18px;
-  min-height: 0;
+  display: flex; flex-direction: column;
+  padding: 18px; min-height: 0;
 }
 .editor-head {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  align-items: center;
-  flex-wrap: wrap;
+  display: flex; gap: 8px;
+  margin-bottom: 12px; align-items: center; flex-wrap: wrap;
 }
 .editor-head .path-input { flex: 1; min-width: 180px; }
 .editor-head .file-status {
-  font-size: 11px;
-  color: var(--text-dim);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
+  font-size: 11px; color: var(--text-dim);
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
   background: rgba(0,0,0,0.3);
   border: 1px solid var(--glass-line);
   letter-spacing: 0.6px;
 }
 .editor-head .file-status svg { width: 12px; height: 12px; }
 .editor-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 400px;
-  border-radius: var(--r-md);
-  overflow: hidden;
+  position: relative; flex: 1; min-height: 400px;
+  border-radius: var(--r-md); overflow: hidden;
   border: 1px solid var(--glass-line);
   background: rgba(0,0,0,0.45);
   box-shadow: inset 0 2px 12px rgba(0,0,0,0.5);
@@ -1026,64 +647,41 @@ textarea::placeholder { color: var(--mut); }
 }
 .editor-wrap:focus-within {
   border-color: var(--accent-1);
-  box-shadow:
-    inset 0 2px 12px rgba(0,0,0,0.5),
-    0 0 0 3px rgba(56,189,248,0.18);
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 0 0 3px rgba(56,189,248,0.18);
 }
 .editor-area {
-  width: 100%;
-  height: 100%;
-  min-height: 400px;
-  resize: none;
-  border: none !important;
-  background: transparent;
-  color: #dbeeff;
+  width: 100%; height: 100%; min-height: 400px;
+  resize: none; border: none !important;
+  background: transparent; color: #dbeeff;
   padding: 16px 18px;
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
-  font-size: 13px;
-  line-height: 1.65;
-  outline: none;
-  white-space: pre;
-  overflow: auto;
-  tab-size: 2;
+  font-size: 13px; line-height: 1.65;
+  outline: none; white-space: pre;
+  overflow: auto; tab-size: 2;
   box-shadow: none !important;
 }
 .editor-area:focus { background: transparent; }
-
 .editor-actions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 14px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin-top: 14px;
 }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
+/* TOAST */
 .toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
+  position: fixed; bottom: 28px; left: 50%;
   transform: translateX(-50%) translateY(140px);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 22px;
-  border-radius: 999px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 22px; border-radius: 999px;
   background: rgba(8,25,45,0.92);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   backdrop-filter: blur(20px) saturate(1.5);
   border: 1px solid var(--accent-1);
-  color: #fff;
-  font-size: 13px;
-  letter-spacing: 0.4px;
-  font-weight: 500;
+  color: #fff; font-size: 13px;
+  letter-spacing: 0.4px; font-weight: 500;
   box-shadow: 0 12px 38px rgba(56,189,248,0.55);
   opacity: 0;
   transition: all 0.4s var(--ease-out);
-  z-index: 999;
-  pointer-events: none;
-  max-width: 90vw;
+  z-index: 999; pointer-events: none; max-width: 90vw;
 }
 .toast svg { width: 16px; height: 16px; stroke-width: 2.5; flex-shrink: 0; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -1092,38 +690,26 @@ textarea::placeholder { color: var(--mut); }
 .toast.ok { border-color: var(--ok); box-shadow: 0 12px 38px rgba(74,222,128,0.5); }
 .toast.ok svg { color: var(--ok); }
 
-/* =========================================================
-   SPINNER
-   ========================================================= */
+/* SPINNER */
 .spinner {
   width: 16px; height: 16px;
   border: 2px solid rgba(56,189,248,0.3);
   border-top-color: var(--accent-1);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
+  display: inline-block; vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* =========================================================
-   PERF LAYER
-   ========================================================= */
-.perf-low .bg-grain,
-.perf-low .bg-tint,
-.perf-low .blob { display: none; }
-.perf-low .glass,
-.perf-low .auth-card {
+/* PERF */
+.perf-low .bg-grain, .perf-low .bg-tint, .perf-low .blob { display: none; }
+.perf-low .glass, .perf-low .auth-card {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   background: rgba(10,25,45,0.92) !important;
 }
-.perf-low .glass::before,
-.perf-low .auth-card::before { opacity: 0.5; }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 @media (max-width: 960px) {
   .layout { grid-template-columns: 1fr; }
   .app { padding: 14px; gap: 14px; }
@@ -1147,9 +733,6 @@ textarea::placeholder { color: var(--mut); }
   .auth-title { font-size: 18px; letter-spacing: 2px; }
 }
 
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -1160,82 +743,48 @@ textarea::placeholder { color: var(--mut); }
   .blob { display: none; }
   .bg-grain { display: none; }
 }
-
 .hidden-input { display: none; }
 </style>
 </head>
 <body>
 
-<!-- =========================================================
-     BACKGROUND STACK
-     ========================================================= -->
-<video
-  class="bg-video"
-  id="bgVideo"
-  autoplay
-  muted
-  loop
-  playsinline
-  preload="auto"
-  disablepictureinpicture
-  disableremoteplayback
->
+<video class="bg-video" id="bgVideo" autoplay muted loop playsinline preload="auto" disablepictureinpicture disableremoteplayback>
   <source src="./wp.mp4" type="video/mp4" />
   <source src="wp.mp4" type="video/mp4" />
   <source src="/wp.mp4" type="video/mp4" />
 </video>
-
 <div class="bg-shade"></div>
 <div class="bg-tint"></div>
 <div class="bg-grain"></div>
 <div class="bg-vignette"></div>
-
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
-<!-- =========================================================
-     AUTH SCREEN
-     ========================================================= -->
+<!-- AUTH -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-card" id="authCard">
-    <div class="auth-logo">
-      <i data-lucide="shield-check"></i>
-    </div>
+    <div class="auth-logo"><i data-lucide="shield-check"></i></div>
     <h1 class="auth-title">FORTECH CONTROL</h1>
     <p class="auth-sub">Masukkan password untuk melanjutkan</p>
-
     <form id="authForm" autocomplete="on">
       <div class="auth-field">
-        <input
-          type="password"
-          id="pwInput"
-          placeholder="Password"
-          autocomplete="current-password"
-          required
-          spellcheck="false"
-        />
+        <input type="password" id="pwInput" placeholder="Password" autocomplete="current-password" required spellcheck="false" />
         <span class="ic-left"><i data-lucide="key-round"></i></span>
         <span class="ic-right toggle" id="pwToggle"><i data-lucide="eye"></i></span>
       </div>
-
       <button type="submit" class="auth-btn" id="authBtn">
         <span class="spinner"></span>
         <i data-lucide="unlock"></i>
         <span class="btn-label">UNLOCK</span>
       </button>
-
       <div class="auth-error" id="authError"></div>
     </form>
-
     <div class="auth-foot">Protected · FortechDev</div>
   </div>
 </div>
 
-<!-- =========================================================
-     APP
-     ========================================================= -->
+<!-- APP -->
 <div class="app hide" id="app">
-
   <header class="topbar glass">
     <div class="brand">
       <div class="brand-badge"><i data-lucide="terminal-square"></i></div>
@@ -1246,20 +795,13 @@ textarea::placeholder { color: var(--mut); }
         <span class="status-dot"></span>
         <span id="statusText">READY</span>
       </div>
-      <button class="btn ghost icon-only" id="btnRefresh" title="Refresh file list">
-        <i data-lucide="refresh-cw"></i>
-      </button>
-      <button class="btn ghost icon-only" id="btnLogout" title="Logout">
-        <i data-lucide="log-out"></i>
-      </button>
+      <button class="btn ghost icon-only" id="btnRefresh" title="Refresh file list"><i data-lucide="refresh-cw"></i></button>
+      <button class="btn ghost icon-only" id="btnLogout" title="Logout"><i data-lucide="log-out"></i></button>
     </div>
   </header>
 
   <div class="layout">
-
     <aside class="sidebar">
-
-      <!-- REPO PICKER -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
@@ -1270,7 +812,6 @@ textarea::placeholder { color: var(--mut); }
             <i data-lucide="download-cloud"></i>
           </button>
         </div>
-
         <div class="active-repo" id="activeRepo">
           <div class="ar-ic"><i data-lucide="check-circle-2"></i></div>
           <div class="ar-info">
@@ -1278,13 +819,10 @@ textarea::placeholder { color: var(--mut); }
             <div class="ar-name" id="activeRepoName">-</div>
           </div>
         </div>
-
         <div class="repo-search-wrap">
           <span class="search-ic"><i data-lucide="search"></i></span>
-          <input type="search" id="repoSearch" placeholder="Filter repository..."
-                 autocomplete="off" spellcheck="false" />
+          <input type="search" id="repoSearch" placeholder="Filter repository..." autocomplete="off" spellcheck="false" />
         </div>
-
         <div class="repo-list" id="repoList">
           <div class="empty-state">
             <i data-lucide="github"></i>
@@ -1294,7 +832,6 @@ textarea::placeholder { color: var(--mut); }
         </div>
       </section>
 
-      <!-- MODE -->
       <section class="panel glass">
         <div class="panel-head">
           <div class="panel-title">
@@ -1303,19 +840,12 @@ textarea::placeholder { color: var(--mut); }
           </div>
         </div>
         <div class="mode-toggle">
-          <div class="mode-btn active" id="btnEdit" data-mode="edit">
-            <i data-lucide="pencil-line"></i> EDIT
-          </div>
-          <div class="mode-btn maint" id="btnMaint" data-mode="maint">
-            <i data-lucide="wrench"></i> MAINTANANCE
-          </div>
+          <div class="mode-btn active" id="btnEdit" data-mode="edit"><i data-lucide="pencil-line"></i> EDIT</div>
+          <div class="mode-btn maint" id="btnMaint" data-mode="maint"><i data-lucide="wrench"></i> MAINTANANCE</div>
         </div>
-        <div class="mode-hint" id="modeHint">
-          Mode EDIT aktif — bisa ubah, tambah, hapus file.
-        </div>
+        <div class="mode-hint" id="modeHint">Mode EDIT aktif — bisa ubah, tambah, hapus file.</div>
       </section>
 
-      <!-- FILE LIST -->
       <section class="panel glass" style="flex:1; min-height:0; display:flex; flex-direction:column;">
         <div class="panel-head">
           <div class="panel-title">
@@ -1324,26 +854,18 @@ textarea::placeholder { color: var(--mut); }
           </div>
           <span class="file-status" id="fileCount">0 files</span>
         </div>
-
         <div class="file-actions">
-          <button class="btn" id="btnNewFile">
-            <i data-lucide="file-plus-2"></i> BUAT FILE
-          </button>
-          <button class="btn ok" id="btnUploadFile">
-            <i data-lucide="upload"></i> TAMBAH FILE
-          </button>
+          <button class="btn" id="btnNewFile"><i data-lucide="file-plus-2"></i> BUAT FILE</button>
+          <button class="btn ok" id="btnUploadFile"><i data-lucide="upload"></i> TAMBAH FILE</button>
         </div>
-
         <div class="file-list" id="fileList" style="flex:1;">
           <div class="empty-state">
             <i data-lucide="folder-open"></i>
             Pilih repository dulu di atas.
           </div>
         </div>
-
         <input type="file" id="fileInput" class="hidden-input" multiple />
       </section>
-
     </aside>
 
     <main class="editor-panel glass">
@@ -1352,40 +874,23 @@ textarea::placeholder { color: var(--mut); }
           <span class="icon-wrap"><i data-lucide="code-2"></i></span>
           Viewer / Editor
         </div>
-        <span class="file-status" id="editorStatus">
-          <i data-lucide="circle-dot"></i> NO FILE
-        </span>
+        <span class="file-status" id="editorStatus"><i data-lucide="circle-dot"></i> NO FILE</span>
       </div>
-
       <div class="editor-head" style="margin-top:0;">
-        <input type="text" id="filePathInput" class="path-input"
-               placeholder="path/file.ext (contoh: src/main.cpp)"
-               autocomplete="off" spellcheck="false" />
+        <input type="text" id="filePathInput" class="path-input" placeholder="path/file.ext (contoh: src/main.cpp)" autocomplete="off" spellcheck="false" />
       </div>
-
       <div class="editor-wrap">
-        <textarea class="editor-area" id="editorArea" spellcheck="false"
-placeholder="// Pilih repository dari panel kiri,
+        <textarea class="editor-area" id="editorArea" spellcheck="false" placeholder="// Pilih repository dari panel kiri,
 // lalu pilih file untuk diedit,
 // atau klik 'BUAT FILE' untuk bikin file baru."></textarea>
       </div>
-
       <div class="editor-actions">
-        <button class="btn ok" id="btnSave">
-          <i data-lucide="save"></i> <span class="btn-label">SAVE</span>
-        </button>
-        <button class="btn danger" id="btnDelete">
-          <i data-lucide="trash-2"></i> <span class="btn-label">DELETE</span>
-        </button>
-        <button class="btn ghost" id="btnCopy">
-          <i data-lucide="copy"></i> <span class="btn-label">COPY</span>
-        </button>
-        <button class="btn ghost" id="btnClear">
-          <i data-lucide="eraser"></i> <span class="btn-label">CLEAR</span>
-        </button>
+        <button class="btn ok" id="btnSave"><i data-lucide="save"></i> <span class="btn-label">SAVE</span></button>
+        <button class="btn danger" id="btnDelete"><i data-lucide="trash-2"></i> <span class="btn-label">DELETE</span></button>
+        <button class="btn ghost" id="btnCopy"><i data-lucide="copy"></i> <span class="btn-label">COPY</span></button>
+        <button class="btn ghost" id="btnClear"><i data-lucide="eraser"></i> <span class="btn-label">CLEAR</span></button>
       </div>
     </main>
-
   </div>
 </div>
 
@@ -1396,13 +901,14 @@ placeholder="// Pilih repository dari panel kiri,
 
 <script>
 /* =========================================================
-   FORTECH CONTROL — Auth + Repo Picker + Editor
+   FORTECH CONTROL — Auth + Repo Picker + Editor + Upload
    ========================================================= */
 (() => {
   'use strict';
 
   const LS_REPO = 'fortech.github.repo';
   const SS_AUTH = 'fortech.auth.token';
+  const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB (limit GitHub Contents API)
 
   const state = {
     repo: null,
@@ -1418,7 +924,7 @@ placeholder="// Pilih repository dari panel kiri,
 
   const $ = id => document.getElementById(id);
 
-  /* ---------- AUTH DOM ---------- */
+  /* AUTH DOM */
   const authScreen = $('authScreen');
   const authCard   = $('authCard');
   const authForm   = $('authForm');
@@ -1427,7 +933,7 @@ placeholder="// Pilih repository dari panel kiri,
   const authBtn    = $('authBtn');
   const authError  = $('authError');
 
-  /* ---------- APP DOM ---------- */
+  /* APP DOM */
   const app          = $('app');
   const video        = $('bgVideo');
   const statusChip   = $('statusChip');
@@ -1457,16 +963,12 @@ placeholder="// Pilih repository dari panel kiri,
   const toastEl      = $('toast');
   const toastMsg     = $('toastMsg');
 
-  /* =========================================================
-     ICONS
-     ========================================================= */
+  /* ================ ICONS ================ */
   function refreshIcons() {
     if (window.lucide && lucide.createIcons) lucide.createIcons();
   }
 
-  /* =========================================================
-     VIDEO AUTOPLAY FALLBACK
-     ========================================================= */
+  /* ================ VIDEO ================ */
   function ensureVideoPlay() {
     video.muted = true;
     video.volume = 0;
@@ -1488,18 +990,14 @@ placeholder="// Pilih repository dari panel kiri,
   if (video.readyState >= 1) ensureVideoPlay();
   else video.addEventListener('loadedmetadata', ensureVideoPlay, { once: true });
 
-  /* =========================================================
-     PERF AUTO-DETECT
-     ========================================================= */
+  /* ================ PERF ================ */
   (function detectPerf() {
     const mem = navigator.deviceMemory || 4;
     const cores = navigator.hardwareConcurrency || 4;
     if (mem <= 2 || cores <= 2) document.body.classList.add('perf-low');
   })();
 
-  /* =========================================================
-     STATUS
-     ========================================================= */
+  /* ================ STATUS ================ */
   function setStatus(txt, cls) {
     statusText.textContent = txt;
     statusChip.className = 'status-chip' + (cls ? ' ' + cls : '');
@@ -1512,9 +1010,7 @@ placeholder="// Pilih repository dari panel kiri,
     refreshIcons();
   }
 
-  /* =========================================================
-     TOAST
-     ========================================================= */
+  /* ================ TOAST ================ */
   let toastTimer = null;
   function toast(msg, type = '') {
     toastMsg.textContent = msg;
@@ -1532,9 +1028,7 @@ placeholder="// Pilih repository dari panel kiri,
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
   }
 
-  /* =========================================================
-     AUTH ERROR HELPER
-     ========================================================= */
+  /* ================ AUTH ================ */
   function showAuthError(msg) {
     authError.innerHTML = `<i data-lucide="alert-circle"></i> <span>${msg}</span>`;
     authError.classList.add('show');
@@ -1548,9 +1042,6 @@ placeholder="// Pilih repository dari panel kiri,
     authError.innerHTML = '';
   }
 
-  /* =========================================================
-     PASSWORD VISIBILITY TOGGLE
-     ========================================================= */
   pwToggle.addEventListener('click', () => {
     const isPw = pwInput.type === 'password';
     pwInput.type = isPw ? 'text' : 'password';
@@ -1559,16 +1050,12 @@ placeholder="// Pilih repository dari panel kiri,
     pwInput.focus();
   });
 
-  /* =========================================================
-     UNLOCK APP
-     ========================================================= */
   function unlockApp() {
     state.authenticated = true;
     authScreen.classList.add('hide');
     setTimeout(() => authScreen.style.display = 'none', 400);
     app.classList.remove('hide');
 
-    // Auto-load repos setelah unlock
     const cachedRepo = localStorage.getItem(LS_REPO);
     loadRepositories().then(() => {
       if (cachedRepo) {
@@ -1578,18 +1065,12 @@ placeholder="// Pilih repository dari panel kiri,
     });
   }
 
-  /* =========================================================
-     AUTH SUBMIT
-     ========================================================= */
   authForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearAuthError();
 
     const pw = pwInput.value;
-    if (!pw) {
-      showAuthError('Password wajib diisi.');
-      return;
-    }
+    if (!pw) { showAuthError('Password wajib diisi.'); return; }
 
     authBtn.classList.add('loading');
     authBtn.disabled = true;
@@ -1600,18 +1081,10 @@ placeholder="// Pilih repository dari panel kiri,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: pw })
       });
-
       const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Password salah.');
 
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || 'Password salah.');
-      }
-
-      // Simpan token untuk auto-login
-      if (data.token) {
-        sessionStorage.setItem(SS_AUTH, data.token);
-      }
-
+      if (data.token) sessionStorage.setItem(SS_AUTH, data.token);
       pwInput.value = '';
       authBtn.classList.remove('loading');
       authBtn.disabled = false;
@@ -1626,13 +1099,9 @@ placeholder="// Pilih repository dari panel kiri,
     }
   });
 
-  /* =========================================================
-     AUTO-LOGIN via TOKEN
-     ========================================================= */
   async function tryAutoLogin() {
     const token = sessionStorage.getItem(SS_AUTH);
     if (!token) return false;
-
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
@@ -1640,25 +1109,16 @@ placeholder="// Pilih repository dari panel kiri,
         body: JSON.stringify({ token })
       });
       const data = await res.json().catch(() => ({}));
-      if (res.ok && data.ok && data.valid) {
-        return true;
-      }
-      // Token invalid → hapus
+      if (res.ok && data.ok && data.valid) return true;
       sessionStorage.removeItem(SS_AUTH);
       return false;
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   }
 
-  /* =========================================================
-     LOGOUT
-     ========================================================= */
   btnLogout.addEventListener('click', () => {
     if (!confirm('Logout dari Fortech Control?')) return;
     sessionStorage.removeItem(SS_AUTH);
     state.authenticated = false;
-    // Reset UI
     app.classList.add('hide');
     authScreen.style.display = '';
     setTimeout(() => authScreen.classList.remove('hide'), 20);
@@ -1667,18 +1127,14 @@ placeholder="// Pilih repository dari panel kiri,
     clearAuthError();
   });
 
-  /* =========================================================
-     BASE64
-     ========================================================= */
+  /* ================ BASE64 ================ */
   function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
   function b64decode(str) {
     try { return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
     catch { return atob(str.replace(/\n/g, '')); }
   }
 
-  /* =========================================================
-     FILE TYPE
-     ========================================================= */
+  /* ================ FILE TYPE ================ */
   function isBinaryName(name) {
     const ext = (name.split('.').pop() || '').toLowerCase();
     return ['png','jpg','jpeg','gif','webp','ico','bmp','tiff','pdf',
@@ -1745,9 +1201,7 @@ placeholder="// Pilih repository dari panel kiri,
     return Math.floor(diff / 31536000) + 'thn lalu';
   }
 
-  /* =========================================================
-     PROXY FETCH
-     ========================================================= */
+  /* ================ PROXY ================ */
   async function ghFetch(path, opts = {}) {
     const url = '/api/github?path=' + encodeURIComponent(path);
     return fetch(url, {
@@ -1757,9 +1211,7 @@ placeholder="// Pilih repository dari panel kiri,
     });
   }
 
-  /* =========================================================
-     LOAD REPOS
-     ========================================================= */
+  /* ================ LOAD REPOS ================ */
   async function loadRepositories() {
     setStatus('LOAD REPOS...', 'busy');
     repoList.innerHTML =
@@ -1786,9 +1238,7 @@ placeholder="// Pilih repository dari panel kiri,
     }
   }
 
-  /* =========================================================
-     RENDER REPO LIST
-     ========================================================= */
+  /* ================ RENDER REPOS ================ */
   function renderRepoList() {
     let list = state.allRepos;
     if (state.repoFilter) {
@@ -1811,9 +1261,7 @@ placeholder="// Pilih repository dari panel kiri,
       const isActive = state.repo === r.full_name;
       return `
         <div class="repo-item${isActive ? ' active' : ''}" data-full="${escapeHtml(r.full_name)}">
-          <div class="repo-ic">
-            <i data-lucide="${r.private ? 'lock' : 'github'}"></i>
-          </div>
+          <div class="repo-ic"><i data-lucide="${r.private ? 'lock' : 'github'}"></i></div>
           <div class="repo-body">
             <div class="repo-name">${escapeHtml(r.name)}</div>
             ${r.description ? `<div class="repo-desc">${escapeHtml(r.description)}</div>` : ''}
@@ -1836,9 +1284,7 @@ placeholder="// Pilih repository dari panel kiri,
     });
   }
 
-  /* =========================================================
-     SELECT REPO
-     ========================================================= */
+  /* ================ SELECT REPO ================ */
   async function selectRepo(fullName) {
     if (!fullName) return;
 
@@ -1878,9 +1324,7 @@ placeholder="// Pilih repository dari panel kiri,
     }
   }
 
-  /* =========================================================
-     REPO SEARCH
-     ========================================================= */
+  /* ================ SEARCH ================ */
   let searchTimer = null;
   repoSearch.addEventListener('input', (e) => {
     state.repoFilter = e.target.value.trim();
@@ -1890,9 +1334,7 @@ placeholder="// Pilih repository dari panel kiri,
 
   btnLoadRepos.addEventListener('click', loadRepositories);
 
-  /* =========================================================
-     REFRESH FILE LIST
-     ========================================================= */
+  /* ================ REFRESH ================ */
   btnRefresh.addEventListener('click', async () => {
     if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
     setStatus('REFRESHING...', 'busy');
@@ -1906,9 +1348,7 @@ placeholder="// Pilih repository dari panel kiri,
     }
   });
 
-  /* =========================================================
-     FETCH TREE
-     ========================================================= */
+  /* ================ FETCH TREE ================ */
   async function fetchTree() {
     const res = await ghFetch(
       `/repos/${state.repo}/git/trees/${encodeURIComponent(state.branch)}?recursive=1`
@@ -1927,18 +1367,14 @@ placeholder="// Pilih repository dari panel kiri,
         .filter(t => t.type === 'blob')
         .map(t => ({
           name: t.path.split('/').pop(),
-          path: t.path,
-          type: 'file',
-          sha: t.sha,
-          size: t.size
+          path: t.path, type: 'file',
+          sha: t.sha, size: t.size
         }));
     }
     renderFiles();
   }
 
-  /* =========================================================
-     RENDER FILES
-     ========================================================= */
+  /* ================ RENDER FILES ================ */
   function renderFiles() {
     fileCount.textContent = state.files.length + ' file' + (state.files.length === 1 ? '' : 's');
 
@@ -1970,9 +1406,7 @@ placeholder="// Pilih repository dari panel kiri,
     });
   }
 
-  /* =========================================================
-     OPEN FILE
-     ========================================================= */
+  /* ================ OPEN FILE ================ */
   async function openFile(path) {
     if (!state.repo) return;
     setStatus('FETCHING...', 'busy');
@@ -2009,9 +1443,7 @@ placeholder="// Pilih repository dari panel kiri,
     }
   }
 
-  /* =========================================================
-     SAVE FILE
-     ========================================================= */
+  /* ================ SAVE FILE ================ */
   async function saveFile() {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
     if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
@@ -2074,9 +1506,7 @@ placeholder="// Pilih repository dari panel kiri,
 
   btnSave.addEventListener('click', saveFile);
 
-  /* =========================================================
-     BUAT FILE BARU
-     ========================================================= */
+  /* ================ BUAT FILE BARU ================ */
   btnNewFile.addEventListener('click', () => {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
     if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
@@ -2091,9 +1521,7 @@ placeholder="// Pilih repository dari panel kiri,
     toast('Tulis path + isi, lalu SAVE', '');
   });
 
-  /* =========================================================
-     UPLOAD FILE
-     ========================================================= */
+  /* ================ UPLOAD FILE (FIXED) ================ */
   btnUploadFile.addEventListener('click', () => {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
     if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
@@ -2102,70 +1530,122 @@ placeholder="// Pilih repository dari panel kiri,
 
   fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files || []);
+    fileInput.value = '';
     if (!files.length) return;
-    if (!confirm(`Upload ${files.length} file ke ${state.repo}?`)) {
-      fileInput.value = '';
+
+    // Cek ukuran
+    const tooBig = files.filter(f => f.size > MAX_FILE_SIZE);
+    const valid = files.filter(f => f.size <= MAX_FILE_SIZE);
+
+    if (tooBig.length && !valid.length) {
+      toast(`Semua file > 1MB. GitHub Contents API gak support file besar.`, 'error');
+      console.warn('[upload] Semua file terlalu besar:', tooBig.map(f => f.name));
       return;
     }
 
-    setStatus(`UPLOAD 0/${files.length}`, 'busy');
-    let okCount = 0, failCount = 0;
+    if (tooBig.length) {
+      toast(`${tooBig.length} file dilewati (terlalu besar)`, 'error');
+      console.warn('[upload] Dilewati (terlalu besar):', tooBig.map(f => f.name));
+    }
 
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i];
-      setStatus(`UPLOAD ${i + 1}/${files.length}`, 'busy');
+    if (!valid.length) return;
+    if (!confirm(`Upload ${valid.length} file ke ${state.repo}?`)) return;
+
+    setStatus(`UPLOAD 0/${valid.length}`, 'busy');
+    btnUploadFile.disabled = true;
+
+    let okCount = 0;
+    let failCount = 0;
+    const failures = [];
+
+    for (let i = 0; i < valid.length; i++) {
+      const f = valid[i];
+      setStatus(`UPLOAD ${i + 1}/${valid.length}`, 'busy');
+
       try {
-        const content = await readFileAsBase64(f);
+        const base64 = await readFileAsBase64(f);
+        if (!base64) throw new Error('Gagal encode base64');
+
         const path = f.name;
 
+        // Cek file existing
         let sha = null;
         const chk = await ghFetch(
           `/repos/${state.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(state.branch)}`
         );
+
         if (chk.ok) {
           const d = await chk.json();
           sha = d.sha;
+          console.log(`[upload] "${path}" existing, sha=${sha ? sha.slice(0,7) : 'null'}`);
+        } else if (chk.status === 404) {
+          console.log(`[upload] "${path}" baru`);
+        } else {
+          const errText = await chk.text();
+          console.warn(`[upload] check "${path}" status ${chk.status}:`, errText.slice(0, 200));
         }
 
+        // PUT content
         const body = {
           message: (sha ? 'update: ' : 'upload: ') + path + ' [Fortech Control]',
-          content,
+          content: base64,
           branch: state.branch
         };
         if (sha) body.sha = sha;
+
+        console.log(`[upload] PUT "${path}" size=${f.size}B`);
 
         const res = await ghFetch(
           `/repos/${state.repo}/contents/${encodeURI(path)}`,
           { method: 'PUT', body }
         );
 
-        if (res.ok) okCount++; else failCount++;
+        if (res.ok) {
+          okCount++;
+          console.log(`[upload] ✓ "${path}"`);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          const msg = errData.message || errData.error || `HTTP ${res.status}`;
+          console.error(`[upload] ✗ "${path}":`, msg, errData);
+          failures.push(`${f.name}: ${msg}`);
+          failCount++;
+        }
       } catch (err) {
-        console.error('upload fail:', f.name, err);
+        console.error(`[upload] ✗ "${f.name}":`, err);
+        failures.push(`${f.name}: ${err.message}`);
         failCount++;
       }
     }
 
-    fileInput.value = '';
-    await fetchTree();
+    btnUploadFile.disabled = state.mode !== 'edit';
+
+    try { await fetchTree(); } catch (e) { console.warn('refresh gagal:', e); }
     setStatus('CONNECTED · ' + state.branch, 'ok');
 
-    if (failCount === 0) toast(`Upload sukses ${okCount}/${files.length} ✓`, 'ok');
-    else toast(`Upload: ${okCount} sukses, ${failCount} gagal`, 'error');
+    if (failCount === 0) {
+      toast(`Upload sukses ${okCount}/${valid.length} ✓`, 'ok');
+    } else {
+      const firstErr = failures[0] || 'Unknown';
+      toast(`Upload: ${okCount} ok, ${failCount} gagal → ${firstErr}`, 'error');
+      console.error('=== UPLOAD FAILURES ===');
+      failures.forEach(f => console.error(' •', f));
+    }
   });
 
   function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result).split(',')[1] || '');
+      reader.onload = () => {
+        const result = String(reader.result);
+        const base64 = result.split(',')[1] || '';
+        resolve(base64);
+      };
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
   }
 
-  /* =========================================================
-     DELETE
-     ========================================================= */
+  /* ================ DELETE ================ */
   async function deleteFile() {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
     if (!state.repo || !state.activeFile) { toast('Pilih file dulu', 'error'); return; }
@@ -2211,9 +1691,7 @@ placeholder="// Pilih repository dari panel kiri,
 
   btnDelete.addEventListener('click', deleteFile);
 
-  /* =========================================================
-     COPY
-     ========================================================= */
+  /* ================ COPY ================ */
   btnCopy.addEventListener('click', async () => {
     if (!editor.value) { toast('Editor kosong', 'error'); return; }
     try {
@@ -2224,9 +1702,7 @@ placeholder="// Pilih repository dari panel kiri,
     }
   });
 
-  /* =========================================================
-     CLEAR
-     ========================================================= */
+  /* ================ CLEAR ================ */
   btnClear.addEventListener('click', () => {
     editor.value = '';
     filePath.value = '';
@@ -2237,9 +1713,7 @@ placeholder="// Pilih repository dari panel kiri,
     toast('Editor dibersihkan');
   });
 
-  /* =========================================================
-     MODE
-     ========================================================= */
+  /* ================ MODE ================ */
   function setMode(mode) {
     state.mode = mode;
     btnEdit.classList.toggle('active', mode === 'edit');
@@ -2263,9 +1737,7 @@ placeholder="// Pilih repository dari panel kiri,
   btnEdit.addEventListener('click', () => setMode('edit'));
   btnMaint.addEventListener('click', () => setMode('maint'));
 
-  /* =========================================================
-     SHORTCUTS
-     ========================================================= */
+  /* ================ SHORTCUTS ================ */
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && state.authenticated) {
       e.preventDefault();
@@ -2280,23 +1752,16 @@ placeholder="// Pilih repository dari panel kiri,
     }
   });
 
-  /* =========================================================
-     INIT
-     ========================================================= */
+  /* ================ INIT ================ */
   (async function init() {
     refreshIcons();
     setMode('edit');
     setEditorStatus('NO FILE');
     setStatus('READY');
-
-    // Fokus ke input password
     setTimeout(() => pwInput.focus(), 300);
 
-    // Coba auto-login pakai token dari sessionStorage
     const ok = await tryAutoLogin();
-    if (ok) {
-      unlockApp();
-    }
+    if (ok) unlockApp();
   })();
 
 })();
