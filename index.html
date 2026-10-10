@@ -28,7 +28,7 @@ html, body {
 }
 
 /* =========================================================
-   BACKGROUND — VIDEO + FALLBACK GRADIENT
+   BACKGROUND — VIDEO + FALLBACK
    ========================================================= */
 #bgLayer {
   position: fixed; inset: 0;
@@ -50,6 +50,7 @@ html, body {
   opacity: 0;
   transition: opacity 0.8s ease;
   pointer-events: none;
+  background: transparent;
 }
 
 #bgVideo.loaded { opacity: 1; }
@@ -86,10 +87,35 @@ html, body {
   top: 40%; left: 50%;
   animation: float3 26s ease-in-out infinite;
 }
-
 @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(60px,40px) scale(1.1);} }
 @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-60px,-40px) scale(1.15);} }
 @keyframes float3 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-40px,60px) scale(0.9);} }
+
+/* =========================================================
+   DEBUG BADGE (bisa lu hapus setelah video jalan)
+   ========================================================= */
+#videoDebug {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 9999;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(180,108,255,0.5);
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 10px;
+  color: #d3b8ff;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+  max-width: 280px;
+  word-break: break-all;
+  line-height: 1.4;
+  display: none;
+}
+#videoDebug.show { display: block; }
+#videoDebug.ok { border-color: #7CFFB2; color: #7CFFB2; }
+#videoDebug.err { border-color: #ff5c6c; color: #ff8a95; }
 
 /* =========================================================
    LIQUID GLASS
@@ -145,7 +171,6 @@ html, body {
   display: flex; flex-direction: column; gap: 18px;
 }
 
-/* HEADER */
 header.topbar {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; padding: 14px 22px; flex-wrap: wrap;
@@ -193,7 +218,6 @@ header.topbar {
 .status-chip.error .status-dot { background: var(--err);  box-shadow: 0 0 12px var(--err); }
 .status-chip.ok .status-dot    { background: var(--ok);   box-shadow: 0 0 12px var(--ok); }
 
-/* LAYOUT */
 .layout {
   display: grid; grid-template-columns: 380px 1fr;
   gap: 18px; flex: 1; min-height: 0;
@@ -219,7 +243,6 @@ header.topbar {
 }
 .panel-title .icon-wrap svg { width: 14px; height: 14px; color: #dcc0ff; stroke-width: 2.5; }
 
-/* INPUTS */
 .input-wrap { display: flex; gap: 8px; }
 input[type="text"], input[type="password"], textarea {
   width: 100%;
@@ -237,7 +260,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 input::placeholder, textarea::placeholder { color: #7d68a8; }
 
-/* BUTTONS */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 8px; border: none; cursor: pointer;
@@ -281,7 +303,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
 .btn.icon-only svg { width: 17px; height: 17px; }
 .btn.full { width: 100%; }
 
-/* MODE */
 .mode-toggle {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   padding: 5px; background: rgba(0,0,0,0.3);
@@ -316,7 +337,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
   text-align: center; line-height: 1.5;
 }
 
-/* FILE LIST */
 .file-actions {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 8px; margin-bottom: 12px;
@@ -381,7 +401,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
   opacity: 0.5; stroke-width: 1.5;
 }
 
-/* EDITOR */
 .editor-panel {
   display: flex; flex-direction: column;
   padding: 18px; min-height: 0;
@@ -430,7 +449,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
   gap: 8px; margin-top: 14px;
 }
 
-/* TOAST */
 .toast {
   position: fixed; bottom: 28px; left: 50%;
   transform: translateX(-50%) translateY(140px);
@@ -454,7 +472,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
 .toast.ok { border-color: var(--ok); box-shadow: 0 12px 38px rgba(80,220,150,0.5); }
 .toast.ok svg { color: var(--ok); }
 
-/* SPINNER */
 .spinner {
   width: 16px; height: 16px;
   border: 2px solid rgba(180,108,255,0.3);
@@ -466,7 +483,6 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spin-icon { animation: spin 1s linear infinite; }
 
-/* RESPONSIVE */
 @media (max-width: 960px) {
   .layout { grid-template-columns: 1fr; }
   .app { padding: 14px; gap: 14px; }
@@ -491,9 +507,12 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
 </head>
 <body>
 
+<!-- ============ DEBUG BADGE ============ -->
+<div id="videoDebug"></div>
+
 <!-- ============ BACKGROUND ============ -->
 <div id="bgLayer"></div>
-<video id="bgVideo" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"></video>
+<video id="bgVideo" autoplay muted loop playsinline preload="auto"></video>
 <div class="bg-overlay"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
@@ -640,11 +659,13 @@ placeholder="// Pilih file dari daftar di kiri,
 <script>
 /* =========================================================
    FORTECH CONTROL — Frontend
+   wp.mp4 TETAP DI ROOT. Loader pakai relative path + fallback.
    ========================================================= */
 (() => {
   'use strict';
 
   const LS_REPO = 'fortech.github.repo';
+  const LS_VIDEO_PATH = 'fortech.video.path';
 
   const state = {
     repo: null, branch: 'main', mode: 'edit',
@@ -654,6 +675,7 @@ placeholder="// Pilih file dari daftar di kiri,
   const $ = id => document.getElementById(id);
 
   const video        = $('bgVideo');
+  const videoDebug   = $('videoDebug');
   const statusChip   = $('statusChip');
   const statusText   = $('statusText');
   const repoInput    = $('repoInput');
@@ -678,84 +700,138 @@ placeholder="// Pilih file dari daftar di kiri,
   const toastMsg     = $('toastMsg');
 
   /* =========================================================
-     BACKGROUND VIDEO LOADER
-     Coba beberapa path, kalau semua gagal → fallback gradient
+     VIDEO LOADER
+     Coba beberapa path. Tampilkan debug di pojok.
      ========================================================= */
-  const VIDEO_CANDIDATES = [
-    '/wp.mp4',
-    '/public/wp.mp4',
-    './wp.mp4',
-    'wp.mp4',
-    '/assets/wp.mp4',
-    '/wp.MP4',
-    '/WP.mp4'
+  const VIDEO_PATHS = [
+    './wp.mp4',       // relative → paling universal (local + vercel root)
+    'wp.mp4',         // tanpa ./ 
+    '/wp.mp4',        // absolute root
+    './WP.mp4',
+    './wp.MP4',
+    './wp.Mp4'
   ];
+
+  function showDebug(msg, type) {
+    videoDebug.textContent = 'VIDEO: ' + msg;
+    videoDebug.className = 'show ' + (type || '');
+    videoDebug.classList.add('show');
+  }
 
   function tryLoadVideo() {
     let idx = 0;
+    const tried = [];
 
     const tryNext = () => {
-      if (idx >= VIDEO_CANDIDATES.length) {
-        console.warn('[Fortech] Semua path video gagal, pakai fallback gradient.');
+      if (idx >= VIDEO_PATHS.length) {
+        showDebug(
+          'GAGAL semua path → ' + tried.join(' | ') +
+          ' — Cek: file ke-commit? nama kecil? ada di root?',
+          'err'
+        );
+        console.error('[Fortech] Semua path video gagal:', tried);
         return;
       }
-      const url = VIDEO_CANDIDATES[idx++];
-      const testVideo = document.createElement('video');
-      testVideo.muted = true;
-      testVideo.playsInline = true;
 
-      const cleanup = () => {
-        testVideo.removeAttribute('src');
-        testVideo.load();
-        testVideo.oncanplay = null;
-        testVideo.onerror = null;
+      const url = VIDEO_PATHS[idx++];
+      tried.push(url);
+      showDebug('coba: ' + url, '');
+
+      // Buat element video tester (silent, tidak tampil)
+      const tester = document.createElement('video');
+      tester.muted = true;
+      tester.playsInline = true;
+      tester.preload = 'metadata';
+
+      let done = false;
+      const finish = (ok) => {
+        if (done) return;
+        done = true;
+        tester.removeAttribute('src');
+        try { tester.load(); } catch (e) {}
+        tester.onloadedmetadata = null;
+        tester.onerror = null;
+        if (ok) {
+          attachVideo(url);
+        } else {
+          tryNext();
+        }
       };
 
-      testVideo.oncanplay = () => {
+      tester.onloadedmetadata = () => {
         console.log('[Fortech] Video OK →', url);
-        video.src = url;
-        video.load();
-        video.play().catch(() => {});
-        cleanup();
+        showDebug('OK → ' + url, 'ok');
+        finish(true);
       };
-      testVideo.onerror = () => {
-        cleanup();
-        tryNext();
+
+      tester.onerror = () => {
+        console.warn('[Fortech] Video gagal →', url);
+        finish(false);
       };
-      testVideo.src = url;
+
+      // Timeout supaya gak nunggu selamanya
+      setTimeout(() => finish(false), 6000);
+
+      tester.src = url;
     };
 
     tryNext();
   }
 
-  video.addEventListener('loadeddata', () => {
-    video.classList.add('loaded');
-    console.log('[Fortech] Video background aktif.');
-  });
+  function attachVideo(url) {
+    video.innerHTML = '';
+    video.removeAttribute('src');
 
-  video.addEventListener('error', () => {
-    video.classList.remove('loaded');
-    console.warn('[Fortech] Video error setelah load, fallback tetap tampil.');
-  });
+    const src = document.createElement('source');
+    src.src = url;
+    src.type = 'video/mp4';
+    video.appendChild(src);
 
-  // Autoplay fallback untuk mobile
-  const tryPlay = () => {
+    video.load();
+
+    video.onloadeddata = () => {
+      video.classList.add('loaded');
+      showDebug('AKTIF → ' + url, 'ok');
+      console.log('[Fortech] Video aktif →', url);
+      localStorage.setItem(LS_VIDEO_PATH, url);
+      setTimeout(() => videoDebug.classList.remove('show'), 3000);
+    };
+
+    video.onerror = () => {
+      console.warn('[Fortech] Video error setelah attach:', url);
+      video.classList.remove('loaded');
+      showDebug('ERROR saat play → ' + url, 'err');
+    };
+
     const p = video.play();
     if (p && p.catch) {
       p.catch(() => {
+        console.warn('[Fortech] Autoplay ditolak, nunggu interaksi user');
+        showDebug('autoplay diblokir → tap untuk play', '');
         const once = () => {
           video.play().catch(() => {});
           document.removeEventListener('touchstart', once);
           document.removeEventListener('click', once);
+          document.removeEventListener('keydown', once);
         };
         document.addEventListener('touchstart', once, { once: true });
         document.addEventListener('click', once, { once: true });
+        document.addEventListener('keydown', once, { once: true });
       });
     }
-  };
+  }
+
+  // Prioritas: pakai path yang berhasil sebelumnya (cache)
+  const cachedVideoPath = localStorage.getItem(LS_VIDEO_PATH);
+  if (cachedVideoPath) {
+    const i = VIDEO_PATHS.indexOf(cachedVideoPath);
+    if (i > 0) {
+      VIDEO_PATHS.splice(i, 1);
+      VIDEO_PATHS.unshift(cachedVideoPath);
+    }
+  }
 
   tryLoadVideo();
-  setTimeout(tryPlay, 800);
 
   /* ---------- LUCIDE ---------- */
   function refreshIcons() {
@@ -1286,4 +1362,4 @@ placeholder="// Pilih file dari daftar di kiri,
 })();
 </script>
 </body>
-</html>
+  </html>
