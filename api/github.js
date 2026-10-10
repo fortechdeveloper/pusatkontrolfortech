@@ -1,30 +1,49 @@
 /* =========================================================
-   FORTECH CONTROL - GitHub API Proxy
-   Vercel Serverless Function
-   Token disimpan di ENV: GITHUB_TOKEN
+   FORTECH CONTROL — GitHub Proxy
+   Fix: robust body forwarding + detailed error
    ========================================================= */
 
 const GITHUB_API = 'https://api.github.com';
 
-// Path yang diizinkan dilewatkan (security filter)
 const ALLOWED_PREFIXES = [
   '/repos/',
   '/user',
   '/rate_limit',
-  '/orgs/'
+  '/orgs/',
+  '/users/'
 ];
+
+/* ---------- Ambil raw body dari request (support semua format) ---------- */
+async function getRawBody(req) {
+  // Kalau Vercel udah parse jadi object
+  if (req.body !== undefined && req.body !== null && req.body !== '') {
+    if (typeof req.body === 'string') return req.body;
+    if (Buffer.isBuffer(req.body)) return req.body.toString('utf8');
+    // Object → stringify
+    try { return JSON.stringify(req.body); }
+    catch { return ''; }
+  }
+
+  // Fallback: baca stream manual
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    req.on('error', reject);
+    // Timeout biar gak hang
+    setTimeout(() => resolve(''), 5000);
+  });
+}
 
 export default async function handler(req, res) {
   // ---------- CORS ----------
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
 
-  // ---------- ENV CHECK ----------
+  // ---------- ENV ----------
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     return res.status(500).json({
@@ -32,29 +51,24 @@ export default async function handler(req, res) {
     });
   }
 
-  // ---------- VALIDASI PATH ----------
+  // ---------- PATH VALIDATION ----------
   const rawPath = req.query.path;
   if (!rawPath || typeof rawPath !== 'string') {
     return res.status(400).json({ error: 'Parameter "path" wajib diisi.' });
   }
 
-  // Normalisasi: pastikan path dimulai dari /
   const ghPath = rawPath.startsWith('/') ? rawPath : '/' + rawPath;
 
-  // Security: hanya izinkan prefix tertentu
   const isAllowed = ALLOWED_PREFIXES.some(p => ghPath.startsWith(p));
   if (!isAllowed) {
-    return res.status(403).json({
-      error: 'Path tidak diizinkan oleh proxy.'
-    });
+    return res.status(403).json({ error: 'Path tidak diizinkan oleh proxy.' });
   }
 
-  // Cegah double-slash / traversal aneh
   if (ghPath.includes('..') || ghPath.includes('//')) {
     return res.status(400).json({ error: 'Path tidak valid.' });
   }
 
-  // ---------- BUILD REQUEST ----------
+  // ---------- BUILD TARGET ----------
   const targetUrl = GITHUB_API + ghPath;
 
   const headers = {
@@ -69,32 +83,42 @@ export default async function handler(req, res) {
     headers
   };
 
-  // Body untuk PUT/POST/DELETE
-  if (['PUT', 'POST', 'DELETE', 'PATCH'].includes(req.method)) {
-    headers['Content-Type'] = 'application/json';
+  // ---------- FORWARD BODY ----------
+  const hasBody = ['PUT', 'POST', 'DELETE', 'PATCH'].includes(req.method);
 
-    if (req.body) {
-      fetchOpts.body =
-        typeof req.body === 'string'
-          ? req.body
-          : JSON.stringify(req.body);
+  if (hasBody) {
+    try {
+      const bodyStr = await getRawBody(req);
+      if (bodyStr) {
+        fetchOpts.body = bodyStr;
+        headers['Content-Type'] = 'application/json';
+      }
+    } catch (e) {
+      console.error('[proxy] body read error:', e);
+      return res.status(400).json({ error: 'Gagal baca body request: ' + e.message });
     }
   }
 
-  // ---------- FORWARD ----------
+  // ---------- FORWARD KE GITHUB ----------
   try {
+    console.log(`[proxy] ${req.method} ${ghPath}`);
+
     const ghRes = await fetch(targetUrl, fetchOpts);
     const text = await ghRes.text();
 
-    // Teruskan content-type asli
     const ct = ghRes.headers.get('content-type') || 'application/json';
     res.setHeader('Content-Type', ct);
 
-    // Teruskan rate-limit headers biar bisa dimonitor
+    // Teruskan rate limit
     const rlRemaining = ghRes.headers.get('x-ratelimit-remaining');
     const rlLimit = ghRes.headers.get('x-ratelimit-limit');
     if (rlRemaining) res.setHeader('X-RateLimit-Remaining', rlRemaining);
     if (rlLimit) res.setHeader('X-RateLimit-Limit', rlLimit);
+
+    // Log error dari GitHub biar keliatan di Vercel logs
+    if (ghRes.status >= 400) {
+      console.error(`[proxy] GitHub ${ghRes.status}:`, text.slice(0, 500));
+    }
 
     return res.status(ghRes.status).send(text);
   } catch (err) {
@@ -104,3 +128,8 @@ export default async function handler(req, res) {
     });
   }
 }
+
+// Naikin limit durasi
+export const config = {
+  maxDuration: 30
+};
