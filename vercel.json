@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/github.js": {
+      "maxDuration": 15
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ]
+}
