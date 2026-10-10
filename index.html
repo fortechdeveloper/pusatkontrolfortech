@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FORTECH CONTROL</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  width: 100%; min-height: 100vh; overflow-x: hidden;
+  font-family: 'Segoe UI','Inter','Roboto',system-ui,sans-serif;
+  color: #fff; background: #0a0012;
+}
+
+#bgVideo {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: -2;
+  filter: brightness(0.65) saturate(1.15);
+}
+.bg-overlay {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(120,0,200,0.35), transparent 60%),
+    radial-gradient(circle at 80% 90%, rgba(80,0,150,0.35), transparent 60%),
+    linear-gradient(180deg, rgba(10,0,20,0.55), rgba(10,0,20,0.75));
+}
+
+header { padding: 22px 20px 12px; position: relative; z-index: 5; }
+.brand {
+  font-size: clamp(20px,5vw,30px); font-weight: 900;
+  letter-spacing: 2.5px; color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8), 0 0 22px rgba(170,0,255,0.5);
+  display: flex; align-items: center; gap: 10px;
+}
+.brand .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #b46cff;
+  box-shadow: 0 0 12px #b46cff, 0 0 22px #b46cff;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.status-bar {
+  margin-top: 6px; font-size: 12px; letter-spacing: 1px;
+  color: #c9b6e8; opacity: 0.85; text-transform: uppercase;
+}
+.status-bar span.online { color: #7CFFB2; }
+.status-bar span.err    { color: #ff7080; }
+
+main {
+  padding: 12px 16px 40px; display: flex;
+  flex-direction: column; gap: 16px;
+  position: relative; z-index: 5;
+  max-width: 900px; margin: 0 auto;
+}
+
+.panel {
+  background: rgba(20,8,40,0.42);
+  border: 1px solid rgba(180,108,255,0.28);
+  border-radius: 22px;
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45),
+              inset 0 1px 0 rgba(255,255,255,0.08);
+  padding: 16px;
+  transition: border-color 0.25s ease;
+}
+.panel:hover { border-color: rgba(180,108,255,0.5); }
+
+.panel-title {
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: #c9b6e8;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-title::before {
+  content: ''; width: 4px; height: 14px; border-radius: 2px;
+  background: linear-gradient(180deg, #b46cff, #6a1fd6);
+  box-shadow: 0 0 8px #b46cff;
+}
+
+.repo-row { display: flex; gap: 8px; }
+.repo-row input {
+  flex: 1; min-width: 0;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(180,108,255,0.35);
+  color: #fff; padding: 12px 14px;
+  border-radius: 12px; font-size: 14px; outline: none;
+  transition: 0.2s;
+}
+.repo-row input:focus {
+  border-color: #b46cff;
+  box-shadow: 0 0 0 3px rgba(180,108,255,0.18);
+}
+.repo-row input::placeholder { color: #9a86c4; }
+
+.btn {
+  border: none; cursor: pointer;
+  font-weight: 700; letter-spacing: 1px;
+  border-radius: 12px; padding: 12px 16px;
+  font-size: 13px; color: #fff;
+  background: linear-gradient(135deg, #7a2bd6, #4a0f96);
+  box-shadow: 0 4px 14px rgba(120,40,200,0.45);
+  transition: transform 0.12s ease, filter 0.2s ease;
+  user-select: none; white-space: nowrap;
+}
+.btn:hover { filter: brightness(1.15); }
+.btn:active { transform: scale(0.96); }
+.btn.ghost {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(180,108,255,0.35);
+  box-shadow: none;
+}
+.btn.danger {
+  background: linear-gradient(135deg, #d6364a, #8b0f22);
+  box-shadow: 0 4px 14px rgba(200,40,70,0.45);
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mode-btn {
+  padding: 16px 10px; border-radius: 16px;
+  font-weight: 900; letter-spacing: 2px;
+  font-size: 14px; text-align: center;
+  cursor: pointer; user-select: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #cbb8ec;
+  transition: all 0.22s ease;
+}
+.mode-btn:hover { background: rgba(180,108,255,0.15); color: #fff; }
+.mode-btn.active {
+  background: linear-gradient(135deg, #7a2bd6, #4a0f96);
+  color: #fff;
+  border-color: rgba(180,108,255,0.7);
+  box-shadow: 0 0 22px rgba(140,60,230,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.mode-btn.maint.active {
+  background: linear-gradient(135deg, #ff9d3b, #b35100);
+  box-shadow: 0 0 22px rgba(255,140,40,0.55);
+}
+.mode-hint {
+  margin-top: 10px; font-size: 11.5px;
+  color: #b9a5dc; letter-spacing: 0.5px; text-align: center;
+}
+
+.file-list {
+  max-height: 260px; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 6px; padding-right: 4px;
+}
+.file-list::-webkit-scrollbar,
+.editor-area::-webkit-scrollbar { width: 6px; }
+.file-list::-webkit-scrollbar-thumb,
+.editor-area::-webkit-scrollbar-thumb {
+  background: rgba(180,108,255,0.5); border-radius: 6px;
+}
+.file-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; font-size: 13px;
+  transition: 0.15s; word-break: break-all;
+}
+.file-item:hover {
+  background: rgba(180,108,255,0.15);
+  border-color: rgba(180,108,255,0.4);
+  transform: translateX(2px);
+}
+.file-item.active {
+  background: rgba(180,108,255,0.28);
+  border-color: #b46cff;
+  box-shadow: 0 0 12px rgba(180,108,255,0.4);
+}
+.file-item .icon { font-size: 15px; opacity: 0.85; flex-shrink: 0; }
+.file-item .name {
+  flex: 1; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.empty-state {
+  text-align: center; color: #9a86c4;
+  font-size: 12.5px; padding: 22px 8px; font-style: italic;
+}
+
+.editor-head { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.editor-head input {
+  flex: 1; min-width: 140px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(180,108,255,0.35);
+  color: #fff; padding: 10px 12px;
+  border-radius: 10px; font-size: 13px; outline: none;
+}
+.editor-area {
+  width: 100%; min-height: 260px; max-height: 420px;
+  resize: vertical;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(180,108,255,0.3);
+  border-radius: 12px; color: #e6dcff;
+  padding: 14px;
+  font-family: 'JetBrains Mono','Fira Code',Consolas,monospace;
+  font-size: 13px; line-height: 1.55;
+  outline: none; white-space: pre;
+  overflow: auto; tab-size: 2;
+}
+.editor-area:focus {
+  border-color: #b46cff;
+  box-shadow: 0 0 0 3px rgba(180,108,255,0.15);
+}
+.editor-actions {
+  display: flex; gap: 8px;
+  margin-top: 10px; flex-wrap: wrap;
+}
+.editor-actions .btn { flex: 1; min-width: 100px; }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(30,10,55,0.95);
+  border: 1px solid #b46cff; color: #fff;
+  padding: 12px 22px; border-radius: 30px;
+  font-size: 13px; letter-spacing: 0.5px;
+  box-shadow: 0 8px 28px rgba(120,40,220,0.5);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(.2,.9,.3,1.2);
+  z-index: 999; pointer-events: none;
+  max-width: 90vw; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { border-color: #ff5c6c; }
+.toast.ok    { border-color: #7CFFB2; }
+
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(180,108,255,0.3);
+  border-top-color: #b46cff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block; vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  header { padding: 16px 14px 8px; }
+  main { padding: 8px 12px 32px; gap: 12px; }
+  .panel { padding: 13px; border-radius: 18px; }
+  .repo-row { flex-direction: column; }
+  .repo-row .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<video id="bgVideo" autoplay muted loop playsinline>
+  <source src="/wp.mp4" type="video/mp4" />
+</video>
+<div class="bg-overlay"></div>
+
+<header>
+  <div class="brand">
+    <span class="dot"></span>
+    FORTECH CONTROL
+  </div>
+  <div class="status-bar">
+    SYSTEM STATUS: <span class="online" id="statusText">READY</span>
+  </div>
+</header>
+
+<main>
+
+  <section class="panel">
+    <div class="panel-title">Border 1 · Repository</div>
+    <div class="repo-row">
+      <input type="text" id="repoInput"
+             placeholder="owner/repo  (contoh: FortechDev/my-project)"
+             autocomplete="off" />
+      <button class="btn" id="btnLoadRepo">LOAD</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">Border 2 · Opsi</div>
+    <div class="mode-row">
+      <div class="mode-btn active" id="btnEdit" data-mode="edit">EDIT</div>
+      <div class="mode-btn maint" id="btnMaint" data-mode="maint">MAINTANANCE</div>
+    </div>
+    <div class="mode-hint" id="modeHint">
+      Mode EDIT aktif — bisa ubah, tambah, hapus file.
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">Border 3 · File Repository</div>
+    <div class="file-list" id="fileList">
+      <div class="empty-state">Belum ada repository yang dimuat.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">Border 4 · Viewer / Editor</div>
+    <div class="editor-head">
+      <input type="text" id="filePathInput"
+             placeholder="path/file.ext (contoh: src/main.cpp)"
+             autocomplete="off" />
+    </div>
+    <textarea class="editor-area" id="editorArea" spellcheck="false"
+      placeholder="// Pilih file dari Border 3, atau tulis path baru di atas lalu klik NEW."></textarea>
+    <div class="editor-actions">
+      <button class="btn" id="btnNew">NEW</button>
+      <button class="btn" id="btnSave">SAVE</button>
+      <button class="btn danger" id="btnDelete">DELETE</button>
+      <button class="btn ghost" id="btnClear">CLEAR</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   FORTECH CONTROL - Frontend
+   Semua request ke GitHub lewat /api/github (proxy serverless)
+   Token TIDAK pernah ada di browser.
+   ========================================================= */
+(() => {
+  'use strict';
+
+  const LS_REPO = 'fortech.github.repo';
+
+  const state = {
+    repo: null,
+    branch: 'main',
+    mode: 'edit',
+    files: [],
+    activeFile: null,
+    activeSha: null
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const video       = $('bgVideo');
+  const statusText  = $('statusText');
+  const repoInput   = $('repoInput');
+  const btnLoadRepo = $('btnLoadRepo');
+  const btnEdit     = $('btnEdit');
+  const btnMaint    = $('btnMaint');
+  const modeHint    = $('modeHint');
+  const fileList    = $('fileList');
+  const filePath    = $('filePathInput');
+  const editor      = $('editorArea');
+  const btnNew      = $('btnNew');
+  const btnSave     = $('btnSave');
+  const btnDelete   = $('btnDelete');
+  const btnClear    = $('btnClear');
+  const toastEl     = $('toast');
+
+  /* ---------- UTIL ---------- */
+  function setStatus(txt, cls) {
+    statusText.textContent = txt;
+    statusText.className = cls || 'online';
+  }
+
+  let toastTimer = null;
+  function toast(msg, type = '') {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast show ' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+  }
+
+  function b64encode(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function b64decode(str) {
+    try {
+      return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
+    } catch (e) {
+      return atob(str.replace(/\n/g, ''));
+    }
+  }
+
+  function isBinaryName(name) {
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    return ['png','jpg','jpeg','gif','webp','ico','bmp','tiff','pdf',
+            'zip','rar','7z','gz','tar','mp3','mp4','wav','ogg','webm',
+            'exe','dll','so','dylib','class','jar','apk','bin','woff',
+            'woff2','ttf','eot','otf'].includes(ext);
+  }
+
+  function fileIcon(name) {
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    const map = {
+      js:'🟨', mjs:'🟨', ts:'🔷', jsx:'⚛️', tsx:'⚛️',
+      html:'🌐', htm:'🌐', css:'🎨', scss:'🎨', sass:'🎨',
+      json:'🧾', md:'📝', txt:'📄', yml:'⚙️', yaml:'⚙️',
+      py:'🐍', cpp:'➕', c:'➕', h:'📘', hpp:'📘',
+      ino:'🔌', java:'☕', go:'🐹', rs:'🦀', php:'🐘',
+      sh:'🐚', bat:'🖥️', ps1:'🖥️', xml:'📐', svg:'🖼️',
+      png:'🖼️', jpg:'🖼️', jpeg:'🖼️', gif:'🖼️', webp:'🖼️',
+      mp4:'🎬', mp3:'🎵', wav:'🎵', pdf:'📕',
+      lock:'🔒', gitignore:'🚫', env:'🔐'
+    };
+    return map[ext] || '📄';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+  }
+
+  /* ---------- PROXY FETCH ---------- */
+  // Semua request ke GitHub lewat /api/github
+  async function ghFetch(path, opts = {}) {
+    const url = '/api/github?path=' + encodeURIComponent(path);
+    const res = await fetch(url, {
+      method: opts.method || 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    });
+    return res;
+  }
+
+  /* ---------- BG VIDEO FALLBACK ---------- */
+  video.addEventListener('error', () => {
+    document.body.style.background =
+      'linear-gradient(135deg, #1a0033, #3a0070, #0a0014)';
+  });
+
+  /* ---------- MODE ---------- */
+  function setMode(mode) {
+    state.mode = mode;
+    btnEdit.classList.toggle('active', mode === 'edit');
+    btnMaint.classList.toggle('active', mode === 'maint');
+
+    const editable = mode === 'edit';
+    modeHint.textContent = editable
+      ? 'Mode EDIT aktif — bisa ubah, tambah, hapus file.'
+      : 'Mode MAINTANANCE — read-only, hanya untuk melihat.';
+
+    if (editable) editor.removeAttribute('readonly');
+    else editor.setAttribute('readonly', 'true');
+
+    btnSave.disabled   = !editable;
+    btnDelete.disabled = !editable;
+    btnNew.disabled    = !editable;
+    editor.style.opacity = editable ? '1' : '0.75';
+  }
+
+  btnEdit.addEventListener('click', () => setMode('edit'));
+  btnMaint.addEventListener('click', () => setMode('maint'));
+
+  /* ---------- LOAD REPO ---------- */
+  async function loadRepo() {
+    const raw = repoInput.value.trim();
+    if (!raw) { toast('Isi dulu owner/repo', 'error'); return; }
+    if (!/^[^\/\s]+\/[^\/\s]+$/.test(raw)) {
+      toast('Format harus owner/repo', 'error'); return;
+    }
+
+    state.repo = raw;
+    state.files = [];
+    state.activeFile = null;
+    state.activeSha = null;
+    localStorage.setItem(LS_REPO, raw);
+
+    setStatus('LOADING...');
+    fileList.innerHTML =
+      '<div class="empty-state"><span class="spinner"></span> Memuat repository...</div>';
+    editor.value = '';
+    filePath.value = '';
+
+    try {
+      const infoRes = await ghFetch('/repos/' + state.repo);
+      if (!infoRes.ok) {
+        const e = await infoRes.json().catch(() => ({}));
+        throw new Error(e.message || e.error || ('HTTP ' + infoRes.status));
+      }
+      const info = await infoRes.json();
+      state.branch = info.default_branch || 'main';
+
+      await fetchTree();
+      setStatus('CONNECTED · ' + state.branch);
+      toast('Repository dimuat ✓', 'ok');
+    } catch (err) {
+      console.error(err);
+      setStatus('ERROR', 'err');
+      fileList.innerHTML = '<div class="empty-state">❌ ' + escapeHtml(err.message) + '</div>';
+      toast(err.message, 'error');
+    }
+  }
+
+  btnLoadRepo.addEventListener('click', loadRepo);
+  repoInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') loadRepo();
+  });
+
+  /* ---------- FETCH TREE ---------- */
+  async function fetchTree() {
+    const res = await ghFetch(
+      `/repos/${state.repo}/git/trees/${encodeURIComponent(state.branch)}?recursive=1`
+    );
+
+    if (!res.ok) {
+      const r2 = await ghFetch('/repos/' + state.repo + '/contents');
+      if (!r2.ok) throw new Error('Gagal ambil daftar file');
+      const items = await r2.json();
+      state.files = items.map(it => ({
+        name: it.name, path: it.path, type: it.type, sha: it.sha
+      }));
+    } else {
+      const data = await res.json();
+      state.files = (data.tree || [])
+        .filter(t => t.type === 'blob')
+        .map(t => ({
+          name: t.path.split('/').pop(),
+          path: t.path,
+          type: 'file',
+          sha: t.sha
+        }));
+    }
+    renderFiles();
+  }
+
+  /* ---------- RENDER FILE LIST ---------- */
+  function renderFiles() {
+    if (!state.files.length) {
+      fileList.innerHTML = '<div class="empty-state">Repository kosong.</div>';
+      return;
+    }
+    const sorted = [...state.files].sort((a, b) => a.path.localeCompare(b.path));
+
+    fileList.innerHTML = sorted.map(f => `
+      <div class="file-item" data-path="${escapeHtml(f.path)}" data-sha="${escapeHtml(f.sha || '')}">
+        <span class="icon">${fileIcon(f.name)}</span>
+        <span class="name">${escapeHtml(f.path)}</span>
+      </div>
+    `).join('');
+
+    fileList.querySelectorAll('.file-item').forEach(el => {
+      el.addEventListener('click', () => {
+        fileList.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        openFile(el.dataset.path);
+      });
+    });
+  }
+
+  /* ---------- OPEN FILE ---------- */
+  async function openFile(path) {
+    if (!state.repo) return;
+    setStatus('FETCHING FILE...');
+
+    try {
+      const res = await ghFetch(
+        `/repos/${state.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(state.branch)}`
+      );
+      if (!res.ok) throw new Error('Gagal buka file (' + res.status + ')');
+      const data = await res.json();
+
+      state.activeFile = path;
+      state.activeSha = data.sha;
+      filePath.value = path;
+
+      if (isBinaryName(data.name)) {
+        editor.value =
+          `// ⚠ File biner (${data.name}) — tidak bisa ditampilkan sebagai teks.\n// Size: ${data.size} bytes`;
+      } else if (data.content && data.encoding === 'base64') {
+        editor.value = b64decode(data.content);
+      } else {
+        editor.value = '';
+      }
+
+      setStatus('FILE: ' + path);
+    } catch (err) {
+      console.error(err);
+      toast(err.message, 'error');
+      setStatus('ERROR', 'err');
+    }
+  }
+
+  /* ---------- SAVE FILE ---------- */
+  async function saveFile() {
+    if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
+    if (!state.repo) { toast('Belum pilih repository', 'error'); return; }
+
+    const path = filePath.value.trim();
+    if (!path) { toast('Isi path file dulu', 'error'); return; }
+
+    setStatus('SAVING...');
+    btnSave.disabled = true;
+
+    try {
+      let sha = state.activeSha;
+      if (!sha) {
+        const r = await ghFetch(
+          `/repos/${state.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(state.branch)}`
+        );
+        if (r.ok) {
+          const d = await r.json();
+          sha = d.sha;
+        }
+      }
+
+      const body = {
+        message: (sha ? 'update: ' : 'create: ') + path + ' [Fortech Control]',
+        content: b64encode(editor.value),
+        branch: state.branch
+      };
+      if (sha) body.sha = sha;
+
+      const res = await ghFetch(
+        `/repos/${state.repo}/contents/${encodeURI(path)}`,
+        { method: 'PUT', body }
+      );
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || errData.error || ('Gagal simpan (' + res.status + ')'));
+      }
+
+      const data = await res.json();
+      state.activeFile = path;
+      state.activeSha = data.content.sha;
+
+      toast('Tersimpan ✓', 'ok');
+      setStatus('SAVED');
+      await fetchTree();
+      const el = fileList.querySelector(`[data-path="${CSS.escape(path)}"]`);
+      if (el) el.classList.add('active');
+    } catch (err) {
+      console.error(err);
+      toast(err.message, 'error');
+      setStatus('ERROR', 'err');
+    } finally {
+      btnSave.disabled = false;
+    }
+  }
+
+  btnSave.addEventListener('click', saveFile);
+
+  /* ---------- NEW FILE ---------- */
+  btnNew.addEventListener('click', () => {
+    if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
+    state.activeFile = null;
+    state.activeSha = null;
+    filePath.value = '';
+    editor.value = '';
+    filePath.focus();
+    fileList.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+    toast('Tulis path + isi, lalu SAVE', '');
+  });
+
+  /* ---------- DELETE FILE ---------- */
+  async function deleteFile() {
+    if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
+    if (!state.repo || !state.activeFile) { toast('Pilih file dulu', 'error'); return; }
+    if (!confirm('Hapus file: ' + state.activeFile + ' ?')) return;
+
+    setStatus('DELETING...');
+    btnDelete.disabled = true;
+
+    try {
+      const res = await ghFetch(
+        `/repos/${state.repo}/contents/${encodeURI(state.activeFile)}`,
+        {
+          method: 'DELETE',
+          body: {
+            message: 'delete: ' + state.activeFile + ' [Fortech Control]',
+            sha: state.activeSha,
+            branch: state.branch
+          }
+        }
+      );
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.message || d.error || ('Gagal hapus (' + res.status + ')'));
+      }
+
+      toast('File dihapus ✓', 'ok');
+      state.activeFile = null;
+      state.activeSha = null;
+      filePath.value = '';
+      editor.value = '';
+      await fetchTree();
+      setStatus('DELETED');
+    } catch (err) {
+      console.error(err);
+      toast(err.message, 'error');
+      setStatus('ERROR', 'err');
+    } finally {
+      btnDelete.disabled = false;
+    }
+  }
+
+  btnDelete.addEventListener('click', deleteFile);
+
+  /* ---------- CLEAR ---------- */
+  btnClear.addEventListener('click', () => {
+    editor.value = '';
+    filePath.value = '';
+    state.activeFile = null;
+    state.activeSha = null;
+    fileList.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+    toast('Editor dibersihkan');
+  });
+
+  /* ---------- SHORTCUTS ---------- */
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      saveFile();
+    }
+    if (e.target === editor && e.key === 'Tab') {
+      e.preventDefault();
+      const s = editor.selectionStart;
+      const en = editor.selectionEnd;
+      editor.value = editor.value.substring(0, s) + '  ' + editor.value.substring(en);
+      editor.selectionStart = editor.selectionEnd = s + 2;
+    }
+  });
+
+  /* ---------- INIT ---------- */
+  (function init() {
+    setMode('edit');
+    const saved = localStorage.getItem(LS_REPO);
+    if (saved) repoInput.value = saved;
+    setStatus('READY');
+
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {
+      document.addEventListener('touchstart', function once() {
+        video.play();
+        document.removeEventListener('touchstart', once);
+      }, { once: true });
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>
