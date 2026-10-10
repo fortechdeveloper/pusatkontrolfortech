@@ -28,11 +28,10 @@ html, body {
 }
 
 /* =========================================================
-   BACKGROUND — VIDEO + FALLBACK
+   BACKGROUND
    ========================================================= */
 #bgLayer {
-  position: fixed; inset: 0;
-  z-index: -4;
+  position: fixed; inset: 0; z-index: -4;
   background:
     radial-gradient(circle at 20% 20%, #3a0070 0%, transparent 55%),
     radial-gradient(circle at 80% 80%, #2a0050 0%, transparent 55%),
@@ -40,33 +39,30 @@ html, body {
 }
 
 #bgVideo {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
   z-index: -3;
-  filter: brightness(0.5) saturate(1.2);
+  filter: brightness(0.75) saturate(1.3);
   opacity: 0;
   transition: opacity 0.8s ease;
   pointer-events: none;
   background: transparent;
 }
-
 #bgVideo.loaded { opacity: 1; }
 
 .bg-overlay {
   position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background:
-    radial-gradient(circle at 15% 15%, rgba(140,60,230,0.35), transparent 55%),
-    radial-gradient(circle at 85% 85%, rgba(90,20,180,0.35), transparent 55%),
-    linear-gradient(180deg, rgba(6,0,15,0.55), rgba(6,0,15,0.8));
+    radial-gradient(circle at 15% 15%, rgba(140,60,230,0.30), transparent 55%),
+    radial-gradient(circle at 85% 85%, rgba(90,20,180,0.30), transparent 55%),
+    linear-gradient(180deg, rgba(6,0,15,0.40), rgba(6,0,15,0.65));
 }
 
 .blob {
   position: fixed; border-radius: 50%;
   filter: blur(90px); z-index: -1;
-  pointer-events: none; opacity: 0.55;
+  pointer-events: none; opacity: 0.4;
   will-change: transform;
 }
 .blob-1 {
@@ -92,25 +88,21 @@ html, body {
 @keyframes float3 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-40px,60px) scale(0.9);} }
 
 /* =========================================================
-   DEBUG BADGE (bisa lu hapus setelah video jalan)
+   DEBUG BADGE
    ========================================================= */
 #videoDebug {
-  position: fixed;
-  top: 8px;
-  right: 8px;
+  position: fixed; top: 8px; right: 8px;
   z-index: 9999;
   padding: 6px 10px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.75);
   border: 1px solid rgba(180,108,255,0.5);
   border-radius: 8px;
-  font-family: monospace;
-  font-size: 10px;
+  font-family: monospace; font-size: 10px;
   color: #d3b8ff;
   pointer-events: none;
   letter-spacing: 0.5px;
-  max-width: 280px;
-  word-break: break-all;
-  line-height: 1.4;
+  max-width: 300px;
+  word-break: break-all; line-height: 1.4;
   display: none;
 }
 #videoDebug.show { display: block; }
@@ -135,8 +127,7 @@ html, body {
     0 0 0 1px rgba(255,255,255,0.03) inset,
     inset 0 1px 0 rgba(255,255,255,0.18),
     inset 0 -1px 0 rgba(0,0,0,0.15);
-  overflow: hidden;
-  isolation: isolate;
+  overflow: hidden; isolation: isolate;
 }
 .glass::before {
   content: ''; position: absolute; inset: 0;
@@ -507,18 +498,18 @@ input::placeholder, textarea::placeholder { color: #7d68a8; }
 </head>
 <body>
 
-<!-- ============ DEBUG BADGE ============ -->
+<!-- DEBUG BADGE -->
 <div id="videoDebug"></div>
 
-<!-- ============ BACKGROUND ============ -->
+<!-- BACKGROUND -->
 <div id="bgLayer"></div>
-<video id="bgVideo" autoplay muted loop playsinline preload="auto"></video>
+<video id="bgVideo" muted loop playsinline autoplay preload="auto"></video>
 <div class="bg-overlay"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
 
-<!-- ============ APP ============ -->
+<!-- APP -->
 <div class="app">
 
   <header class="topbar glass">
@@ -658,8 +649,7 @@ placeholder="// Pilih file dari daftar di kiri,
 
 <script>
 /* =========================================================
-   FORTECH CONTROL — Frontend
-   wp.mp4 TETAP DI ROOT. Loader pakai relative path + fallback.
+   FORTECH CONTROL — Frontend (VIDEO LOADER FIXED)
    ========================================================= */
 (() => {
   'use strict';
@@ -700,44 +690,192 @@ placeholder="// Pilih file dari daftar di kiri,
   const toastMsg     = $('toastMsg');
 
   /* =========================================================
-     VIDEO LOADER
-     Coba beberapa path. Tampilkan debug di pojok.
+     VIDEO LOADER — ROBUST
      ========================================================= */
-  const VIDEO_PATHS = [
-    './wp.mp4',       // relative → paling universal (local + vercel root)
-    'wp.mp4',         // tanpa ./ 
-    '/wp.mp4',        // absolute root
-    './WP.mp4',
-    './wp.MP4',
-    './wp.Mp4'
-  ];
+  const VIDEO_PATHS = ['./wp.mp4', 'wp.mp4', '/wp.mp4'];
 
   function showDebug(msg, type) {
     videoDebug.textContent = 'VIDEO: ' + msg;
     videoDebug.className = 'show ' + (type || '');
-    videoDebug.classList.add('show');
   }
 
+  /* ---------- TAP-TO-PLAY OVERLAY ---------- */
+  let tapBtn = null;
+  function showTapToPlay(url) {
+    if (tapBtn) return;
+    tapBtn = document.createElement('div');
+    tapBtn.innerHTML = `
+      <div style="
+        position:fixed; inset:0; z-index:9998;
+        display:flex; align-items:center; justify-content:center;
+        background:rgba(0,0,0,0.55); backdrop-filter:blur(4px);
+        cursor:pointer; color:#fff; font-family:inherit;
+      ">
+        <div style="
+          display:flex; flex-direction:column; align-items:center; gap:14px;
+          padding:22px 34px; border-radius:18px;
+          background:rgba(28,10,52,0.85);
+          border:1px solid #b46cff;
+          box-shadow:0 12px 40px rgba(140,60,230,0.6);
+          text-align:center;
+        ">
+          <div style="
+            width:64px; height:64px; border-radius:50%;
+            background:linear-gradient(135deg,#b46cff,#4a0f96);
+            display:grid; place-items:center;
+            box-shadow:0 6px 22px rgba(180,108,255,0.7);
+          ">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+          <span style="font-weight:800; letter-spacing:2px; font-size:13px;">
+            TAP UNTUK PUTAR VIDEO
+          </span>
+          <span style="font-size:11px; opacity:0.7; letter-spacing:1px;">
+            Browser blokir autoplay, butuh 1x interaksi
+          </span>
+        </div>
+      </div>`;
+    document.body.appendChild(tapBtn);
+
+    const tryPlayNow = () => {
+      video.muted = true;
+      video.volume = 0;
+      const p = video.play();
+      if (p && p.then) {
+        p.then(() => {
+          if (tapBtn) { tapBtn.remove(); tapBtn = null; }
+          showDebug('PLAYING → ' + url, 'ok');
+        }).catch(err => {
+          console.warn('[Fortech] Masih gagal play:', err);
+        });
+      }
+    };
+    tapBtn.addEventListener('click', tryPlayNow);
+    tapBtn.addEventListener('touchstart', tryPlayNow, { passive: true });
+  }
+
+  /* ---------- ATTACH VIDEO ---------- */
+  function attachVideo(url) {
+    try { video.pause(); } catch (e) {}
+
+    video.removeAttribute('src');
+    video.innerHTML = '';
+    try { video.load(); } catch (e) {}
+
+    // Set properties via JS (reliable) + attributes
+    video.src = url;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.volume = 0;
+    video.playsInline = true;
+    video.webkitPlaysInline = true;
+    video.autoplay = true;
+    video.loop = true;
+
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('autoplay', '');
+    video.setAttribute('loop', '');
+
+    video.load();
+
+    video.onloadeddata = () => {
+      video.classList.add('loaded');
+
+      setTimeout(() => {
+        if (video.videoWidth === 0 || video.videoHeight === 0) {
+          showDebug('0x0 → codec HEVC/H.265/AV1 tidak didukung. Convert ke H.264.', 'err');
+          console.error('[Fortech] Video 0x0 — kemungkinan codec unsupported. Pakai ffmpeg: -c:v libx264');
+          return;
+        }
+        console.log('[Fortech] loadeddata OK:', video.videoWidth + 'x' + video.videoHeight);
+        showDebug('loaded OK ' + video.videoWidth + 'x' + video.videoHeight, 'ok');
+        attemptPlay(url);
+      }, 300);
+    };
+
+    video.onerror = () => {
+      const err = video.error;
+      let msg = 'unknown';
+      if (err) {
+        switch (err.code) {
+          case 1: msg = 'ABORTED'; break;
+          case 2: msg = 'NETWORK'; break;
+          case 3: msg = 'DECODE (file korup/codec rusak)'; break;
+          case 4: msg = 'SRC_NOT_SUPPORTED (codec tidak didukung)'; break;
+        }
+      }
+      console.error('[Fortech] Video error:', msg, err);
+      showDebug('ERROR → ' + msg, 'err');
+      video.classList.remove('loaded');
+    };
+
+    video.onplaying = () => {
+      console.log('[Fortech] Event: playing ✓');
+      showDebug('PLAYING → ' + url, 'ok');
+      setTimeout(() => videoDebug.classList.remove('show'), 3000);
+      localStorage.setItem(LS_VIDEO_PATH, url);
+      if (tapBtn) { tapBtn.remove(); tapBtn = null; }
+    };
+  }
+
+  /* ---------- ATTEMPT PLAY + RETRY ---------- */
+  function attemptPlay(url, retry = 0) {
+    console.log('[Fortech] attemptPlay #' + retry);
+    video.muted = true;
+    video.volume = 0;
+
+    const p = video.play();
+    if (!p || !p.then) return;
+
+    p.then(() => {
+      console.log('[Fortech] play() resolved');
+
+      setTimeout(() => {
+        if (video.paused) {
+          console.warn('[Fortech] Video paused lagi → autoplay diblokir?');
+          if (retry < 2) attemptPlay(url, retry + 1);
+          else showTapToPlay(url);
+        } else if (video.currentTime === 0 && video.readyState >= 2) {
+          console.warn('[Fortech] currentTime 0 → kemungkinan codec issue');
+          showDebug('frame tidak decode → codec issue (convert ke H.264)', 'err');
+        } else {
+          console.log('[Fortech] Video JALAN ✓ t=' + video.currentTime.toFixed(2));
+        }
+      }, 2000);
+    })
+    .catch(err => {
+      console.warn('[Fortech] play() rejected:', err.name, err.message);
+      if (err.name === 'NotAllowedError') {
+        showDebug('autoplay diblokir → tap untuk play', '');
+        showTapToPlay(url);
+      } else if (retry < 2) {
+        setTimeout(() => attemptPlay(url, retry + 1), 600);
+      } else {
+        showTapToPlay(url);
+      }
+    });
+  }
+
+  /* ---------- TRY LOAD VIDEO (probe path) ---------- */
   function tryLoadVideo() {
     let idx = 0;
     const tried = [];
 
     const tryNext = () => {
       if (idx >= VIDEO_PATHS.length) {
-        showDebug(
-          'GAGAL semua path → ' + tried.join(' | ') +
-          ' — Cek: file ke-commit? nama kecil? ada di root?',
-          'err'
-        );
+        showDebug('GAGAL semua path → ' + tried.join(' | '), 'err');
         console.error('[Fortech] Semua path video gagal:', tried);
         return;
       }
 
       const url = VIDEO_PATHS[idx++];
       tried.push(url);
-      showDebug('coba: ' + url, '');
+      showDebug('test: ' + url, '');
 
-      // Buat element video tester (silent, tidak tampil)
       const tester = document.createElement('video');
       tester.muted = true;
       tester.playsInline = true;
@@ -747,11 +885,11 @@ placeholder="// Pilih file dari daftar di kiri,
       const finish = (ok) => {
         if (done) return;
         done = true;
-        tester.removeAttribute('src');
-        try { tester.load(); } catch (e) {}
+        try { tester.removeAttribute('src'); tester.load(); } catch (e) {}
         tester.onloadedmetadata = null;
         tester.onerror = null;
         if (ok) {
+          console.log('[Fortech] Path valid →', url);
           attachVideo(url);
         } else {
           tryNext();
@@ -759,69 +897,24 @@ placeholder="// Pilih file dari daftar di kiri,
       };
 
       tester.onloadedmetadata = () => {
-        console.log('[Fortech] Video OK →', url);
-        showDebug('OK → ' + url, 'ok');
+        if (tester.videoWidth === 0) {
+          console.warn('[Fortech] Metadata OK tapi 0x0:', url);
+        }
         finish(true);
       };
-
       tester.onerror = () => {
-        console.warn('[Fortech] Video gagal →', url);
+        console.warn('[Fortech] Gagal:', url);
         finish(false);
       };
 
-      // Timeout supaya gak nunggu selamanya
-      setTimeout(() => finish(false), 6000);
-
+      setTimeout(() => finish(false), 8000);
       tester.src = url;
     };
 
     tryNext();
   }
 
-  function attachVideo(url) {
-    video.innerHTML = '';
-    video.removeAttribute('src');
-
-    const src = document.createElement('source');
-    src.src = url;
-    src.type = 'video/mp4';
-    video.appendChild(src);
-
-    video.load();
-
-    video.onloadeddata = () => {
-      video.classList.add('loaded');
-      showDebug('AKTIF → ' + url, 'ok');
-      console.log('[Fortech] Video aktif →', url);
-      localStorage.setItem(LS_VIDEO_PATH, url);
-      setTimeout(() => videoDebug.classList.remove('show'), 3000);
-    };
-
-    video.onerror = () => {
-      console.warn('[Fortech] Video error setelah attach:', url);
-      video.classList.remove('loaded');
-      showDebug('ERROR saat play → ' + url, 'err');
-    };
-
-    const p = video.play();
-    if (p && p.catch) {
-      p.catch(() => {
-        console.warn('[Fortech] Autoplay ditolak, nunggu interaksi user');
-        showDebug('autoplay diblokir → tap untuk play', '');
-        const once = () => {
-          video.play().catch(() => {});
-          document.removeEventListener('touchstart', once);
-          document.removeEventListener('click', once);
-          document.removeEventListener('keydown', once);
-        };
-        document.addEventListener('touchstart', once, { once: true });
-        document.addEventListener('click', once, { once: true });
-        document.addEventListener('keydown', once, { once: true });
-      });
-    }
-  }
-
-  // Prioritas: pakai path yang berhasil sebelumnya (cache)
+  // Cache prioritas
   const cachedVideoPath = localStorage.getItem(LS_VIDEO_PATH);
   if (cachedVideoPath) {
     const i = VIDEO_PATHS.indexOf(cachedVideoPath);
@@ -833,6 +926,16 @@ placeholder="// Pilih file dari daftar di kiri,
 
   tryLoadVideo();
 
+  // Global interaction fallback: kapanpun user klik/tap/scroll, coba play
+  ['click','touchstart','keydown','scroll'].forEach(evt => {
+    window.addEventListener(evt, function once() {
+      if (video.paused && video.src) {
+        video.muted = true;
+        video.play().catch(() => {});
+      }
+    }, { once: false, passive: true });
+  });
+
   /* ---------- LUCIDE ---------- */
   function refreshIcons() {
     if (window.lucide && lucide.createIcons) lucide.createIcons();
@@ -843,7 +946,6 @@ placeholder="// Pilih file dari daftar di kiri,
     statusText.textContent = txt;
     statusChip.className = 'status-chip' + (cls ? ' ' + cls : '');
   }
-
   function setEditorStatus(txt, ok) {
     editorStatus.innerHTML = `<i data-lucide="circle-dot"></i> <span>${txt}</span>`;
     if (ok === false) editorStatus.style.color = 'var(--err)';
@@ -1362,4 +1464,4 @@ placeholder="// Pilih file dari daftar di kiri,
 })();
 </script>
 </body>
-  </html>
+</html>
