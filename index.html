@@ -2,329 +2,960 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>FORTECH CONTROL</title>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* =========================================================
+   RESET
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --accent-1: #b46cff;
+  --accent-2: #7a2bd6;
+  --accent-3: #4a0f96;
+  --ok: #7CFFB2;
+  --err: #ff5c6c;
+  --warn: #ff9d3b;
+  --text: #f2ecff;
+  --text-dim: #b9a5dc;
+}
+
 html, body {
-  width: 100%; min-height: 100vh; overflow-x: hidden;
-  font-family: 'Segoe UI','Inter','Roboto',system-ui,sans-serif;
-  color: #fff; background: #0a0012;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+  color: var(--text);
+  background: #06000d;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* =========================================================
+   BACKGROUND VIDEO + BLOBS
+   ========================================================= */
 #bgVideo {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; z-index: -2;
-  filter: brightness(0.65) saturate(1.15);
-}
-.bg-overlay {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(120,0,200,0.35), transparent 60%),
-    radial-gradient(circle at 80% 90%, rgba(80,0,150,0.35), transparent 60%),
-    linear-gradient(180deg, rgba(10,0,20,0.55), rgba(10,0,20,0.75));
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -3;
+  filter: brightness(0.5) saturate(1.2);
 }
 
-header { padding: 22px 20px 12px; position: relative; z-index: 5; }
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(140,60,230,0.35), transparent 55%),
+    radial-gradient(circle at 85% 85%, rgba(90,20,180,0.35), transparent 55%),
+    linear-gradient(180deg, rgba(6,0,15,0.55), rgba(6,0,15,0.8));
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  will-change: transform;
+}
+.blob-1 {
+  width: 45vw; height: 45vw;
+  max-width: 500px; max-height: 500px;
+  background: radial-gradient(circle, #7a2bd6, transparent 70%);
+  top: -10%; left: -10%;
+  animation: float1 18s ease-in-out infinite;
+}
+.blob-2 {
+  width: 40vw; height: 40vw;
+  max-width: 460px; max-height: 460px;
+  background: radial-gradient(circle, #b46cff, transparent 70%);
+  bottom: -10%; right: -10%;
+  animation: float2 22s ease-in-out infinite;
+}
+.blob-3 {
+  width: 30vw; height: 30vw;
+  max-width: 340px; max-height: 340px;
+  background: radial-gradient(circle, #4a0f96, transparent 70%);
+  top: 40%; left: 50%;
+  animation: float3 26s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 40px) scale(1.1); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-60px, -40px) scale(1.15); }
+}
+@keyframes float3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, 60px) scale(0.9); }
+}
+
+/* =========================================================
+   LIQUID GLASS
+   ========================================================= */
+.glass {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.025) 45%,
+    rgba(255,255,255,0.06) 100%
+  );
+  backdrop-filter: blur(26px) saturate(180%) contrast(110%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%) contrast(110%);
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.15);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(180,108,255,0.35) 30%,
+    rgba(255,255,255,0.05) 60%,
+    rgba(180,108,255,0.25) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.02) 60%,
+    transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* =========================================================
+   APP SHELL
+   ========================================================= */
+.app {
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+header.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+  flex-wrap: wrap;
+}
+
 .brand {
-  font-size: clamp(20px,5vw,30px); font-weight: 900;
-  letter-spacing: 2.5px; color: #fff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.8), 0 0 22px rgba(170,0,255,0.5);
-  display: flex; align-items: center; gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 900;
+  font-size: clamp(16px, 2.2vw, 22px);
+  letter-spacing: 2.5px;
 }
-.brand .dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #b46cff;
-  box-shadow: 0 0 12px #b46cff, 0 0 22px #b46cff;
-  animation: pulse 1.6s ease-in-out infinite;
+
+.brand-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 6px 22px rgba(140,60,230,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
+
+.brand-badge svg {
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  stroke-width: 2.2;
+}
+
+.brand-text {
+  background: linear-gradient(135deg, #fff 0%, #d3b8ff 50%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(180,108,255,0.4);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-dim);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 12px var(--ok);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
 @keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
+  0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
 }
-.status-bar {
-  margin-top: 6px; font-size: 12px; letter-spacing: 1px;
-  color: #c9b6e8; opacity: 0.85; text-transform: uppercase;
-}
-.status-bar span.online { color: #7CFFB2; }
-.status-bar span.err    { color: #ff7080; }
 
-main {
-  padding: 12px 16px 40px; display: flex;
-  flex-direction: column; gap: 16px;
-  position: relative; z-index: 5;
-  max-width: 900px; margin: 0 auto;
+.status-chip.busy .status-dot { background: var(--warn); box-shadow: 0 0 12px var(--warn); }
+.status-chip.error .status-dot { background: var(--err); box-shadow: 0 0 12px var(--err); }
+.status-chip.ok .status-dot { background: var(--ok); }
+
+/* =========================================================
+   GRID LAYOUT
+   ========================================================= */
+.layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .panel {
-  background: rgba(20,8,40,0.42);
-  border: 1px solid rgba(180,108,255,0.28);
-  border-radius: 22px;
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45),
-              inset 0 1px 0 rgba(255,255,255,0.08);
-  padding: 16px;
-  transition: border-color 0.25s ease;
+  padding: 18px;
 }
-.panel:hover { border-color: rgba(180,108,255,0.5); }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 8px;
+}
 
 .panel-title {
-  font-size: 11px; letter-spacing: 2px;
-  text-transform: uppercase; color: #c9b6e8;
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
-}
-.panel-title::before {
-  content: ''; width: 4px; height: 14px; border-radius: 2px;
-  background: linear-gradient(180deg, #b46cff, #6a1fd6);
-  box-shadow: 0 0 8px #b46cff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 800;
 }
 
-.repo-row { display: flex; gap: 8px; }
-.repo-row input {
-  flex: 1; min-width: 0;
+.panel-title .icon-wrap {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(180,108,255,0.35), rgba(74,15,150,0.35));
+  display: grid; place-items: center;
+  border: 1px solid rgba(180,108,255,0.4);
+  box-shadow: 0 0 10px rgba(180,108,255,0.3);
+}
+
+.panel-title .icon-wrap svg {
+  width: 14px; height: 14px;
+  color: #dcc0ff;
+  stroke-width: 2.5;
+}
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+.input-wrap {
+  display: flex;
+  gap: 8px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
   background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(180,108,255,0.35);
-  color: #fff; padding: 12px 14px;
-  border-radius: 12px; font-size: 14px; outline: none;
-  transition: 0.2s;
+  border: 1px solid rgba(180,108,255,0.28);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  outline: none;
+  transition: 0.2s ease;
+  font-family: inherit;
 }
-.repo-row input:focus {
-  border-color: #b46cff;
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border-color: var(--accent-1);
   box-shadow: 0 0 0 3px rgba(180,108,255,0.18);
+  background: rgba(0,0,0,0.5);
 }
-.repo-row input::placeholder { color: #9a86c4; }
 
+input::placeholder,
+textarea::placeholder { color: #7d68a8; }
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 .btn {
-  border: none; cursor: pointer;
-  font-weight: 700; letter-spacing: 1px;
-  border-radius: 12px; padding: 12px 16px;
-  font-size: 13px; color: #fff;
-  background: linear-gradient(135deg, #7a2bd6, #4a0f96);
-  box-shadow: 0 4px 14px rgba(120,40,200,0.45);
-  transition: transform 0.12s ease, filter 0.2s ease;
-  user-select: none; white-space: nowrap;
-}
-.btn:hover { filter: brightness(1.15); }
-.btn:active { transform: scale(0.96); }
-.btn.ghost {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(180,108,255,0.35);
-  box-shadow: none;
-}
-.btn.danger {
-  background: linear-gradient(135deg, #d6364a, #8b0f22);
-  box-shadow: 0 4px 14px rgba(200,40,70,0.45);
-}
-.btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mode-btn {
-  padding: 16px 10px; border-radius: 16px;
-  font-weight: 900; letter-spacing: 2px;
-  font-size: 14px; text-align: center;
-  cursor: pointer; user-select: none;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: #cbb8ec;
-  transition: all 0.22s ease;
-}
-.mode-btn:hover { background: rgba(180,108,255,0.15); color: #fff; }
-.mode-btn.active {
-  background: linear-gradient(135deg, #7a2bd6, #4a0f96);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-size: 12.5px;
   color: #fff;
-  border-color: rgba(180,108,255,0.7);
-  box-shadow: 0 0 22px rgba(140,60,230,0.55),
-              inset 0 1px 0 rgba(255,255,255,0.15);
+  padding: 11px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+  box-shadow:
+    0 4px 14px rgba(120,40,200,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+  transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
 }
+
+.btn svg {
+  width: 15px; height: 15px;
+  stroke-width: 2.5;
+  flex-shrink: 0;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+  box-shadow:
+    0 6px 20px rgba(140,60,230,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.btn:active:not(:disabled) { transform: scale(0.96); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn.ghost {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: none;
+  color: var(--text-dim);
+}
+.btn.ghost:hover:not(:disabled) {
+  background: rgba(180,108,255,0.15);
+  color: #fff;
+  border-color: rgba(180,108,255,0.5);
+}
+
+.btn.danger {
+  background: linear-gradient(135deg, #e5405a, #8b0f22);
+  box-shadow:
+    0 4px 14px rgba(220,50,80,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.btn.ok {
+  background: linear-gradient(135deg, #2ecc71, #0e8a44);
+  box-shadow:
+    0 4px 14px rgba(40,200,120,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.btn.icon-only {
+  padding: 11px;
+  width: 42px;
+  height: 42px;
+}
+.btn.icon-only svg { width: 17px; height: 17px; }
+
+.btn.full { width: 100%; }
+
+/* =========================================================
+   MODE TOGGLE
+   ========================================================= */
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 5px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-dim);
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.mode-btn svg { width: 15px; height: 15px; stroke-width: 2.5; }
+
+.mode-btn:hover { color: #fff; }
+
+.mode-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+  border-color: rgba(180,108,255,0.6);
+  box-shadow:
+    0 6px 20px rgba(140,60,230,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
 .mode-btn.maint.active {
   background: linear-gradient(135deg, #ff9d3b, #b35100);
-  box-shadow: 0 0 22px rgba(255,140,40,0.55);
+  border-color: rgba(255,157,59,0.6);
+  box-shadow:
+    0 6px 20px rgba(255,140,40,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
+
 .mode-hint {
-  margin-top: 10px; font-size: 11.5px;
-  color: #b9a5dc; letter-spacing: 0.5px; text-align: center;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.4px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FILE LIST
+   ========================================================= */
+.file-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .file-list {
-  max-height: 260px; overflow-y: auto;
-  display: flex; flex-direction: column;
-  gap: 6px; padding-right: 4px;
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
 }
+
 .file-list::-webkit-scrollbar,
 .editor-area::-webkit-scrollbar { width: 6px; }
+.file-list::-webkit-scrollbar-track,
+.editor-area::-webkit-scrollbar-track { background: transparent; }
 .file-list::-webkit-scrollbar-thumb,
 .editor-area::-webkit-scrollbar-thumb {
-  background: rgba(180,108,255,0.5); border-radius: 6px;
+  background: rgba(180,108,255,0.45);
+  border-radius: 6px;
 }
+.file-list::-webkit-scrollbar-thumb:hover,
+.editor-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(180,108,255,0.7);
+}
+
 .file-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; border-radius: 10px;
-  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.06);
-  cursor: pointer; font-size: 13px;
-  transition: 0.15s; word-break: break-all;
+  cursor: pointer;
+  font-size: 12.5px;
+  transition: all 0.18s ease;
+  word-break: break-all;
+  min-width: 0;
 }
+
 .file-item:hover {
-  background: rgba(180,108,255,0.15);
+  background: rgba(180,108,255,0.14);
   border-color: rgba(180,108,255,0.4);
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
+
 .file-item.active {
-  background: rgba(180,108,255,0.28);
-  border-color: #b46cff;
-  box-shadow: 0 0 12px rgba(180,108,255,0.4);
+  background: rgba(180,108,255,0.25);
+  border-color: var(--accent-1);
+  box-shadow: 0 0 14px rgba(180,108,255,0.35);
 }
-.file-item .icon { font-size: 15px; opacity: 0.85; flex-shrink: 0; }
-.file-item .name {
-  flex: 1; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+
+.file-item .file-icon {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  color: #b46cff;
 }
+.file-item .file-icon svg { width: 16px; height: 16px; stroke-width: 2.2; }
+
+.file-item .file-name {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #e0d3ff;
+  font-weight: 500;
+}
+
+.file-item .file-size {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
 .empty-state {
-  text-align: center; color: #9a86c4;
-  font-size: 12.5px; padding: 22px 8px; font-style: italic;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 26px 12px;
+  font-style: italic;
+  line-height: 1.6;
 }
 
-.editor-head { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.editor-head input {
-  flex: 1; min-width: 140px;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(180,108,255,0.35);
-  color: #fff; padding: 10px 12px;
-  border-radius: 10px; font-size: 13px; outline: none;
+.empty-state svg {
+  display: block;
+  margin: 0 auto 10px;
+  width: 32px; height: 32px;
+  opacity: 0.5;
+  stroke-width: 1.5;
 }
+
+/* =========================================================
+   EDITOR
+   ========================================================= */
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  min-height: 0;
+}
+
+.editor-head {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.editor-head .path-input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.editor-head .file-status {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  letter-spacing: 0.6px;
+}
+
+.editor-head .file-status svg { width: 12px; height: 12px; }
+
+.editor-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 400px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(180,108,255,0.25);
+  background: rgba(0,0,0,0.45);
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.5);
+  transition: border-color 0.2s;
+}
+
+.editor-wrap:focus-within {
+  border-color: var(--accent-1);
+  box-shadow:
+    inset 0 2px 12px rgba(0,0,0,0.5),
+    0 0 0 3px rgba(180,108,255,0.18);
+}
+
 .editor-area {
-  width: 100%; min-height: 260px; max-height: 420px;
-  resize: vertical;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(180,108,255,0.3);
-  border-radius: 12px; color: #e6dcff;
-  padding: 14px;
-  font-family: 'JetBrains Mono','Fira Code',Consolas,monospace;
-  font-size: 13px; line-height: 1.55;
-  outline: none; white-space: pre;
-  overflow: auto; tab-size: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  resize: none;
+  border: none !important;
+  background: transparent;
+  color: #e6dcff;
+  padding: 16px 18px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  outline: none;
+  white-space: pre;
+  overflow: auto;
+  tab-size: 2;
+  box-shadow: none !important;
 }
-.editor-area:focus {
-  border-color: #b46cff;
-  box-shadow: 0 0 0 3px rgba(180,108,255,0.15);
-}
+
+.editor-area:focus { background: transparent; }
+
 .editor-actions {
-  display: flex; gap: 8px;
-  margin-top: 10px; flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 14px;
 }
-.editor-actions .btn { flex: 1; min-width: 100px; }
 
+/* =========================================================
+   TOAST
+   ========================================================= */
 .toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: rgba(30,10,55,0.95);
-  border: 1px solid #b46cff; color: #fff;
-  padding: 12px 22px; border-radius: 30px;
-  font-size: 13px; letter-spacing: 0.5px;
-  box-shadow: 0 8px 28px rgba(120,40,220,0.5);
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(140px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: rgba(28,10,52,0.92);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid var(--accent-1);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  box-shadow: 0 12px 38px rgba(120,40,220,0.55);
   opacity: 0;
-  transition: all 0.35s cubic-bezier(.2,.9,.3,1.2);
-  z-index: 999; pointer-events: none;
-  max-width: 90vw; text-align: center;
+  transition: all 0.4s cubic-bezier(.2,.9,.3,1.2);
+  z-index: 999;
+  pointer-events: none;
+  max-width: 90vw;
 }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.error { border-color: #ff5c6c; }
-.toast.ok    { border-color: #7CFFB2; }
 
+.toast svg {
+  width: 16px; height: 16px;
+  stroke-width: 2.5;
+  flex-shrink: 0;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.error {
+  border-color: var(--err);
+  box-shadow: 0 12px 38px rgba(220,50,80,0.55);
+}
+.toast.error svg { color: var(--err); }
+.toast.ok {
+  border-color: var(--ok);
+  box-shadow: 0 12px 38px rgba(80,220,150,0.5);
+}
+.toast.ok svg { color: var(--ok); }
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
 .spinner {
-  width: 18px; height: 18px;
+  width: 16px; height: 16px;
   border: 2px solid rgba(180,108,255,0.3);
-  border-top-color: #b46cff;
+  border-top-color: var(--accent-1);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
-  display: inline-block; vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 480px) {
-  header { padding: 16px 14px 8px; }
-  main { padding: 8px 12px 32px; gap: 12px; }
-  .panel { padding: 13px; border-radius: 18px; }
-  .repo-row { flex-direction: column; }
-  .repo-row .btn { width: 100%; }
+.spin-icon { animation: spin 1s linear infinite; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .app { padding: 14px; gap: 14px; }
+  header.topbar { padding: 12px 16px; }
+  .panel { padding: 15px; }
+  .editor-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .file-list { max-height: 300px; }
+  .brand { font-size: 16px; letter-spacing: 1.5px; }
+  .brand-badge { width: 36px; height: 36px; border-radius: 12px; }
+  .brand-badge svg { width: 19px; height: 19px; }
 }
+
+@media (max-width: 480px) {
+  .input-wrap { flex-direction: column; }
+  .input-wrap .btn { width: 100%; }
+  .file-actions { grid-template-columns: 1fr; }
+  .editor-actions { grid-template-columns: 1fr 1fr; }
+  .editor-actions .btn span.btn-label { display: none; }
+  .editor-actions .btn svg { width: 17px; height: 17px; }
+}
+
+/* Hidden inputs */
+.hidden-input { display: none; }
 </style>
 </head>
 <body>
 
+<!-- ============ BACKGROUND ============ -->
 <video id="bgVideo" autoplay muted loop playsinline>
   <source src="/wp.mp4" type="video/mp4" />
 </video>
 <div class="bg-overlay"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 
-<header>
-  <div class="brand">
-    <span class="dot"></span>
-    FORTECH CONTROL
+<!-- ============ APP ============ -->
+<div class="app">
+
+  <!-- ======== TOPBAR ======== -->
+  <header class="topbar glass">
+    <div class="brand">
+      <div class="brand-badge">
+        <i data-lucide="terminal-square"></i>
+      </div>
+      <span class="brand-text">FORTECH CONTROL</span>
+    </div>
+
+    <div class="header-right">
+      <div class="status-chip" id="statusChip">
+        <span class="status-dot"></span>
+        <span id="statusText">READY</span>
+      </div>
+      <button class="btn ghost icon-only" id="btnRefresh" title="Refresh file list">
+        <i data-lucide="refresh-cw"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======== LAYOUT ======== -->
+  <div class="layout">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+
+      <!-- Border 1: Repository -->
+      <section class="panel glass">
+        <div class="panel-head">
+          <div class="panel-title">
+            <span class="icon-wrap"><i data-lucide="folder-git-2"></i></span>
+            Repository
+          </div>
+        </div>
+        <div class="input-wrap">
+          <input type="text" id="repoInput"
+                 placeholder="owner/repo"
+                 autocomplete="off" spellcheck="false" />
+          <button class="btn icon-only" id="btnLoadRepo" title="Load repository">
+            <i data-lucide="download"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Border 2: Mode -->
+      <section class="panel glass">
+        <div class="panel-head">
+          <div class="panel-title">
+            <span class="icon-wrap"><i data-lucide="sliders-horizontal"></i></span>
+            Opsi
+          </div>
+        </div>
+        <div class="mode-toggle">
+          <div class="mode-btn active" id="btnEdit" data-mode="edit">
+            <i data-lucide="pencil-line"></i>
+            EDIT
+          </div>
+          <div class="mode-btn maint" id="btnMaint" data-mode="maint">
+            <i data-lucide="wrench"></i>
+            MAINTANANCE
+          </div>
+        </div>
+        <div class="mode-hint" id="modeHint">
+          Mode EDIT aktif — bisa ubah, tambah, hapus file.
+        </div>
+      </section>
+
+      <!-- Border 3: File list -->
+      <section class="panel glass" style="flex:1; min-height:0; display:flex; flex-direction:column;">
+        <div class="panel-head">
+          <div class="panel-title">
+            <span class="icon-wrap"><i data-lucide="files"></i></span>
+            File Repository
+          </div>
+          <span class="file-status" id="fileCount">0 files</span>
+        </div>
+
+        <div class="file-actions">
+          <button class="btn" id="btnNewFile">
+            <i data-lucide="file-plus-2"></i>
+            BUAT FILE
+          </button>
+          <button class="btn ok" id="btnUploadFile">
+            <i data-lucide="upload"></i>
+            TAMBAH FILE
+          </button>
+        </div>
+
+        <div class="file-list" id="fileList" style="flex:1;">
+          <div class="empty-state">
+            <i data-lucide="folder-open"></i>
+            Belum ada repository dimuat.<br>
+            Masukkan <b>owner/repo</b> di atas.
+          </div>
+        </div>
+
+        <input type="file" id="fileInput" class="hidden-input" multiple />
+      </section>
+
+    </aside>
+
+    <!-- ========== EDITOR ========== -->
+    <main class="editor-panel glass">
+
+      <div class="editor-head">
+        <div class="panel-title">
+          <span class="icon-wrap"><i data-lucide="code-2"></i></span>
+          Viewer / Editor
+        </div>
+        <span class="file-status" id="editorStatus">
+          <i data-lucide="circle-dot"></i>
+          NO FILE
+        </span>
+      </div>
+
+      <div class="editor-head" style="margin-top:0;">
+        <input type="text" id="filePathInput" class="path-input"
+               placeholder="path/file.ext (contoh: src/main.cpp)"
+               autocomplete="off" spellcheck="false" />
+      </div>
+
+      <div class="editor-wrap">
+        <textarea class="editor-area" id="editorArea" spellcheck="false"
+placeholder="// Pilih file dari daftar di kiri,
+// atau klik 'BUAT FILE' untuk bikin file baru,
+// atau klik 'TAMBAH FILE' untuk upload dari perangkat lu."></textarea>
+      </div>
+
+      <div class="editor-actions">
+        <button class="btn ok" id="btnSave">
+          <i data-lucide="save"></i>
+          <span class="btn-label">SAVE</span>
+        </button>
+        <button class="btn danger" id="btnDelete">
+          <i data-lucide="trash-2"></i>
+          <span class="btn-label">DELETE</span>
+        </button>
+        <button class="btn ghost" id="btnCopy">
+          <i data-lucide="copy"></i>
+          <span class="btn-label">COPY</span>
+        </button>
+        <button class="btn ghost" id="btnClear">
+          <i data-lucide="eraser"></i>
+          <span class="btn-label">CLEAR</span>
+        </button>
+      </div>
+
+    </main>
+
   </div>
-  <div class="status-bar">
-    SYSTEM STATUS: <span class="online" id="statusText">READY</span>
-  </div>
-</header>
+</div>
 
-<main>
-
-  <section class="panel">
-    <div class="panel-title">Border 1 · Repository</div>
-    <div class="repo-row">
-      <input type="text" id="repoInput"
-             placeholder="owner/repo  (contoh: FortechDev/my-project)"
-             autocomplete="off" />
-      <button class="btn" id="btnLoadRepo">LOAD</button>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-title">Border 2 · Opsi</div>
-    <div class="mode-row">
-      <div class="mode-btn active" id="btnEdit" data-mode="edit">EDIT</div>
-      <div class="mode-btn maint" id="btnMaint" data-mode="maint">MAINTANANCE</div>
-    </div>
-    <div class="mode-hint" id="modeHint">
-      Mode EDIT aktif — bisa ubah, tambah, hapus file.
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-title">Border 3 · File Repository</div>
-    <div class="file-list" id="fileList">
-      <div class="empty-state">Belum ada repository yang dimuat.</div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-title">Border 4 · Viewer / Editor</div>
-    <div class="editor-head">
-      <input type="text" id="filePathInput"
-             placeholder="path/file.ext (contoh: src/main.cpp)"
-             autocomplete="off" />
-    </div>
-    <textarea class="editor-area" id="editorArea" spellcheck="false"
-      placeholder="// Pilih file dari Border 3, atau tulis path baru di atas lalu klik NEW."></textarea>
-    <div class="editor-actions">
-      <button class="btn" id="btnNew">NEW</button>
-      <button class="btn" id="btnSave">SAVE</button>
-      <button class="btn danger" id="btnDelete">DELETE</button>
-      <button class="btn ghost" id="btnClear">CLEAR</button>
-    </div>
-  </section>
-
-</main>
-
-<div class="toast" id="toast"></div>
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast">
+  <i data-lucide="info"></i>
+  <span id="toastMsg">Message</span>
+</div>
 
 <script>
 /* =========================================================
-   FORTECH CONTROL - Frontend
-   Semua request ke GitHub lewat /api/github (proxy serverless)
-   Token TIDAK pernah ada di browser.
+   FORTECH CONTROL — Frontend
+   Semua request lewat /api/github (serverless proxy)
    ========================================================= */
 (() => {
   'use strict';
@@ -340,37 +971,73 @@ main {
     activeSha: null
   };
 
-  const $ = (id) => document.getElementById(id);
-  const video       = $('bgVideo');
-  const statusText  = $('statusText');
-  const repoInput   = $('repoInput');
-  const btnLoadRepo = $('btnLoadRepo');
-  const btnEdit     = $('btnEdit');
-  const btnMaint    = $('btnMaint');
-  const modeHint    = $('modeHint');
-  const fileList    = $('fileList');
-  const filePath    = $('filePathInput');
-  const editor      = $('editorArea');
-  const btnNew      = $('btnNew');
-  const btnSave     = $('btnSave');
-  const btnDelete   = $('btnDelete');
-  const btnClear    = $('btnClear');
-  const toastEl     = $('toast');
+  const $ = id => document.getElementById(id);
 
-  /* ---------- UTIL ---------- */
+  const video        = $('bgVideo');
+  const statusChip   = $('statusChip');
+  const statusText   = $('statusText');
+  const repoInput    = $('repoInput');
+  const btnLoadRepo  = $('btnLoadRepo');
+  const btnRefresh   = $('btnRefresh');
+  const btnEdit      = $('btnEdit');
+  const btnMaint     = $('btnMaint');
+  const modeHint     = $('modeHint');
+  const fileList     = $('fileList');
+  const fileCount    = $('fileCount');
+  const btnNewFile   = $('btnNewFile');
+  const btnUploadFile= $('btnUploadFile');
+  const fileInput    = $('fileInput');
+  const filePath     = $('filePathInput');
+  const editor       = $('editorArea');
+  const editorStatus = $('editorStatus');
+  const btnSave      = $('btnSave');
+  const btnDelete    = $('btnDelete');
+  const btnCopy      = $('btnCopy');
+  const btnClear     = $('btnClear');
+  const toastEl      = $('toast');
+  const toastMsg     = $('toastMsg');
+
+  /* ---------- LUCIDE INIT ---------- */
+  function refreshIcons() {
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  }
+
+  /* ---------- STATUS ---------- */
   function setStatus(txt, cls) {
     statusText.textContent = txt;
-    statusText.className = cls || 'online';
+    statusChip.className = 'status-chip' + (cls ? ' ' + cls : '');
   }
 
+  function setEditorStatus(txt, ok) {
+    editorStatus.innerHTML =
+      `<i data-lucide="circle-dot"></i> <span>${txt}</span>`;
+    if (ok === false) editorStatus.style.color = 'var(--err)';
+    else if (ok === true) editorStatus.style.color = 'var(--ok)';
+    else editorStatus.style.color = '';
+    refreshIcons();
+  }
+
+  /* ---------- TOAST ---------- */
   let toastTimer = null;
   function toast(msg, type = '') {
-    toastEl.textContent = msg;
+    toastMsg.textContent = msg;
     toastEl.className = 'toast show ' + type;
+    const icon = toastEl.querySelector('svg');
+    if (icon) {
+      icon.parentNode.removeChild(icon);
+    }
+    const iconName = type === 'error' ? 'alert-circle'
+                   : type === 'ok'    ? 'check-circle-2'
+                   : 'info';
+    const i = document.createElement('i');
+    i.setAttribute('data-lucide', iconName);
+    toastEl.insertBefore(i, toastMsg);
+    refreshIcons();
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
   }
 
+  /* ---------- BASE64 ---------- */
   function b64encode(str) {
     return btoa(unescape(encodeURIComponent(str)));
   }
@@ -382,6 +1049,7 @@ main {
     }
   }
 
+  /* ---------- FILE TYPE ---------- */
   function isBinaryName(name) {
     const ext = (name.split('.').pop() || '').toLowerCase();
     return ['png','jpg','jpeg','gif','webp','ico','bmp','tiff','pdf',
@@ -390,20 +1058,37 @@ main {
             'woff2','ttf','eot','otf'].includes(ext);
   }
 
-  function fileIcon(name) {
+  function iconFor(name) {
     const ext = (name.split('.').pop() || '').toLowerCase();
     const map = {
-      js:'🟨', mjs:'🟨', ts:'🔷', jsx:'⚛️', tsx:'⚛️',
-      html:'🌐', htm:'🌐', css:'🎨', scss:'🎨', sass:'🎨',
-      json:'🧾', md:'📝', txt:'📄', yml:'⚙️', yaml:'⚙️',
-      py:'🐍', cpp:'➕', c:'➕', h:'📘', hpp:'📘',
-      ino:'🔌', java:'☕', go:'🐹', rs:'🦀', php:'🐘',
-      sh:'🐚', bat:'🖥️', ps1:'🖥️', xml:'📐', svg:'🖼️',
-      png:'🖼️', jpg:'🖼️', jpeg:'🖼️', gif:'🖼️', webp:'🖼️',
-      mp4:'🎬', mp3:'🎵', wav:'🎵', pdf:'📕',
-      lock:'🔒', gitignore:'🚫', env:'🔐'
+      js:'file-json-2', mjs:'file-json-2', cjs:'file-json-2',
+      ts:'file-code-2', jsx:'file-code-2', tsx:'file-code-2',
+      html:'file-code-2', htm:'file-code-2', css:'file-code-2',
+      scss:'file-code-2', sass:'file-code-2', less:'file-code-2',
+      json:'file-json', json5:'file-json',
+      md:'file-text', mdx:'file-text', txt:'file-text', rtf:'file-text',
+      yml:'file-cog', yaml:'file-cog', toml:'file-cog', ini:'file-cog',
+      env:'file-lock-2',
+      py:'file-code-2', rb:'file-code-2', php:'file-code-2',
+      c:'file-code-2', cpp:'file-code-2', cc:'file-code-2', cxx:'file-code-2',
+      h:'file-code-2', hpp:'file-code-2', hh:'file-code-2',
+      ino:'cpu', java:'file-code-2', kt:'file-code-2',
+      go:'file-code-2', rs:'file-code-2', swift:'file-code-2',
+      sh:'terminal', bash:'terminal', zsh:'terminal', bat:'terminal',
+      ps1:'terminal', cmd:'terminal',
+      xml:'file-code-2', svg:'image', vue:'file-code-2', svelte:'file-code-2',
+      png:'image', jpg:'image', jpeg:'image', gif:'image', webp:'image',
+      ico:'image', bmp:'image',
+      mp4:'video', mov:'video', webm:'video', mkv:'video', avi:'video',
+      mp3:'music', wav:'music', ogg:'music', flac:'music', m4a:'music',
+      pdf:'file-type-2', doc:'file-text', docx:'file-text',
+      xls:'sheet', xlsx:'sheet', ppt:'presentation', pptx:'presentation',
+      zip:'file-archive', rar:'file-archive', '7z':'file-archive',
+      gz:'file-archive', tar:'file-archive',
+      lock:'lock', gitignore:'git-branch', dockerfile:'container',
+      license:'scroll'
     };
-    return map[ext] || '📄';
+    return map[ext] || 'file';
   }
 
   function escapeHtml(s) {
@@ -412,19 +1097,24 @@ main {
     })[c]);
   }
 
+  function fmtSize(bytes) {
+    if (!bytes && bytes !== 0) return '';
+    if (bytes < 1024) return bytes + 'B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + 'KB';
+    return (bytes / 1024 / 1024).toFixed(1) + 'MB';
+  }
+
   /* ---------- PROXY FETCH ---------- */
-  // Semua request ke GitHub lewat /api/github
   async function ghFetch(path, opts = {}) {
     const url = '/api/github?path=' + encodeURIComponent(path);
-    const res = await fetch(url, {
+    return fetch(url, {
       method: opts.method || 'GET',
       headers: { 'Content-Type': 'application/json' },
       body: opts.body ? JSON.stringify(opts.body) : undefined
     });
-    return res;
   }
 
-  /* ---------- BG VIDEO FALLBACK ---------- */
+  /* ---------- VIDEO FALLBACK ---------- */
   video.addEventListener('error', () => {
     document.body.style.background =
       'linear-gradient(135deg, #1a0033, #3a0070, #0a0014)';
@@ -444,9 +1134,10 @@ main {
     if (editable) editor.removeAttribute('readonly');
     else editor.setAttribute('readonly', 'true');
 
-    btnSave.disabled   = !editable;
-    btnDelete.disabled = !editable;
-    btnNew.disabled    = !editable;
+    btnSave.disabled    = !editable;
+    btnDelete.disabled  = !editable;
+    btnNewFile.disabled = !editable;
+    btnUploadFile.disabled = !editable;
     editor.style.opacity = editable ? '1' : '0.75';
   }
 
@@ -467,11 +1158,12 @@ main {
     state.activeSha = null;
     localStorage.setItem(LS_REPO, raw);
 
-    setStatus('LOADING...');
+    setStatus('LOADING...', 'busy');
     fileList.innerHTML =
-      '<div class="empty-state"><span class="spinner"></span> Memuat repository...</div>';
+      '<div class="empty-state"><span class="spinner"></span><br>Memuat repository...</div>';
     editor.value = '';
     filePath.value = '';
+    setEditorStatus('NO FILE');
 
     try {
       const infoRes = await ghFetch('/repos/' + state.repo);
@@ -483,12 +1175,14 @@ main {
       state.branch = info.default_branch || 'main';
 
       await fetchTree();
-      setStatus('CONNECTED · ' + state.branch);
+      setStatus('CONNECTED · ' + state.branch, 'ok');
       toast('Repository dimuat ✓', 'ok');
     } catch (err) {
       console.error(err);
-      setStatus('ERROR', 'err');
-      fileList.innerHTML = '<div class="empty-state">❌ ' + escapeHtml(err.message) + '</div>';
+      setStatus('ERROR', 'error');
+      fileList.innerHTML =
+        `<div class="empty-state" style="color:var(--err)">❌ ${escapeHtml(err.message)}</div>`;
+      refreshIcons();
       toast(err.message, 'error');
     }
   }
@@ -496,6 +1190,19 @@ main {
   btnLoadRepo.addEventListener('click', loadRepo);
   repoInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') loadRepo();
+  });
+
+  btnRefresh.addEventListener('click', async () => {
+    if (!state.repo) { toast('Belum ada repo dimuat', 'error'); return; }
+    setStatus('REFRESHING...', 'busy');
+    try {
+      await fetchTree();
+      setStatus('CONNECTED · ' + state.branch, 'ok');
+      toast('File list di-refresh ✓', 'ok');
+    } catch (err) {
+      setStatus('ERROR', 'error');
+      toast(err.message, 'error');
+    }
   });
 
   /* ---------- FETCH TREE ---------- */
@@ -509,7 +1216,8 @@ main {
       if (!r2.ok) throw new Error('Gagal ambil daftar file');
       const items = await r2.json();
       state.files = items.map(it => ({
-        name: it.name, path: it.path, type: it.type, sha: it.sha
+        name: it.name, path: it.path, type: it.type,
+        sha: it.sha, size: it.size
       }));
     } else {
       const data = await res.json();
@@ -519,7 +1227,8 @@ main {
           name: t.path.split('/').pop(),
           path: t.path,
           type: 'file',
-          sha: t.sha
+          sha: t.sha,
+          size: t.size
         }));
     }
     renderFiles();
@@ -527,18 +1236,26 @@ main {
 
   /* ---------- RENDER FILE LIST ---------- */
   function renderFiles() {
+    fileCount.textContent = state.files.length + ' file' + (state.files.length === 1 ? '' : 's');
+
     if (!state.files.length) {
-      fileList.innerHTML = '<div class="empty-state">Repository kosong.</div>';
+      fileList.innerHTML =
+        '<div class="empty-state"><i data-lucide="folder-open"></i>Repository kosong.</div>';
+      refreshIcons();
       return;
     }
+
     const sorted = [...state.files].sort((a, b) => a.path.localeCompare(b.path));
 
     fileList.innerHTML = sorted.map(f => `
       <div class="file-item" data-path="${escapeHtml(f.path)}" data-sha="${escapeHtml(f.sha || '')}">
-        <span class="icon">${fileIcon(f.name)}</span>
-        <span class="name">${escapeHtml(f.path)}</span>
+        <span class="file-icon"><i data-lucide="${iconFor(f.name)}"></i></span>
+        <span class="file-name">${escapeHtml(f.path)}</span>
+        ${f.size !== undefined ? `<span class="file-size">${fmtSize(f.size)}</span>` : ''}
       </div>
     `).join('');
+
+    refreshIcons();
 
     fileList.querySelectorAll('.file-item').forEach(el => {
       el.addEventListener('click', () => {
@@ -552,7 +1269,8 @@ main {
   /* ---------- OPEN FILE ---------- */
   async function openFile(path) {
     if (!state.repo) return;
-    setStatus('FETCHING FILE...');
+    setStatus('FETCHING...', 'busy');
+    setEditorStatus('LOADING...');
 
     try {
       const res = await ghFetch(
@@ -567,18 +1285,21 @@ main {
 
       if (isBinaryName(data.name)) {
         editor.value =
-          `// ⚠ File biner (${data.name}) — tidak bisa ditampilkan sebagai teks.\n// Size: ${data.size} bytes`;
+          `// ⚠ File biner (${data.name}) — tidak bisa ditampilkan sebagai teks.\n` +
+          `// Size: ${fmtSize(data.size)} (${data.size} bytes)`;
       } else if (data.content && data.encoding === 'base64') {
         editor.value = b64decode(data.content);
       } else {
         editor.value = '';
       }
 
-      setStatus('FILE: ' + path);
+      setStatus('FILE: ' + path.split('/').pop(), 'ok');
+      setEditorStatus(fmtSize(data.size) + ' · ' + path.split('/').pop(), true);
     } catch (err) {
       console.error(err);
       toast(err.message, 'error');
-      setStatus('ERROR', 'err');
+      setStatus('ERROR', 'error');
+      setEditorStatus('ERROR', false);
     }
   }
 
@@ -587,10 +1308,11 @@ main {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
     if (!state.repo) { toast('Belum pilih repository', 'error'); return; }
 
-    const path = filePath.value.trim();
+    const path = filePath.value.trim().replace(/^\/+/, '');
     if (!path) { toast('Isi path file dulu', 'error'); return; }
+    if (path.includes('..')) { toast('Path tidak valid', 'error'); return; }
 
-    setStatus('SAVING...');
+    setStatus('SAVING...', 'busy');
     btnSave.disabled = true;
 
     try {
@@ -627,32 +1349,118 @@ main {
       state.activeSha = data.content.sha;
 
       toast('Tersimpan ✓', 'ok');
-      setStatus('SAVED');
+      setStatus('SAVED', 'ok');
+      setEditorStatus('SAVED · ' + path.split('/').pop(), true);
+
       await fetchTree();
       const el = fileList.querySelector(`[data-path="${CSS.escape(path)}"]`);
       if (el) el.classList.add('active');
     } catch (err) {
       console.error(err);
       toast(err.message, 'error');
-      setStatus('ERROR', 'err');
+      setStatus('ERROR', 'error');
     } finally {
-      btnSave.disabled = false;
+      btnSave.disabled = state.mode !== 'edit';
     }
   }
 
   btnSave.addEventListener('click', saveFile);
 
-  /* ---------- NEW FILE ---------- */
-  btnNew.addEventListener('click', () => {
+  /* ---------- BUAT FILE BARU ---------- */
+  btnNewFile.addEventListener('click', () => {
     if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
+    if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
+
     state.activeFile = null;
     state.activeSha = null;
     filePath.value = '';
     editor.value = '';
     filePath.focus();
     fileList.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+    setEditorStatus('NEW FILE', true);
     toast('Tulis path + isi, lalu SAVE', '');
   });
+
+  /* ---------- TAMBAH FILE (UPLOAD) ---------- */
+  btnUploadFile.addEventListener('click', () => {
+    if (state.mode !== 'edit') { toast('Mode MAINTANANCE — read only', 'error'); return; }
+    if (!state.repo) { toast('Pilih repository dulu', 'error'); return; }
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    if (!confirm(`Upload ${files.length} file ke ${state.repo}?\nSemua file akan di-commit langsung ke branch ${state.branch}.`)) {
+      fileInput.value = '';
+      return;
+    }
+
+    setStatus(`UPLOAD 0/${files.length}`, 'busy');
+    let okCount = 0, failCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      setStatus(`UPLOAD ${i + 1}/${files.length}`, 'busy');
+      try {
+        const content = await readFileAsBase64(f);
+        // path = nama file saja (root repo). Kalau user mau subfolder, dia harus rename dulu.
+        const path = f.name;
+
+        // Cek apakah file sudah ada → butuh sha untuk overwrite
+        let sha = null;
+        const chk = await ghFetch(
+          `/repos/${state.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(state.branch)}`
+        );
+        if (chk.ok) {
+          const d = await chk.json();
+          sha = d.sha;
+        }
+
+        const body = {
+          message: (sha ? 'update: ' : 'upload: ') + path + ' [Fortech Control]',
+          content,
+          branch: state.branch
+        };
+        if (sha) body.sha = sha;
+
+        const res = await ghFetch(
+          `/repos/${state.repo}/contents/${encodeURI(path)}`,
+          { method: 'PUT', body }
+        );
+
+        if (res.ok) okCount++;
+        else failCount++;
+      } catch (err) {
+        console.error('upload fail:', f.name, err);
+        failCount++;
+      }
+    }
+
+    fileInput.value = '';
+    await fetchTree();
+    setStatus('CONNECTED · ' + state.branch, 'ok');
+
+    if (failCount === 0) {
+      toast(`Upload sukses ${okCount}/${files.length} ✓`, 'ok');
+    } else {
+      toast(`Upload: ${okCount} sukses, ${failCount} gagal`, 'error');
+    }
+  });
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result);
+        const base64 = result.split(',')[1] || '';
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   /* ---------- DELETE FILE ---------- */
   async function deleteFile() {
@@ -660,7 +1468,7 @@ main {
     if (!state.repo || !state.activeFile) { toast('Pilih file dulu', 'error'); return; }
     if (!confirm('Hapus file: ' + state.activeFile + ' ?')) return;
 
-    setStatus('DELETING...');
+    setStatus('DELETING...', 'busy');
     btnDelete.disabled = true;
 
     try {
@@ -686,18 +1494,30 @@ main {
       state.activeSha = null;
       filePath.value = '';
       editor.value = '';
+      setEditorStatus('NO FILE');
       await fetchTree();
-      setStatus('DELETED');
+      setStatus('DELETED', 'ok');
     } catch (err) {
       console.error(err);
       toast(err.message, 'error');
-      setStatus('ERROR', 'err');
+      setStatus('ERROR', 'error');
     } finally {
-      btnDelete.disabled = false;
+      btnDelete.disabled = state.mode !== 'edit';
     }
   }
 
   btnDelete.addEventListener('click', deleteFile);
+
+  /* ---------- COPY ---------- */
+  btnCopy.addEventListener('click', async () => {
+    if (!editor.value) { toast('Editor kosong', 'error'); return; }
+    try {
+      await navigator.clipboard.writeText(editor.value);
+      toast('Isi editor dicopy ✓', 'ok');
+    } catch {
+      toast('Gagal copy ke clipboard', 'error');
+    }
+  });
 
   /* ---------- CLEAR ---------- */
   btnClear.addEventListener('click', () => {
@@ -706,6 +1526,7 @@ main {
     state.activeFile = null;
     state.activeSha = null;
     fileList.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+    setEditorStatus('NO FILE');
     toast('Editor dibersihkan');
   });
 
@@ -726,9 +1547,13 @@ main {
 
   /* ---------- INIT ---------- */
   (function init() {
+    refreshIcons();
     setMode('edit');
+    setEditorStatus('NO FILE');
+
     const saved = localStorage.getItem(LS_REPO);
     if (saved) repoInput.value = saved;
+
     setStatus('READY');
 
     const p = video.play();
@@ -743,4 +1568,4 @@ main {
 })();
 </script>
 </body>
-</html>
+  </html>
