@@ -2,1667 +2,469 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#000000" />
 <title>Fortech Panel</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
 <style>
-/* =============================================================
-   RESET
-   ============================================================= */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#000;--surface:#0b1220;--surface2:#101a2e;
+  --line:#1c2a44;--text:#eaf0fa;--text2:#a8b6d0;--mute:#5f6d8c;--dim:#3d4a68;
+  --accent:#38bdf8;--accent2:#60a5fa;--accent3:#818cf8;
+  --success:#22c55e;--danger:#ef4444;--warning:#f59e0b;
+  --shl:0 20px 60px rgba(0,0,0,.7);
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --prev-h:460px;
 }
-
-:root {
-  --black-0: #000000;
-  --black-1: #04070d;
-  --black-2: #070b14;
-  --black-3: #0a1220;
-  --black-4: #0f1828;
-  --surface: #0b1220;
-  --surface-2: #101a2e;
-  --surface-3: #16223a;
-  --line: #1c2a44;
-  --line-soft: #14203a;
-  --line-glow: #1e3a5f;
-  --text: #eaf0fa;
-  --text-soft: #a8b6d0;
-  --text-mute: #5f6d8c;
-  --text-dim: #3d4a68;
-  --accent: #38bdf8;
-  --accent-2: #60a5fa;
-  --accent-3: #818cf8;
-  --accent-glow: rgba(56, 189, 248, 0.35);
-  --success: #22c55e;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --preview-height: 480px;
-  --header-h: 60px;
-  --tabs-h: 52px;
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  overscroll-behavior: none;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-  background: var(--black-0);
-}
-
-/* =============================================================
-   BACKGROUND — BLACK GRADIENT WITH SUBTLE BLUE
-   ============================================================= */
-.bg-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.bg-base {
+html,body{height:100%;width:100%;overscroll-behavior:none}
+body{font-family:'Inter',sans-serif;color:var(--text);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow:hidden;background:var(--bg)}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(56, 189, 248, 0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(129, 140, 248, 0.06) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 0% 80%, rgba(96, 165, 250, 0.05) 0%, transparent 55%),
-    linear-gradient(180deg, #050810 0%, #03050a 40%, #000000 100%);
-}
-
-.bg-grain {
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.04) 0%, transparent 30%),
-    radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.03) 0%, transparent 30%);
-  mix-blend-mode: screen;
-}
-
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(56, 189, 248, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 189, 248, 0.025) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 0%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 0%, transparent 80%);
-}
-
-@media (max-width: 640px) {
-  .bg-grid { display: none; }
-}
-
-/* =============================================================
-   COMMON
-   ============================================================= */
-button,
-input,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  outline: none;
-}
-
-button {
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.hidden { display: none !important; }
-
-svg.lucide {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2;
-  flex-shrink: 0;
-}
-
-/* =============================================================
-   LOGIN
-   ============================================================= */
-#loginView {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: 20px;
-  padding-top: calc(20px + var(--safe-top));
-  padding-bottom: calc(20px + var(--safe-bottom));
-}
-
-.login-shell {
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-card {
-  background: linear-gradient(180deg, rgba(16, 26, 46, 0.9), rgba(7, 11, 20, 0.95));
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  padding: 40px 28px 32px;
-  box-shadow:
-    var(--shadow-lg),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  position: relative;
-  overflow: hidden;
-  animation: cardIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.login-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.6;
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.login-logo {
-  width: 68px;
-  height: 68px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  color: #050810;
-  box-shadow:
-    0 12px 32px rgba(56, 189, 248, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  position: relative;
-}
-
-.login-logo::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-3));
-  opacity: 0.3;
-  filter: blur(16px);
-  z-index: -1;
-}
-
-.login-logo svg {
-  width: 32px;
-  height: 32px;
-  stroke-width: 2.5;
-}
-
-.login-title {
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  letter-spacing: -0.6px;
-  margin-bottom: 6px;
-  background: linear-gradient(135deg, #ffffff, #cbd5e1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.login-sub {
-  font-size: 13px;
-  color: var(--text-mute);
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.field {
-  margin-bottom: 16px;
-}
-
-.field-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-soft);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.input-wrap {
-  position: relative;
-}
-
-.input-wrap svg.icon-left {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: var(--text-mute);
-  pointer-events: none;
-  transition: color 0.2s;
-}
-
-.input-wrap input {
-  width: 100%;
-  padding: 13px 14px 13px 42px;
-  background: rgba(7, 11, 20, 0.7);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 15px;
-  transition: all 0.2s;
-}
-
-.input-wrap input:focus {
-  border-color: var(--accent);
-  background: rgba(7, 11, 20, 0.95);
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
-}
-
-.input-wrap input:focus ~ svg.icon-left,
-.input-wrap:focus-within svg.icon-left {
-  color: var(--accent);
-}
-
-.toggle-pass {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 8px;
-  border-radius: 8px;
-  color: var(--text-mute);
-  transition: all 0.15s;
-}
-
-.toggle-pass:hover {
-  color: var(--text);
-  background: var(--surface-2);
-}
-
-.btn-login {
-  width: 100%;
-  padding: 14px;
-  margin-top: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #050810;
-  font-weight: 800;
-  font-size: 15px;
-  letter-spacing: 0.3px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.15s;
-  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.3);
-}
-
-.btn-login:hover:not(:disabled) {
-  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.45);
-  transform: translateY(-1px);
-}
-
-.btn-login:active:not(:disabled) {
-  transform: translateY(0) scale(0.98);
-}
-
-.btn-login:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.login-err {
-  min-height: 18px;
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--danger);
-  text-align: center;
-  font-weight: 500;
-}
-
-.login-foot {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 11px;
-  color: var(--text-dim);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.login-foot strong {
-  color: var(--accent);
-  font-weight: 700;
-}
-
-/* =============================================================
-   APP
-   ============================================================= */
-#app {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-/* HEADER */
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  padding-top: calc(12px + var(--safe-top));
-  background: rgba(5, 8, 16, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--line);
-  flex-shrink: 0;
-  gap: 12px;
-  z-index: 10;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 800;
-  font-size: 15px;
-  letter-spacing: -0.3px;
-}
-
-.brand-icon {
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #050810;
-  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
-  position: relative;
-}
-
-.brand-icon svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2.6;
-}
-
-.brand-text {
-  background: linear-gradient(100deg, #ffffff, var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-sub {
-  font-size: 10px;
-  color: var(--text-mute);
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  display: block;
-  margin-top: -2px;
-}
-
-.user-area {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.user-chip {
-  display: none;
-  font-size: 12px;
-  color: var(--text-soft);
-  padding: 6px 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-weight: 500;
-  align-items: center;
-  gap: 6px;
-}
-
-.user-chip::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--success);
-  box-shadow: 0 0 6px var(--success);
-}
-
-@media (min-width: 520px) {
-  .user-chip { display: inline-flex; }
-}
-
-.icon-btn {
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  color: var(--text-soft);
-  border: 1px solid transparent;
-  transition: all 0.15s;
-}
-
-.icon-btn:hover {
-  color: var(--text);
-  background: var(--surface);
-  border-color: var(--line);
-}
-
-.icon-btn.danger:hover {
-  color: var(--danger);
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
-}
-
-/* TABS */
-.tab-bar {
-  display: flex;
-  background: rgba(5, 8, 16, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--line);
-  padding: 0 12px;
-  flex-shrink: 0;
-  gap: 4px;
-  z-index: 9;
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 14px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-mute);
-  border-bottom: 2px solid transparent;
-  transition: all 0.18s;
-  position: relative;
-  top: 1px;
-}
-
-.tab-btn:hover { color: var(--text-soft); }
-
-.tab-btn.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
-  box-shadow: 0 0 12px var(--accent);
-}
-
-.tab-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* CONTENT */
-.content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.tab-panel {
-  flex: 1;
-  overflow: hidden;
-  display: none;
-  flex-direction: column;
-}
-
-.tab-panel.active { display: flex; }
-
-/* =============================================================
-   FILES LAYOUT
-   ============================================================= */
-.workbench {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-@media (min-width: 900px) {
-  .workbench {
-    flex-direction: row;
-  }
-}
-
-.file-sidebar {
-  display: flex;
-  flex-direction: column;
-  background: rgba(5, 8, 16, 0.4);
-  border-bottom: 1px solid var(--line);
-  max-height: 38%;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-@media (min-width: 900px) {
-  .file-sidebar {
-    width: 300px;
-    max-height: none;
-    border-bottom: none;
-    border-right: 1px solid var(--line);
-    flex-shrink: 0;
-  }
-}
-
-.sidebar-head {
-  padding: 10px 12px;
-  display: flex;
-  gap: 6px;
-  border-bottom: 1px solid var(--line);
-  flex-shrink: 0;
-  background: rgba(7, 11, 20, 0.6);
-}
-
-.btn-mini {
-  padding: 8px 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  color: var(--text-soft);
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.btn-mini:hover {
-  color: var(--text);
-  border-color: var(--text-mute);
-  background: var(--surface-2);
-}
-
-.btn-mini svg {
-  width: 14px;
-  height: 14px;
-}
-
-.btn-mini.primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #050810;
-  border-color: transparent;
-  font-weight: 700;
-}
-
-.btn-mini.primary:hover {
-  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
-}
-
-.btn-mini.danger:hover {
-  color: var(--danger);
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
-}
-
-.btn-mini.grow { flex: 1; }
-
-.btn-mini:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.file-list {
-  overflow-y: auto;
-  padding: 8px;
-  flex: 1;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-}
-
-.file-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.file-list::-webkit-scrollbar-thumb {
-  background: var(--line);
-  border-radius: 3px;
-}
-
-.file-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--text-soft);
-  cursor: pointer;
-  transition: all 0.12s;
-  word-break: break-all;
-  border: 1px solid transparent;
-}
-
-.file-item:hover {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--line);
-}
-
-.file-item.active {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(96, 165, 250, 0.08));
-  color: var(--accent);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.15);
-}
-
-.file-item svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.file-item .fname {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.empty-state {
-  padding: 30px 20px;
-  text-align: center;
-  color: var(--text-mute);
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  min-height: 120px;
-}
-
-.empty-state svg {
-  width: 32px;
-  height: 32px;
-  opacity: 0.4;
-}
-
-/* EDITOR */
-.editor-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-}
-
-.editor-head {
-  padding: 10px 14px;
-  background: rgba(7, 11, 20, 0.6);
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.path-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--text-mute);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.path-label.has-file {
-  color: var(--accent);
-}
-
-.editor-actions {
-  display: flex;
-  gap: 6px;
-}
-
-textarea#editor {
-  flex: 1;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  line-height: 1.7;
-  resize: none;
-  color: var(--text);
-  -webkit-overflow-scrolling: touch;
-  border: none;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-  tab-size: 2;
-}
-
-textarea#editor::-webkit-scrollbar {
-  width: 8px;
-}
-
-textarea#editor::-webkit-scrollbar-thumb {
-  background: var(--line);
-  border-radius: 4px;
-}
-
-textarea#editor::placeholder {
-  color: var(--text-dim);
-}
-
-/* =============================================================
-   PHONE PREVIEW
-   ============================================================= */
-.preview-bar {
-  flex-shrink: 0;
-  background: rgba(5, 8, 16, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--line);
-  transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  z-index: 8;
-  overflow: hidden;
-}
-
-.preview-bar.collapsed {
-  height: 52px;
-}
-
-.preview-bar:not(.collapsed) {
-  height: var(--preview-height);
-}
-
-@media (max-height: 700px) {
-  .preview-bar:not(.collapsed) {
-    height: 380px;
-  }
-}
-
-.preview-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  height: 52px;
-  border-bottom: 1px solid var(--line);
-  flex-shrink: 0;
-}
-
-.preview-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  flex-shrink: 0;
-}
-
-.preview-label svg {
-  width: 14px;
-  height: 14px;
-  color: var(--accent);
-}
-
-.preview-url-wrap {
-  flex: 1;
-  position: relative;
-  min-width: 0;
-}
-
-.preview-url-wrap input {
-  width: 100%;
-  padding: 8px 12px 8px 32px;
-  background: rgba(7, 11, 20, 0.7);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--text);
-  transition: all 0.15s;
-}
-
-.preview-url-wrap input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
-}
-
-.preview-url-wrap > svg {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  color: var(--text-mute);
-  pointer-events: none;
-}
-
-.preview-tools {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.preview-tools .icon-btn {
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-.preview-tools .icon-btn:hover {
-  background: var(--surface-2);
-}
-
-.preview-tools .icon-btn.spin svg {
-  animation: spin 0.7s linear infinite;
-}
-
-.preview-body {
-  height: calc(100% - 52px);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
-  position: relative;
-}
-
-.preview-bg-glow {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-/* PHONE FRAME */
-.phone-frame {
-  width: 240px;
-  height: 100%;
-  max-height: 100%;
-  aspect-ratio: 9 / 19;
-  background: #000;
-  border: 8px solid #10141c;
-  border-radius: 32px;
-  position: relative;
-  box-shadow:
-    0 0 0 2px #1a1f2b,
-    0 20px 60px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(56, 189, 248, 0.15);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-@media (max-height: 600px) {
-  .phone-frame {
-    width: 180px;
-  }
-}
-
-.phone-frame::before {
-  /* Side buttons */
-  content: '';
-  position: absolute;
-  top: 70px;
-  right: -10px;
-  width: 2px;
-  height: 40px;
-  background: #1a1f2b;
-  border-radius: 2px;
-  box-shadow: 0 60px 0 0 #1a1f2b;
-}
-
-.phone-frame::after {
-  content: '';
-  position: absolute;
-  top: 90px;
-  left: -10px;
-  width: 2px;
-  height: 60px;
-  background: #1a1f2b;
-  border-radius: 2px;
-}
-
-.phone-notch {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90px;
-  height: 20px;
-  background: #000;
-  border-radius: 999px;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
-  gap: 6px;
-}
-
-.phone-notch::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #1a1f2b;
-  box-shadow: inset 0 0 2px #0a0d14;
-}
-
-.phone-notch::after {
-  content: '';
-  width: 18px;
-  height: 3px;
-  background: #1a1f2b;
-  border-radius: 2px;
-}
-
-.phone-screen {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  border-radius: 24px;
-  overflow: hidden;
-  padding-top: 26px;
-  padding-bottom: 8px;
-}
-
-.phone-screen iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #fff;
-  border-radius: 0 0 20px 20px;
-}
-
-.phone-home-bar {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 2px;
-  z-index: 5;
-}
-
-/* Preview placeholder */
-.preview-placeholder {
-  text-align: center;
-  color: var(--text-mute);
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 20px;
-}
-
-.preview-placeholder svg {
-  width: 28px;
-  height: 28px;
-  opacity: 0.4;
-}
-
-/* =============================================================
-   MAINTENANCE TAB
-   ============================================================= */
-.maint-wrap {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  padding-bottom: calc(20px + var(--safe-bottom));
-  -webkit-overflow-scrolling: touch;
-}
-
-.maint-container {
-  max-width: 560px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.card {
-  background: linear-gradient(180deg, rgba(16, 26, 46, 0.5), rgba(7, 11, 20, 0.7));
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
-}
-
-.card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 8px;
-}
-
-.card-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid;
-}
-
-.card-icon.warning {
-  background: rgba(245, 158, 11, 0.12);
-  color: var(--warning);
-  border-color: rgba(245, 158, 11, 0.25);
-}
-
-.card-icon.info {
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent);
-  border-color: rgba(56, 189, 248, 0.25);
-}
-
-.card-icon.success {
-  background: rgba(34, 197, 94, 0.12);
-  color: var(--success);
-  border-color: rgba(34, 197, 94, 0.25);
-}
-
-.card-icon svg {
-  width: 22px;
-  height: 22px;
-}
-
-.card h2 {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  margin-bottom: 4px;
-}
-
-.card p {
-  font-size: 13px;
-  color: var(--text-soft);
-  line-height: 1.6;
-}
-
-.card code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  padding: 2px 6px;
-  background: rgba(56, 189, 248, 0.1);
-  color: var(--accent);
-  border-radius: 4px;
-}
-
-.field-inline {
-  margin-top: 18px;
-}
-
-.field-inline label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-soft);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.field-inline input {
-  width: 100%;
-  padding: 12px 14px;
-  background: rgba(7, 11, 20, 0.8);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  transition: all 0.18s;
-}
-
-.field-inline input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
-}
-
-.huge-btn {
-  width: 100%;
-  padding: 28px 20px;
-  margin-top: 18px;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, #f59e0b, #dc2626);
-  color: white;
-  font-weight: 800;
-  font-size: 16px;
-  letter-spacing: 0.5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow:
-    0 12px 36px rgba(245, 158, 11, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  border: none;
-}
-
-.huge-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
-  background-size: 200% 100%;
-  animation: shine 3.5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes shine {
-  0%, 100% { background-position: 200% 0; }
-  50%      { background-position: -100% 0; }
-}
-
-.huge-btn:hover:not(:disabled) {
-  box-shadow:
-    0 16px 44px rgba(245, 158, 11, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-}
-
-.huge-btn:active:not(:disabled) {
-  transform: translateY(0) scale(0.98);
-}
-
-.huge-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.huge-btn svg {
-  width: 36px;
-  height: 36px;
-  stroke-width: 2.2;
-}
-
-.huge-btn .sub {
-  font-size: 11px;
-  font-weight: 500;
-  opacity: 0.9;
-  letter-spacing: 0.5px;
-  text-transform: none;
-}
-
-.restore-btn {
-  width: 100%;
-  padding: 14px;
-  margin-top: 10px;
-  border-radius: 10px;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  color: var(--text-soft);
-  font-weight: 600;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.15s;
-}
-
-.restore-btn:hover:not(:disabled) {
-  color: var(--success);
-  border-color: rgba(34, 197, 94, 0.5);
-  background: rgba(34, 197, 94, 0.08);
-}
-
-.restore-btn:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.restore-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.restore-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: rgba(34, 197, 94, 0.12);
-  color: var(--success);
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-top: 14px;
-  border: 1px solid rgba(34, 197, 94, 0.25);
-}
-
-.status-pill.offline {
-  background: rgba(239, 68, 68, 0.12);
-  color: var(--danger);
-  border-color: rgba(239, 68, 68, 0.25);
-}
-
-.status-pill svg {
-  width: 12px;
-  height: 12px;
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: pulse 1.8s ease-in-out infinite;
-  box-shadow: 0 0 8px currentColor;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
-}
-
-/* =============================================================
-   MODAL
-   ============================================================= */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.2s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.modal {
-  width: 100%;
-  max-width: 400px;
-  background: linear-gradient(180deg, rgba(16, 26, 46, 0.95), rgba(7, 11, 20, 0.98));
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  padding: 26px;
-  box-shadow: var(--shadow-lg);
-  animation: cardIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.modal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-}
-
-.modal-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  border: 1px solid;
-}
-
-.modal-icon.warning {
-  background: rgba(245, 158, 11, 0.14);
-  color: var(--warning);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.modal-icon.danger {
-  background: rgba(239, 68, 68, 0.14);
-  color: var(--danger);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.modal-icon.info {
-  background: rgba(56, 189, 248, 0.14);
-  color: var(--accent);
-  border-color: rgba(56, 189, 248, 0.3);
-}
-
-.modal-icon svg {
-  width: 28px;
-  height: 28px;
-}
-
-.modal h3 {
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 10px;
-  letter-spacing: -0.3px;
-}
-
-.modal p {
-  font-size: 13px;
-  color: var(--text-soft);
-  text-align: center;
-  line-height: 1.6;
-  margin-bottom: 22px;
-}
-
-.modal p b {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.modal-btn {
-  flex: 1;
-  padding: 13px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 13px;
-  transition: all 0.15s;
-  letter-spacing: 0.2px;
-}
-
-.modal-btn.cancel {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  color: var(--text-soft);
-}
-
-.modal-btn.cancel:hover {
-  color: var(--text);
-  border-color: var(--text-mute);
-}
-
-.modal-btn.confirm {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #050810;
-}
-
-.modal-btn.confirm:hover {
-  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.4);
-}
-
-.modal-btn.confirm.danger {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-  color: white;
-}
-
-.modal-btn.confirm.danger:hover {
-  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
-}
-
-.modal-btn:active {
-  transform: scale(0.97);
-}
-
-/* =============================================================
-   TOAST
-   ============================================================= */
-#toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(20px + var(--safe-bottom));
-  transform: translateX(-50%) translateY(120%);
-  background: linear-gradient(180deg, rgba(16, 26, 46, 0.98), rgba(7, 11, 20, 0.98));
-  border: 1px solid var(--line);
-  padding: 13px 20px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  box-shadow: var(--shadow-lg);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0;
-  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-  max-width: calc(100vw - 40px);
-  pointer-events: none;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-#toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-#toast svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-#toast.success { border-color: rgba(34, 197, 94, 0.5); }
-#toast.success svg { color: var(--success); }
-#toast.error { border-color: rgba(239, 68, 68, 0.5); }
-#toast.error svg { color: var(--danger); }
-#toast.info { border-color: rgba(56, 189, 248, 0.5); }
-#toast.info svg { color: var(--accent); }
-
-/* =============================================================
-   SPINNER
-   ============================================================= */
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--line);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* =============================================================
-   RESPONSIVE
-   ============================================================= */
-@media (max-width: 640px) {
-  .preview-label span { display: none; }
-  .preview-label { gap: 0; }
-  .phone-frame { width: 200px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(56,189,248,.1) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(129,140,248,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 0% 80%,rgba(96,165,250,.05) 0%,transparent 55%),
+    linear-gradient(180deg,#050810 0%,#03050a 40%,#000 100%)}
+button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;outline:none}
+button{cursor:pointer;user-select:none;-webkit-user-select:none}
+.hidden{display:none!important}
+svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
+.spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* LOGIN */
+#loginView{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;
+  min-height:100vh;min-height:100dvh;padding:20px;
+  padding-top:calc(20px + var(--safe-t));padding-bottom:calc(20px + var(--safe-b))}
+.login-card{width:100%;max-width:380px;
+  background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(7,11,20,.95));
+  border:1px solid var(--line);border-radius:24px;padding:40px 28px 32px;
+  box-shadow:var(--shl),inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  position:relative;overflow:hidden;animation:cardIn .6s cubic-bezier(.2,.8,.2,1)}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.6}
+.login-logo{width:68px;height:68px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:20px;display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;color:#050810;box-shadow:0 12px 32px rgba(56,189,248,.35)}
+.login-logo svg{width:32px;height:32px;stroke-width:2.5}
+.login-title{font-size:24px;font-weight:800;text-align:center;letter-spacing:-.6px;
+  margin-bottom:6px;background:linear-gradient(135deg,#fff,#cbd5e1);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.login-sub{font-size:13px;color:var(--mute);text-align:center;margin-bottom:28px}
+.input-wrap{position:relative}
+.input-wrap svg.icon-left{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;color:var(--mute);pointer-events:none;transition:color .2s}
+.input-wrap input{width:100%;padding:14px 44px 14px 42px;
+  background:rgba(7,11,20,.7);border:1px solid var(--line);border-radius:12px;
+  font-size:16px;letter-spacing:1px;transition:all .2s}
+.input-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.toggle-pass{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  padding:8px;border-radius:8px;color:var(--mute);transition:all .15s}
+.toggle-pass:hover{color:var(--text);background:var(--surface2)}
+.btn-login{width:100%;padding:14px;margin-top:16px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;
+  font-weight:800;font-size:15px;letter-spacing:.3px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .15s;box-shadow:0 8px 24px rgba(56,189,248,.3);margin-top:16px}
+.btn-login:hover:not(:disabled){box-shadow:0 12px 32px rgba(56,189,248,.45);transform:translateY(-1px)}
+.btn-login:active:not(:disabled){transform:scale(.98)}
+.btn-login:disabled{opacity:.7;cursor:not-allowed}
+.login-err{min-height:18px;margin-top:12px;font-size:13px;color:var(--danger);
+  text-align:center;font-weight:500}
+
+/* REPO PICKER */
+#repoView{position:relative;z-index:2;display:flex;flex-direction:column;
+  height:100vh;height:100dvh;overflow:hidden}
+.repo-header{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;padding-top:calc(14px + var(--safe-t));
+  background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
+  flex-shrink:0;gap:12px}
+.repo-header-left{display:flex;align-items:center;gap:12px}
+.repo-header-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#050810;box-shadow:0 4px 14px rgba(56,189,248,.35)}
+.repo-header-icon svg{width:20px;height:20px;stroke-width:2.4}
+.repo-header h1{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.repo-header p{font-size:11px;color:var(--mute);text-transform:uppercase;
+  letter-spacing:.6px;font-weight:500}
+.repo-body{flex:1;overflow-y:auto;padding:16px;
+  padding-bottom:calc(16px + var(--safe-b));-webkit-overflow-scrolling:touch}
+.repo-search-wrap{position:relative;max-width:600px;margin:0 auto 14px}
+.repo-search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;color:var(--mute);pointer-events:none}
+.repo-search-wrap input{width:100%;padding:12px 14px 12px 42px;
+  background:rgba(7,11,20,.7);border:1px solid var(--line);border-radius:12px;
+  font-size:14px;transition:all .2s}
+.repo-search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.repo-list{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.repo-card{background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(7,11,20,.7));
+  border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;
+  transition:all .15s;display:flex;align-items:flex-start;gap:12px}
+.repo-card:hover{border-color:rgba(56,189,248,.5);background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(7,11,20,.95))}
+.repo-card:active{transform:scale(.99)}
+.repo-card-icon{width:38px;height:38px;flex-shrink:0;border-radius:10px;
+  background:var(--surface2);display:flex;align-items:center;justify-content:center;
+  color:var(--accent);border:1px solid var(--line)}
+.repo-card-main{flex:1;min-width:0}
+.repo-card-name{font-size:14px;font-weight:700;letter-spacing:-.2px;
+  margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.repo-card-owner{font-size:11px;color:var(--mute);font-weight:500}
+.repo-card-desc{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.5;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.repo-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;
+  background:var(--surface2);color:var(--text2);border:1px solid var(--line);
+  text-transform:uppercase;letter-spacing:.5px}
+.repo-tag.private{background:rgba(245,158,11,.12);color:var(--warning);
+  border-color:rgba(245,158,11,.3)}
+.empty-state{padding:40px 20px;text-align:center;color:var(--mute);font-size:13px;
+  display:flex;flex-direction:column;align-items:center;gap:12px}
+.empty-state svg{width:32px;height:32px;opacity:.4}
+.btn-ghost{padding:8px 14px;background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);
+  display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-ghost:hover{color:var(--text);border-color:var(--mute)}
+
+/* APP */
+#app{position:relative;z-index:2;display:flex;flex-direction:column;
+  height:100vh;height:100dvh;overflow:hidden}
+.app-header{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;padding-top:calc(12px + var(--safe-t));
+  background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
+  flex-shrink:0;gap:10px;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.brand-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#050810;flex-shrink:0}
+.brand-icon svg{width:18px;height:18px;stroke-width:2.6}
+.brand-info{display:flex;flex-direction:column;min-width:0;flex:1}
+.brand-title{font-size:13px;font-weight:800;letter-spacing:-.2px;line-height:1.2}
+.brand-repo{font-size:11px;color:var(--accent);font-weight:600;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;
+  display:flex;align-items:center;gap:4px;margin-top:1px}
+.brand-repo:hover{text-decoration:underline}
+.brand-repo svg{width:10px;height:10px}
+.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;color:var(--text2);border:1px solid transparent;transition:all .15s;
+  background:transparent;flex-shrink:0}
+.icon-btn:hover{color:var(--text);background:var(--surface);border-color:var(--line)}
+.icon-btn.danger:hover{color:var(--danger);border-color:rgba(239,68,68,.4);
+  background:rgba(239,68,68,.08)}
+.tab-bar{display:flex;background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
+  padding:0 12px;flex-shrink:0;gap:4px;z-index:9}
+.tab-btn{flex:1;padding:14px 8px;display:flex;align-items:center;justify-content:center;
+  gap:8px;font-size:13px;font-weight:600;color:var(--mute);
+  border-bottom:2px solid transparent;transition:all .18s;position:relative;top:1px}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn svg{width:16px;height:16px}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.tab-panel{flex:1;overflow:hidden;display:none;flex-direction:column}
+.tab-panel.active{display:flex}
+
+/* FILES */
+.workbench{flex:1;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:900px){.workbench{flex-direction:row}}
+.file-sidebar{display:flex;flex-direction:column;background:rgba(5,8,16,.4);
+  border-bottom:1px solid var(--line);max-height:38%;flex-shrink:0;overflow:hidden}
+@media(min-width:900px){.file-sidebar{width:300px;max-height:none;
+  border-bottom:none;border-right:1px solid var(--line);flex-shrink:0}}
+.sidebar-head{padding:10px 12px;display:flex;gap:6px;
+  border-bottom:1px solid var(--line);flex-shrink:0;background:rgba(7,11,20,.6)}
+.btn-mini{padding:8px 12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  gap:6px;color:var(--text2);font-size:12px;font-weight:600;
+  transition:all .15s;white-space:nowrap}
+.btn-mini:hover{color:var(--text);border-color:var(--mute);background:var(--surface2)}
+.btn-mini svg{width:14px;height:14px}
+.btn-mini.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#050810;border-color:transparent;font-weight:700}
+.btn-mini.primary:hover{box-shadow:0 4px 14px rgba(56,189,248,.4)}
+.btn-mini.danger:hover{color:var(--danger);border-color:rgba(239,68,68,.4);
+  background:rgba(239,68,68,.08)}
+.btn-mini.grow{flex:1}
+.btn-mini:disabled{opacity:.4;cursor:not-allowed}
+.file-list{overflow-y:auto;padding:8px;flex:1;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.file-list::-webkit-scrollbar{width:6px}
+.file-list::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;
+  transition:all .12s;word-break:break-all;border:1px solid transparent}
+.file-item:hover{background:var(--surface);color:var(--text);border-color:var(--line)}
+.file-item.active{background:linear-gradient(135deg,rgba(56,189,248,.14),rgba(96,165,250,.08));
+  color:var(--accent);border-color:rgba(56,189,248,.35)}
+.file-item svg{width:16px;height:16px;flex-shrink:0}
+.file-item .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.editor-head{padding:10px 14px;background:rgba(7,11,20,.6);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;
+  justify-content:space-between;gap:10px;flex-shrink:0}
+.path-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mute);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;
+  display:flex;align-items:center;gap:6px}
+.path-label.has-file{color:var(--accent)}
+.editor-actions{display:flex;gap:6px}
+textarea#editor{flex:1;width:100%;background:rgba(0,0,0,.4);padding:16px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;
+  resize:none;color:var(--text);-webkit-overflow-scrolling:touch;
+  border:none;scrollbar-width:thin;tab-size:2}
+textarea#editor::-webkit-scrollbar{width:8px}
+textarea#editor::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+textarea#editor::placeholder{color:var(--dim)}
+
+/* PREVIEW */
+.preview-bar{flex-shrink:0;background:rgba(5,8,16,.8);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);
+  transition:height .3s cubic-bezier(.2,.8,.2,1);position:relative;z-index:8;overflow:hidden}
+.preview-bar.collapsed{height:52px}
+.preview-bar:not(.collapsed){height:var(--prev-h)}
+@media(max-height:700px){.preview-bar:not(.collapsed){height:380px}}
+.preview-header{display:flex;align-items:center;gap:8px;padding:10px 14px;
+  height:52px;border-bottom:1px solid var(--line);flex-shrink:0}
+.preview-label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  color:var(--text2);text-transform:uppercase;letter-spacing:.8px;flex-shrink:0}
+.preview-label svg{width:14px;height:14px;color:var(--accent)}
+.preview-url-wrap{flex:1;position:relative;min-width:0}
+.preview-url-wrap input{width:100%;padding:8px 12px 8px 32px;
+  background:rgba(7,11,20,.7);border:1px solid var(--line);border-radius:8px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;transition:all .15s}
+.preview-url-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.preview-url-wrap>svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--mute);pointer-events:none}
+.preview-tools{display:flex;gap:6px;flex-shrink:0}
+.preview-tools .icon-btn{width:34px;height:34px;border:1px solid var(--line);background:var(--surface)}
+.preview-tools .icon-btn:hover{background:var(--surface2)}
+.preview-tools .icon-btn.spin svg{animation:spin .7s linear infinite}
+.preview-body{height:calc(100% - 52px);overflow:hidden;display:flex;
+  align-items:center;justify-content:center;padding:14px;position:relative}
+.preview-bg-glow{position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 50% 100%,rgba(56,189,248,.08) 0%,transparent 60%);
+  pointer-events:none}
+.phone-frame{width:240px;height:100%;max-height:100%;aspect-ratio:9/19;background:#000;
+  border:8px solid #10141c;border-radius:32px;position:relative;
+  box-shadow:0 0 0 2px #1a1f2b,0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(56,189,248,.15);
+  overflow:hidden;flex-shrink:0}
+@media(max-height:600px){.phone-frame{width:180px}}
+.phone-notch{position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:90px;height:20px;background:#000;border-radius:999px;z-index:5}
+.phone-notch::before{content:'';position:absolute;right:10px;top:50%;
+  transform:translateY(-50%);width:6px;height:6px;border-radius:50%;
+  background:#1a1f2b;box-shadow:inset 0 0 2px #0a0d14}
+.phone-notch::after{content:'';position:absolute;right:22px;top:50%;
+  transform:translateY(-50%);width:18px;height:3px;background:#1a1f2b;border-radius:2px}
+.phone-screen{position:absolute;inset:0;background:#000;border-radius:24px;
+  overflow:hidden;padding-top:26px;padding-bottom:8px}
+.phone-screen iframe{width:100%;height:100%;border:none;background:#fff;
+  border-radius:0 0 20px 20px}
+.phone-home-bar{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
+  width:60px;height:3px;background:rgba(255,255,255,.4);border-radius:2px;z-index:5}
+.preview-placeholder{text-align:center;color:var(--mute);font-size:13px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px}
+.preview-placeholder svg{width:28px;height:28px;opacity:.4}
+@media(max-width:640px){.preview-label span{display:none}.phone-frame{width:200px}}
+
+/* MAINTENANCE */
+.maint-wrap{flex:1;overflow-y:auto;padding:20px;
+  padding-bottom:calc(20px + var(--safe-b));-webkit-overflow-scrolling:touch}
+.maint-container{max-width:560px;margin:0 auto;display:flex;
+  flex-direction:column;gap:16px}
+.card{background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(7,11,20,.7));
+  border:1px solid var(--line);border-radius:18px;padding:22px;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(56,189,248,.4),transparent)}
+.card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:8px}
+.card-icon{width:44px;height:44px;border-radius:12px;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;border:1px solid}
+.card-icon.warning{background:rgba(245,158,11,.12);color:var(--warning);
+  border-color:rgba(245,158,11,.25)}
+.card-icon.info{background:rgba(56,189,248,.12);color:var(--accent);
+  border-color:rgba(56,189,248,.25)}
+.card-icon.success{background:rgba(34,197,94,.12);color:var(--success);
+  border-color:rgba(34,197,94,.25)}
+.card-icon svg{width:22px;height:22px}
+.card h2{font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:4px}
+.card p{font-size:13px;color:var(--text2);line-height:1.6}
+.card code{font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 6px;
+  background:rgba(56,189,248,.1);color:var(--accent);border-radius:4px}
+.field-inline{margin-top:18px}
+.field-inline label{display:block;font-size:11px;font-weight:700;color:var(--text2);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.field-inline input{width:100%;padding:12px 14px;background:rgba(7,11,20,.8);
+  border:1px solid var(--line);border-radius:10px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;transition:all .18s}
+.field-inline input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.huge-btn{width:100%;padding:28px 20px;margin-top:18px;border-radius:18px;
+  background:linear-gradient(135deg,#f59e0b,#dc2626);color:white;font-weight:800;
+  font-size:16px;letter-spacing:.5px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 12px 36px rgba(245,158,11,.35),inset 0 1px 0 rgba(255,255,255,.2);
+  transition:all .15s;position:relative;overflow:hidden;text-transform:uppercase}
+.huge-btn:hover:not(:disabled){box-shadow:0 16px 44px rgba(245,158,11,.5);transform:translateY(-2px)}
+.huge-btn:active:not(:disabled){transform:translateY(0) scale(.98)}
+.huge-btn:disabled{opacity:.6;cursor:not-allowed}
+.huge-btn svg{width:36px;height:36px;stroke-width:2.2}
+.huge-btn .sub{font-size:11px;font-weight:500;opacity:.9;
+  letter-spacing:.5px;text-transform:none}
+.restore-btn{width:100%;padding:14px;margin-top:10px;border-radius:10px;
+  background:var(--surface2);border:1px solid var(--line);color:var(--text2);
+  font-weight:600;font-size:13px;display:flex;align-items:center;
+  justify-content:center;gap:8px;transition:all .15s}
+.restore-btn:hover:not(:disabled){color:var(--success);
+  border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08)}
+.restore-btn:active:not(:disabled){transform:scale(.98)}
+.restore-btn:disabled{opacity:.5;cursor:not-allowed}
+.restore-btn svg{width:16px;height:16px}
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;
+  background:rgba(34,197,94,.12);color:var(--success);border-radius:999px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  margin-top:14px;border:1px solid rgba(34,197,94,.25)}
+.status-pill.offline{background:rgba(239,68,68,.12);color:var(--danger);
+  border-color:rgba(239,68,68,.25)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;
+  animation:pulse 1.8s ease-in-out infinite;box-shadow:0 0 8px currentColor}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.8);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fadeIn .2s}
+.modal{width:100%;max-width:400px;
+  background:linear-gradient(180deg,rgba(16,26,46,.95),rgba(7,11,20,.98));
+  border:1px solid var(--line);border-radius:24px;padding:26px;
+  box-shadow:var(--shl);animation:cardIn .3s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow:hidden}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.modal-icon{width:56px;height:56px;border-radius:16px;display:flex;
+  align-items:center;justify-content:center;margin:0 auto 16px;border:1px solid}
+.modal-icon.warning{background:rgba(245,158,11,.14);color:var(--warning);
+  border-color:rgba(245,158,11,.3)}
+.modal-icon.danger{background:rgba(239,68,68,.14);color:var(--danger);
+  border-color:rgba(239,68,68,.3)}
+.modal-icon.info{background:rgba(56,189,248,.14);color:var(--accent);
+  border-color:rgba(56,189,248,.3)}
+.modal-icon svg{width:28px;height:28px}
+.modal h3{font-size:18px;font-weight:700;text-align:center;
+  margin-bottom:10px;letter-spacing:-.3px}
+.modal p{font-size:13px;color:var(--text2);text-align:center;
+  line-height:1.6;margin-bottom:22px}
+.modal p b{color:var(--accent);font-weight:600}
+.modal-actions{display:flex;gap:8px}
+.modal-btn{flex:1;padding:13px;border-radius:10px;font-weight:700;
+  font-size:13px;transition:all .15s;letter-spacing:.2px}
+.modal-btn.cancel{background:var(--surface2);border:1px solid var(--line);color:var(--text2)}
+.modal-btn.cancel:hover{color:var(--text);border-color:var(--mute)}
+.modal-btn.confirm{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810}
+.modal-btn.confirm:hover{box-shadow:0 8px 24px rgba(56,189,248,.4)}
+.modal-btn.confirm.danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:white}
+.modal-btn.confirm.danger:hover{box-shadow:0 8px 24px rgba(239,68,68,.4)}
+.modal-btn:active{transform:scale(.97)}
+
+/* TOAST */
+#toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));
+  transform:translateX(-50%) translateY(120%);
+  background:linear-gradient(180deg,rgba(16,26,46,.98),rgba(7,11,20,.98));
+  border:1px solid var(--line);padding:13px 20px;border-radius:12px;
+  font-size:13px;font-weight:500;box-shadow:var(--shl);z-index:2000;
+  display:flex;align-items:center;gap:10px;opacity:0;
+  transition:all .35s cubic-bezier(.2,.8,.2,1);
+  max-width:calc(100vw - 40px);pointer-events:none;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast svg{width:18px;height:18px;flex-shrink:0}
+#toast.success{border-color:rgba(34,197,94,.5)}
+#toast.success svg{color:var(--success)}
+#toast.error{border-color:rgba(239,68,68,.5)}
+#toast.error svg{color:var(--danger)}
+#toast.info{border-color:rgba(56,189,248,.5)}
+#toast.info svg{color:var(--accent)}
 </style>
 </head>
 <body>
 
-<div class="bg-layer bg-base"></div>
-<div class="bg-layer bg-grain"></div>
-<div class="bg-layer bg-grid"></div>
+<div class="bg"></div>
 
-<!-- ============================================================
-     LOGIN VIEW
-     ============================================================ -->
+<!-- LOGIN -->
 <div id="loginView">
-  <div class="login-shell">
-    <form class="login-card" id="loginForm" autocomplete="on">
-      <div class="login-logo">
-        <i data-lucide="zap"></i>
-      </div>
-      <h1 class="login-title">Fortech Panel</h1>
-      <p class="login-sub">Masuk untuk mengelola repository</p>
+  <form class="login-card" id="loginForm">
+    <div class="login-logo"><i data-lucide="zap"></i></div>
+    <h1 class="login-title">Fortech Panel</h1>
+    <p class="login-sub">Masukkan password untuk melanjutkan</p>
 
-      <div class="field">
-        <label class="field-label" for="username">Username</label>
-        <div class="input-wrap">
-          <i data-lucide="user" class="icon-left"></i>
-          <input id="username" type="text" autocomplete="username" spellcheck="false" required />
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label" for="password">Password</label>
-        <div class="input-wrap">
-          <i data-lucide="lock" class="icon-left"></i>
-          <input id="password" type="password" autocomplete="current-password" required />
-          <button type="button" class="toggle-pass" id="togglePass" aria-label="Tampilkan password">
-            <i data-lucide="eye"></i>
-          </button>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-login" id="loginBtn">
-        <i data-lucide="log-in"></i>
-        <span>Masuk</span>
+    <div class="input-wrap">
+      <i data-lucide="lock" class="icon-left"></i>
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" required />
+      <button type="button" class="toggle-pass" id="togglePass" aria-label="Tampilkan">
+        <i data-lucide="eye"></i>
       </button>
+    </div>
 
-      <div class="login-err" id="loginErr"></div>
+    <button type="submit" class="btn-login" id="loginBtn">
+      <i data-lucide="log-in"></i>
+      <span>Masuk</span>
+    </button>
+    <div class="login-err" id="loginErr"></div>
+  </form>
+</div>
 
-      <div class="login-foot">
-        Powered by <strong>Fortech</strong>
+<!-- REPO PICKER -->
+<div id="repoView" class="hidden">
+  <header class="repo-header">
+    <div class="repo-header-left">
+      <div class="repo-header-icon"><i data-lucide="git-branch"></i></div>
+      <div>
+        <h1>Pilih Repository</h1>
+        <p>Pilih repo yang mau diedit</p>
       </div>
-    </form>
+    </div>
+    <button class="icon-btn danger" id="logoutBtn1" title="Logout">
+      <i data-lucide="log-out"></i>
+    </button>
+  </header>
+
+  <div class="repo-body">
+    <div class="repo-search-wrap">
+      <i data-lucide="search"></i>
+      <input id="repoSearch" type="text" placeholder="Cari repo..." spellcheck="false" />
+    </div>
+    <div class="repo-list" id="repoList">
+      <div class="empty-state"><div class="spinner"></div><span>Memuat repo...</span></div>
+    </div>
   </div>
 </div>
 
-<!-- ============================================================
-     APP VIEW
-     ============================================================ -->
+<!-- APP -->
 <div id="app" class="hidden">
-
   <header class="app-header">
     <div class="brand">
       <div class="brand-icon"><i data-lucide="zap"></i></div>
-      <div>
-        <span class="brand-text">Fortech</span>
-        <span class="brand-sub">Control Panel</span>
+      <div class="brand-info">
+        <div class="brand-title">Fortech Panel</div>
+        <div class="brand-repo" id="currentRepo" title="Ganti repo">
+          <i data-lucide="git-branch"></i>
+          <span id="repoName">-</span>
+        </div>
       </div>
     </div>
-
-    <div class="user-area">
-      <span class="user-chip" id="userLabel"></span>
-      <button class="icon-btn danger" id="logoutBtn" title="Logout">
+    <div style="display:flex;gap:6px">
+      <button class="icon-btn" id="changeRepoBtn" title="Ganti Repo">
+        <i data-lucide="repeat"></i>
+      </button>
+      <button class="icon-btn danger" id="logoutBtn2" title="Logout">
         <i data-lucide="log-out"></i>
       </button>
     </div>
@@ -1670,18 +472,14 @@ textarea#editor::placeholder {
 
   <nav class="tab-bar">
     <button class="tab-btn active" data-tab="files">
-      <i data-lucide="folder-tree"></i>
-      <span>Files</span>
+      <i data-lucide="folder-tree"></i><span>Files</span>
     </button>
     <button class="tab-btn" data-tab="maintenance">
-      <i data-lucide="wrench"></i>
-      <span>Maintenance</span>
+      <i data-lucide="wrench"></i><span>Maintenance</span>
     </button>
   </nav>
 
   <main class="content">
-
-    <!-- FILES TAB -->
     <section class="tab-panel active" id="filesTab">
       <div class="workbench">
         <aside class="file-sidebar">
@@ -1693,31 +491,25 @@ textarea#editor::placeholder {
               <i data-lucide="refresh-cw"></i>
             </button>
             <button class="btn-mini primary grow" id="newBtn">
-              <i data-lucide="file-plus"></i>
-              <span>File Baru</span>
+              <i data-lucide="file-plus"></i><span>File Baru</span>
             </button>
           </div>
           <div class="file-list" id="fileList">
-            <div class="empty-state">
-              <div class="spinner"></div>
-              <span>Memuat...</span>
-            </div>
+            <div class="empty-state"><div class="spinner"></div><span>Memuat...</span></div>
           </div>
         </aside>
 
         <div class="editor-panel">
           <div class="editor-head">
             <span class="path-label" id="currentPath">
-              <i data-lucide="file"></i>
-              <span>Belum ada file dipilih</span>
+              <i data-lucide="file"></i><span>Belum ada file dipilih</span>
             </span>
             <div class="editor-actions">
               <button class="btn-mini danger" id="deleteBtn" disabled title="Hapus">
                 <i data-lucide="trash-2"></i>
               </button>
               <button class="btn-mini primary" id="saveBtn" disabled>
-                <i data-lucide="save"></i>
-                <span>Simpan</span>
+                <i data-lucide="save"></i><span>Simpan</span>
               </button>
             </div>
           </div>
@@ -1726,35 +518,28 @@ textarea#editor::placeholder {
       </div>
     </section>
 
-    <!-- MAINTENANCE TAB -->
     <section class="tab-panel" id="maintenanceTab">
       <div class="maint-wrap">
         <div class="maint-container">
-
           <div class="card">
             <div class="card-header">
-              <div class="card-icon info">
-                <i data-lucide="activity"></i>
-              </div>
+              <div class="card-icon info"><i data-lucide="activity"></i></div>
               <div>
                 <h2>Status Sistem</h2>
                 <p id="statusText">Memeriksa...</p>
               </div>
             </div>
             <div class="status-pill" id="statusPill">
-              <span class="status-dot"></span>
-              <span>Checking</span>
+              <span class="status-dot"></span><span>Checking</span>
             </div>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <div class="card-icon warning">
-                <i data-lucide="alert-triangle"></i>
-              </div>
+              <div class="card-icon warning"><i data-lucide="alert-triangle"></i></div>
               <div>
                 <h2>Mode Maintenance</h2>
-                <p>Ganti file website dengan halaman maintenance. File lama di-backup otomatis.</p>
+                <p>Ganti file dengan halaman maintenance. File lama di-backup otomatis.</p>
               </div>
             </div>
 
@@ -1777,37 +562,27 @@ textarea#editor::placeholder {
 
           <div class="card">
             <div class="card-header">
-              <div class="card-icon success">
-                <i data-lucide="shield-check"></i>
-              </div>
+              <div class="card-icon success"><i data-lucide="shield-check"></i></div>
               <div>
                 <h2>Info Backup</h2>
                 <p>File backup disimpan di: <code id="backupPathLabel">index.backup.html</code></p>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- ============================================================
-       PHONE PREVIEW BAR
-       ============================================================ -->
   <div class="preview-bar" id="previewBar">
     <div class="preview-header">
       <div class="preview-label">
-        <i data-lucide="smartphone"></i>
-        <span>Preview</span>
+        <i data-lucide="smartphone"></i><span>Preview</span>
       </div>
-
       <div class="preview-url-wrap">
         <i data-lucide="globe"></i>
         <input id="previewUrl" type="text" placeholder="https://website-lu.com" spellcheck="false" />
       </div>
-
       <div class="preview-tools">
         <button class="icon-btn" id="previewRefresh" title="Refresh">
           <i data-lucide="refresh-cw"></i>
@@ -1817,10 +592,8 @@ textarea#editor::placeholder {
         </button>
       </div>
     </div>
-
     <div class="preview-body">
       <div class="preview-bg-glow"></div>
-
       <div class="phone-frame" id="phoneFrame">
         <div class="phone-notch"></div>
         <div class="phone-screen">
@@ -1828,47 +601,40 @@ textarea#editor::placeholder {
         </div>
         <div class="phone-home-bar"></div>
       </div>
-
       <div class="preview-placeholder hidden" id="previewPlaceholder">
-        <i data-lucide="link"></i>
-        <span>Masukkan URL untuk preview</span>
+        <i data-lucide="link"></i><span>Masukkan URL untuk preview</span>
       </div>
     </div>
   </div>
-
 </div>
 
 <div id="toast"></div>
 
 <script>
-(function () {
+(function(){
   'use strict';
 
-  const API = '/api/github';
-  const LS_PREVIEW_URL = 'fortech_preview_url';
-  const LS_PREVIEW_COLLAPSED = 'fortech_preview_collapsed';
+  var API = '/api/github';
+  var LS_PREVIEW_URL = 'fortech_preview_url';
+  var LS_PREVIEW_COLLAPSED = 'fortech_preview_collapsed';
+  var LS_LAST_REPO = 'fortech_last_repo';
 
-  const el = {
-    // Login
+  var el = {
     loginView: document.getElementById('loginView'),
+    repoView: document.getElementById('repoView'),
     app: document.getElementById('app'),
     loginForm: document.getElementById('loginForm'),
     loginBtn: document.getElementById('loginBtn'),
     loginErr: document.getElementById('loginErr'),
-    username: document.getElementById('username'),
     password: document.getElementById('password'),
     togglePass: document.getElementById('togglePass'),
-
-    // Header
-    userLabel: document.getElementById('userLabel'),
-    logoutBtn: document.getElementById('logoutBtn'),
-
-    // Tabs
-    tabBtns: document.querySelectorAll('.tab-btn'),
-    filesTab: document.getElementById('filesTab'),
-    maintenanceTab: document.getElementById('maintenanceTab'),
-
-    // Files
+    repoSearch: document.getElementById('repoSearch'),
+    repoList: document.getElementById('repoList'),
+    logoutBtn1: document.getElementById('logoutBtn1'),
+    logoutBtn2: document.getElementById('logoutBtn2'),
+    changeRepoBtn: document.getElementById('changeRepoBtn'),
+    currentRepo: document.getElementById('currentRepo'),
+    repoName: document.getElementById('repoName'),
     backBtn: document.getElementById('backBtn'),
     refreshBtn: document.getElementById('refreshBtn'),
     newBtn: document.getElementById('newBtn'),
@@ -1877,16 +643,12 @@ textarea#editor::placeholder {
     editor: document.getElementById('editor'),
     saveBtn: document.getElementById('saveBtn'),
     deleteBtn: document.getElementById('deleteBtn'),
-
-    // Maintenance
     maintenanceBtn: document.getElementById('maintenanceBtn'),
     restoreBtn: document.getElementById('restoreBtn'),
     targetPath: document.getElementById('targetPath'),
     statusText: document.getElementById('statusText'),
     statusPill: document.getElementById('statusPill'),
     backupPathLabel: document.getElementById('backupPathLabel'),
-
-    // Preview
     previewBar: document.getElementById('previewBar'),
     previewUrl: document.getElementById('previewUrl'),
     previewRefresh: document.getElementById('previewRefresh'),
@@ -1894,35 +656,35 @@ textarea#editor::placeholder {
     previewIframe: document.getElementById('previewIframe'),
     previewPlaceholder: document.getElementById('previewPlaceholder'),
     phoneFrame: document.getElementById('phoneFrame'),
-
-    // Toast
-    toast: document.getElementById('toast')
+    toast: document.getElementById('toast'),
+    tabBtns: document.querySelectorAll('.tab-btn'),
+    filesTab: document.getElementById('filesTab'),
+    maintenanceTab: document.getElementById('maintenanceTab')
   };
 
-  const state = {
-    user: null,
+  var state = {
     currentDir: '',
     currentFile: null,
     currentSha: null,
-    items: []
+    items: [],
+    repos: [],
+    repo: null,
+    branch: 'main'
   };
 
-  // ============================================================
-  // UTILS
-  // ============================================================
-  function refreshIcons() {
+  function refreshIcons(){
     if (window.lucide && window.lucide.createIcons) {
-      try { window.lucide.createIcons(); } catch (e) {}
+      try { window.lucide.createIcons(); } catch(e){}
     }
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
   }
 
-  function iconFor(name, type) {
+  function iconFor(name, type){
     if (type === 'dir') return 'folder';
     if (/\.(html?|htm)$/i.test(name)) return 'file-code-2';
     if (/\.(js|mjs|cjs|ts|tsx|jsx)$/i.test(name)) return 'file-code-2';
@@ -1933,51 +695,44 @@ textarea#editor::placeholder {
     if (/\.(mp4|mov|webm|avi|mkv)$/i.test(name)) return 'video';
     if (/\.(mp3|wav|ogg|m4a|flac)$/i.test(name)) return 'music';
     if (/\.(zip|rar|7z|tar|gz)$/i.test(name)) return 'archive';
-    if (/\.pdf$/i.test(name)) return 'file-text';
     return 'file';
   }
 
-  function toast(msg, type) {
-    const iconName = type === 'error' ? 'alert-circle' : type === 'info' ? 'info' : 'check-circle';
+  function toast(msg, type){
+    var iconName = type === 'error' ? 'alert-circle' : type === 'info' ? 'info' : 'check-circle';
     el.toast.innerHTML = '<i data-lucide="' + iconName + '"></i><span>' + escapeHtml(msg) + '</span>';
     el.toast.className = 'show ' + (type || 'success');
     refreshIcons();
     clearTimeout(toast._t);
-    toast._t = setTimeout(function () {
-      el.toast.className = '';
-    }, 3000);
+    toast._t = setTimeout(function(){ el.toast.className = ''; }, 3000);
   }
 
-  async function api(action, extra) {
-    const payload = Object.assign({ action: action }, extra || {});
-    const res = await fetch(API, {
+  function api(action, extra){
+    var payload = Object.assign({ action: action }, extra || {});
+    if (state.repo && !payload.repo) payload.repo = state.repo;
+    if (state.branch && !payload.branch) payload.branch = state.branch;
+    return fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
       body: JSON.stringify(payload)
+    }).then(function(res){
+      return res.json().catch(function(){
+        return { ok: false, error: 'Respon tidak valid' };
+      });
+    }).then(function(data){
+      if (!data.error && !data.ok) data.error = 'Gagal';
+      return data;
     });
-    let data;
-    try {
-      data = await res.json();
-    } catch (e) {
-      data = { ok: false, error: 'Respon server tidak valid' };
-    }
-    if (!res.ok && !data.error) data.error = 'HTTP ' + res.status;
-    return data;
   }
 
-  // ============================================================
-  // MODAL CONFIRM
-  // ============================================================
-  function confirmModal(opts) {
-    return new Promise(function (resolve) {
-      const overlay = document.createElement('div');
+  function confirmModal(opts){
+    return new Promise(function(resolve){
+      var overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
-
-      const iconName = opts.icon || 'alert-triangle';
-      const iconClass = opts.danger ? 'danger' : (opts.info ? 'info' : 'warning');
-      const btnClass = opts.danger ? 'modal-btn confirm danger' : 'modal-btn confirm';
-
+      var iconName = opts.icon || 'alert-triangle';
+      var iconClass = opts.danger ? 'danger' : (opts.info ? 'info' : 'warning');
+      var btnClass = opts.danger ? 'modal-btn confirm danger' : 'modal-btn confirm';
       overlay.innerHTML =
         '<div class="modal">' +
         '  <div class="modal-icon ' + iconClass + '"><i data-lucide="' + iconName + '"></i></div>' +
@@ -1988,113 +743,196 @@ textarea#editor::placeholder {
         '    <button class="' + btnClass + '" data-act="ok">' + escapeHtml(opts.okText || 'Lanjut') + '</button>' +
         '  </div>' +
         '</div>';
-
       document.body.appendChild(overlay);
       refreshIcons();
-
-      function close(val) {
+      function close(v){
         overlay.style.opacity = '0';
-        setTimeout(function () { overlay.remove(); }, 200);
-        resolve(val);
+        setTimeout(function(){ overlay.remove(); }, 200);
+        resolve(v);
       }
-
-      overlay.addEventListener('click', function (e) {
+      overlay.addEventListener('click', function(e){
         if (e.target === overlay) return close(false);
-        const btn = e.target.closest('[data-act]');
+        var btn = e.target.closest('[data-act]');
         if (!btn) return;
         close(btn.dataset.act === 'ok');
       });
     });
   }
 
-  // ============================================================
-  // LOGIN
-  // ============================================================
-  el.togglePass.addEventListener('click', function () {
-    const isPass = el.password.type === 'password';
+  // ===== LOGIN =====
+  el.togglePass.addEventListener('click', function(){
+    var isPass = el.password.type === 'password';
     el.password.type = isPass ? 'text' : 'password';
     el.togglePass.innerHTML = '<i data-lucide="' + (isPass ? 'eye-off' : 'eye') + '"></i>';
     refreshIcons();
   });
 
-  el.loginForm.addEventListener('submit', async function (e) {
+  el.loginForm.addEventListener('submit', function(e){
     e.preventDefault();
     el.loginErr.textContent = '';
     el.loginBtn.disabled = true;
     el.loginBtn.innerHTML = '<div class="spinner"></div><span>Memproses...</span>';
 
-    const r = await api('login', {
-      username: el.username.value,
-      password: el.password.value
+    api('login', { password: el.password.value }).then(function(r){
+      el.loginBtn.disabled = false;
+      el.loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
+      refreshIcons();
+      if (r.ok) {
+        el.loginView.classList.add('hidden');
+        showRepoPicker();
+      } else {
+        el.loginErr.textContent = r.error || 'Password salah';
+      }
     });
-
-    el.loginBtn.disabled = false;
-    el.loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
-    refreshIcons();
-
-    if (r.ok) {
-      state.user = el.username.value;
-      showApp();
-    } else {
-      el.loginErr.textContent = r.error || 'Login gagal';
-    }
   });
 
-  el.logoutBtn.addEventListener('click', async function () {
-    const ok = await confirmModal({
-      title: 'Logout',
-      message: 'Yakin mau keluar dari panel?',
-      icon: 'log-out',
-      okText: 'Logout',
-      info: true
+  function logout(){
+    api('logout').then(function(){
+      state.repo = null;
+      state.currentFile = null;
+      state.currentSha = null;
+      el.editor.value = '';
+      el.app.classList.add('hidden');
+      el.repoView.classList.add('hidden');
+      el.loginView.classList.remove('hidden');
+      el.password.value = '';
+      refreshIcons();
     });
-    if (!ok) return;
+  }
 
-    await api('logout');
-    state.user = null;
-    state.currentFile = null;
-    state.currentSha = null;
-    el.editor.value = '';
-    el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
-    el.app.classList.add('hidden');
-    el.loginView.classList.remove('hidden');
-    el.password.value = '';
-    refreshIcons();
-  });
+  el.logoutBtn1.addEventListener('click', logout);
+  el.logoutBtn2.addEventListener('click', logout);
 
-  (async function initSession() {
-    const r = await api('check');
-    if (r.ok && r.loggedIn) {
-      state.user = r.user;
-      showApp();
-    }
+  // ===== SESSION =====
+  (function init(){
+    api('check').then(function(r){
+      if (r.ok && r.loggedIn) {
+        el.loginView.classList.add('hidden');
+        var last = localStorage.getItem(LS_LAST_REPO);
+        if (last) {
+          try {
+            var parts = last.split('/');
+            state.repo = last;
+            state.branch = 'main';
+            openApp(last);
+          } catch(e){
+            showRepoPicker();
+          }
+        } else {
+          showRepoPicker();
+        }
+      }
+    });
     refreshIcons();
   })();
 
-  function showApp() {
-    el.loginView.classList.add('hidden');
+  // ===== REPO PICKER =====
+  function showRepoPicker(){
+    el.repoView.classList.remove('hidden');
+    el.app.classList.add('hidden');
+    el.repoList.innerHTML = '<div class="empty-state"><div class="spinner"></div><span>Memuat repo...</span></div>';
+    refreshIcons();
+
+    api('listRepos').then(function(r){
+      if (!r.ok) {
+        el.repoList.innerHTML =
+          '<div class="empty-state">' +
+          '<i data-lucide="alert-circle"></i>' +
+          '<span>' + escapeHtml(r.error || 'Gagal memuat repo') + '</span>' +
+          '</div>';
+        refreshIcons();
+        return;
+      }
+      state.repos = r.repos || [];
+      renderRepos('');
+    });
+  }
+
+  function renderRepos(q){
+    var query = (q || '').toLowerCase();
+    var list = state.repos.filter(function(r){
+      if (!query) return true;
+      return r.full_name.toLowerCase().indexOf(query) !== -1 ||
+             (r.description || '').toLowerCase().indexOf(query) !== -1;
+    });
+
+    if (list.length === 0) {
+      el.repoList.innerHTML =
+        '<div class="empty-state">' +
+        '<i data-lucide="folder-open"></i>' +
+        '<span>' + (state.repos.length === 0 ? 'Tidak ada repo' : 'Tidak ada hasil') + '</span>' +
+        '</div>';
+      refreshIcons();
+      return;
+    }
+
+    el.repoList.innerHTML = '';
+    list.forEach(function(r){
+      var card = document.createElement('div');
+      card.className = 'repo-card';
+      card.innerHTML =
+        '<div class="repo-card-icon"><i data-lucide="' +
+          (r.private ? 'lock' : 'book') + '"></i></div>' +
+        '<div class="repo-card-main">' +
+        '  <div class="repo-card-name">' +
+             escapeHtml(r.name) +
+             (r.private ? '<span class="repo-tag private">Private</span>' : '') +
+        '  </div>' +
+        '  <div class="repo-card-owner">' + escapeHtml(r.owner) + '</div>' +
+        (r.description ? '<div class="repo-card-desc">' + escapeHtml(r.description) + '</div>' : '') +
+        '</div>';
+      card.addEventListener('click', function(){
+        state.repo = r.full_name;
+        state.branch = r.default_branch || 'main';
+        localStorage.setItem(LS_LAST_REPO, r.full_name);
+        el.repoView.classList.add('hidden');
+        openApp(r.full_name);
+      });
+      el.repoList.appendChild(card);
+    });
+    refreshIcons();
+  }
+
+  el.repoSearch.addEventListener('input', function(){
+    renderRepos(el.repoSearch.value);
+  });
+
+  el.changeRepoBtn.addEventListener('click', function(){
+    state.repo = null;
+    state.currentFile = null;
+    state.currentSha = null;
+    el.editor.value = '';
+    showRepoPicker();
+  });
+
+  // ===== APP =====
+  function openApp(repoFull){
     el.app.classList.remove('hidden');
-    el.userLabel.textContent = state.user || '';
+    el.repoName.textContent = repoFull;
+    state.currentDir = '';
+    state.currentFile = null;
+    state.currentSha = null;
+    el.editor.value = '';
+    el.currentPath.classList.remove('has-file');
+    el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
+    el.saveBtn.disabled = true;
+    el.deleteBtn.disabled = true;
     loadList('');
     updateStatus();
     initPreview();
     refreshIcons();
   }
 
-  // ============================================================
-  // TABS
-  // ============================================================
-  el.tabBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      el.tabBtns.forEach(function (b) { b.classList.remove('active'); });
+  // ===== TABS =====
+  el.tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      el.tabBtns.forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
-
-      const tab = btn.dataset.tab;
+      var t = btn.dataset.tab;
       el.filesTab.classList.remove('active');
       el.maintenanceTab.classList.remove('active');
-
-      if (tab === 'files') el.filesTab.classList.add('active');
-      if (tab === 'maintenance') {
+      if (t === 'files') el.filesTab.classList.add('active');
+      if (t === 'maintenance') {
         el.maintenanceTab.classList.add('active');
         updateStatus();
       }
@@ -2102,32 +940,27 @@ textarea#editor::placeholder {
     });
   });
 
-  // ============================================================
-  // FILE LIST
-  // ============================================================
-  async function loadList(dir) {
+  // ===== FILE LIST =====
+  function loadList(dir){
     state.currentDir = dir || '';
-    el.fileList.innerHTML =
-      '<div class="empty-state"><div class="spinner"></div><span>Memuat...</span></div>';
-
-    const r = await api('list', { path: state.currentDir });
-
-    if (!r.ok) {
-      el.fileList.innerHTML =
-        '<div class="empty-state">' +
-        '<i data-lucide="alert-circle"></i>' +
-        '<span>Gagal memuat: ' + escapeHtml(r.error || '') + '</span>' +
-        '</div>';
-      refreshIcons();
-      return;
-    }
-
-    state.items = r.items || [];
-    renderList();
+    el.fileList.innerHTML = '<div class="empty-state"><div class="spinner"></div><span>Memuat...</span></div>';
+    api('list', { path: state.currentDir }).then(function(r){
+      if (!r.ok) {
+        el.fileList.innerHTML =
+          '<div class="empty-state">' +
+          '<i data-lucide="alert-circle"></i>' +
+          '<span>' + escapeHtml(r.error || 'Gagal memuat') + '</span>' +
+          '</div>';
+        refreshIcons();
+        return;
+      }
+      state.items = r.items || [];
+      renderList();
+    });
   }
 
-  function renderList() {
-    const items = state.items.slice().sort(function (a, b) {
+  function renderList(){
+    var items = state.items.slice().sort(function(a, b){
       if (a.type === b.type) return a.name.localeCompare(b.name);
       return a.type === 'dir' ? -1 : 1;
     });
@@ -2135,11 +968,11 @@ textarea#editor::placeholder {
     el.fileList.innerHTML = '';
 
     if (state.currentDir) {
-      const up = document.createElement('div');
+      var up = document.createElement('div');
       up.className = 'file-item';
       up.innerHTML = '<i data-lucide="corner-left-up"></i><span class="fname">..</span>';
-      up.addEventListener('click', function () {
-        const parts = state.currentDir.split('/').filter(Boolean);
+      up.addEventListener('click', function(){
+        var parts = state.currentDir.split('/').filter(Boolean);
         parts.pop();
         loadList(parts.join('/'));
       });
@@ -2156,262 +989,229 @@ textarea#editor::placeholder {
       return;
     }
 
-    items.forEach(function (item) {
-      const div = document.createElement('div');
+    items.forEach(function(item){
+      var div = document.createElement('div');
       div.className = 'file-item';
-
-      const iconName = iconFor(item.name, item.type);
+      var iconName = iconFor(item.name, item.type);
       div.innerHTML =
         '<i data-lucide="' + iconName + '"></i>' +
         '<span class="fname">' + escapeHtml(item.name) + '</span>';
-
       if (state.currentFile === item.path) div.classList.add('active');
-
-      div.addEventListener('click', function () {
-        if (item.type === 'dir') {
-          loadList(item.path);
-        } else {
-          openFile(item.path);
-        }
+      div.addEventListener('click', function(){
+        if (item.type === 'dir') loadList(item.path);
+        else openFile(item.path);
       });
-
       el.fileList.appendChild(div);
     });
-
     refreshIcons();
   }
 
-  // ============================================================
-  // OPEN FILE
-  // ============================================================
-  async function openFile(path) {
+  // ===== OPEN FILE =====
+  function openFile(path){
     el.editor.value = '';
     el.editor.placeholder = 'Memuat...';
-    el.currentPath.innerHTML =
-      '<i data-lucide="loader"></i><span>' + escapeHtml(path) + '</span>';
+    el.currentPath.innerHTML = '<i data-lucide="loader"></i><span>' + escapeHtml(path) + '</span>';
     el.saveBtn.disabled = true;
     el.deleteBtn.disabled = true;
     refreshIcons();
 
-    const r = await api('read', { path: path });
-    el.editor.placeholder = 'Pilih file dari daftar, atau buat file baru...';
-
-    if (!r.ok) {
-      toast('Gagal buka: ' + (r.error || ''), 'error');
+    api('read', { path: path }).then(function(r){
+      el.editor.placeholder = 'Pilih file dari daftar, atau buat file baru...';
+      if (!r.ok) {
+        toast('Gagal buka: ' + (r.error || ''), 'error');
+        el.currentPath.classList.remove('has-file');
+        el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
+        refreshIcons();
+        return;
+      }
+      state.currentFile = path;
+      state.currentSha = r.sha;
+      el.editor.value = r.content;
+      el.saveBtn.disabled = false;
+      el.deleteBtn.disabled = false;
+      el.currentPath.classList.add('has-file');
       el.currentPath.innerHTML =
-        '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
+        '<i data-lucide="file-code-2"></i><span>' + escapeHtml(path) + '</span>';
+      renderList();
       refreshIcons();
-      return;
-    }
-
-    state.currentFile = path;
-    state.currentSha = r.sha;
-    el.editor.value = r.content;
-    el.saveBtn.disabled = false;
-    el.deleteBtn.disabled = false;
-    el.currentPath.classList.add('has-file');
-    el.currentPath.innerHTML =
-      '<i data-lucide="file-code-2"></i><span>' + escapeHtml(path) + '</span>';
-    renderList();
-    refreshIcons();
-
-    el.editor.scrollTop = 0;
+      el.editor.scrollTop = 0;
+    });
   }
 
-  // ============================================================
-  // SAVE FILE
-  // ============================================================
-  el.saveBtn.addEventListener('click', async function () {
+  // ===== SAVE =====
+  el.saveBtn.addEventListener('click', function(){
     if (!state.currentFile) return;
     el.saveBtn.disabled = true;
     el.saveBtn.innerHTML = '<div class="spinner"></div>';
-
-    const r = await api('write', {
+    api('write', {
       path: state.currentFile,
       content: el.editor.value
-    });
-
-    el.saveBtn.disabled = false;
-    el.saveBtn.innerHTML = '<i data-lucide="save"></i><span>Simpan</span>';
-    refreshIcons();
-
-    if (r.ok) {
-      toast('Tersimpan — preview di-refresh', 'success');
-      loadList(state.currentDir);
-      // Auto refresh preview kalau file yang disimpan adalah index.html
-      if (/index\.html?$/i.test(state.currentFile)) {
-        setTimeout(refreshPreview, 3000);
+    }).then(function(r){
+      el.saveBtn.disabled = false;
+      el.saveBtn.innerHTML = '<i data-lucide="save"></i><span>Simpan</span>';
+      refreshIcons();
+      if (r.ok) {
+        toast('Tersimpan — preview refresh nanti', 'success');
+        loadList(state.currentDir);
+        if (/index\.html?$/i.test(state.currentFile)) {
+          setTimeout(refreshPreview, 3000);
+        }
+      } else {
+        toast('Gagal simpan: ' + (r.error || ''), 'error');
       }
-    } else {
-      toast('Gagal simpan: ' + (r.error || ''), 'error');
-    }
+    });
   });
 
-  // ============================================================
-  // DELETE FILE
-  // ============================================================
-  el.deleteBtn.addEventListener('click', async function () {
+  // ===== DELETE =====
+  el.deleteBtn.addEventListener('click', function(){
     if (!state.currentFile) return;
-
-    const ok = await confirmModal({
+    confirmModal({
       title: 'Hapus File',
       message: 'Yakin hapus <b>' + escapeHtml(state.currentFile) + '</b>?<br>Aksi ini tidak bisa dibatalkan.',
       icon: 'trash-2',
       okText: 'Hapus',
       danger: true
-    });
-    if (!ok) return;
-
-    el.deleteBtn.disabled = true;
-    const r = await api('delete', { path: state.currentFile });
-    el.deleteBtn.disabled = false;
-
-    if (r.ok) {
-      toast('File terhapus', 'success');
-      state.currentFile = null;
-      state.currentSha = null;
-      el.editor.value = '';
-      el.currentPath.classList.remove('has-file');
-      el.currentPath.innerHTML =
-        '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
-      el.saveBtn.disabled = true;
+    }).then(function(ok){
+      if (!ok) return;
       el.deleteBtn.disabled = true;
-      loadList(state.currentDir);
-      refreshIcons();
-    } else {
-      toast('Gagal hapus: ' + (r.error || ''), 'error');
-    }
-  });
-
-  // ============================================================
-  // NEW FILE
-  // ============================================================
-  el.newBtn.addEventListener('click', async function () {
-    const name = prompt('Nama file (boleh dengan folder, contoh: src/app.js):');
-    if (!name) return;
-    const clean = name.trim().replace(/^\/+/, '');
-    if (!clean) return;
-
-    const fullPath = state.currentDir ? state.currentDir + '/' + clean : clean;
-
-    const check = await api('exists', { path: fullPath });
-    if (check.ok && check.exists) {
-      const overwrite = await confirmModal({
-        title: 'File Sudah Ada',
-        message: '<b>' + escapeHtml(fullPath) + '</b> sudah ada. Timpa dengan yang baru?',
-        icon: 'alert-triangle',
-        okText: 'Timpa',
-        danger: true
+      api('delete', { path: state.currentFile }).then(function(r){
+        el.deleteBtn.disabled = false;
+        if (r.ok) {
+          toast('File terhapus', 'success');
+          state.currentFile = null;
+          state.currentSha = null;
+          el.editor.value = '';
+          el.currentPath.classList.remove('has-file');
+          el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
+          el.saveBtn.disabled = true;
+          el.deleteBtn.disabled = true;
+          loadList(state.currentDir);
+          refreshIcons();
+        } else {
+          toast('Gagal hapus: ' + (r.error || ''), 'error');
+        }
       });
-      if (!overwrite) {
-        openFile(fullPath);
-        return;
-      }
-    }
-
-    state.currentFile = fullPath;
-    state.currentSha = null;
-    el.currentPath.classList.add('has-file');
-    el.currentPath.innerHTML =
-      '<i data-lucide="file-plus"></i><span>' + escapeHtml(fullPath) + '</span>';
-    el.editor.value = '';
-    el.saveBtn.disabled = false;
-    el.deleteBtn.disabled = true;
-    el.editor.focus();
-    toast('Isi konten lalu klik Simpan', 'info');
-    renderList();
-    refreshIcons();
+    });
   });
 
-  // ============================================================
-  // BACK / REFRESH
-  // ============================================================
-  el.backBtn.addEventListener('click', function () {
+  // ===== NEW FILE =====
+  el.newBtn.addEventListener('click', function(){
+    var name = prompt('Nama file (boleh dengan folder, contoh: src/app.js):');
+    if (!name) return;
+    var clean = name.trim().replace(/^\/+/, '');
+    if (!clean) return;
+    var fullPath = state.currentDir ? state.currentDir + '/' + clean : clean;
+
+    api('exists', { path: fullPath }).then(function(check){
+      var proceed = function(){
+        state.currentFile = fullPath;
+        state.currentSha = null;
+        el.currentPath.classList.add('has-file');
+        el.currentPath.innerHTML =
+          '<i data-lucide="file-plus"></i><span>' + escapeHtml(fullPath) + '</span>';
+        el.editor.value = '';
+        el.saveBtn.disabled = false;
+        el.deleteBtn.disabled = true;
+        el.editor.focus();
+        toast('Isi konten lalu klik Simpan', 'info');
+        renderList();
+        refreshIcons();
+      };
+
+      if (check.ok && check.exists) {
+        confirmModal({
+          title: 'File Sudah Ada',
+          message: '<b>' + escapeHtml(fullPath) + '</b> sudah ada. Timpa?',
+          icon: 'alert-triangle',
+          okText: 'Timpa',
+          danger: true
+        }).then(function(ok){
+          if (ok) proceed();
+          else openFile(fullPath);
+        });
+      } else {
+        proceed();
+      }
+    });
+  });
+
+  // ===== BACK / REFRESH =====
+  el.backBtn.addEventListener('click', function(){
     if (!state.currentDir) return;
-    const parts = state.currentDir.split('/').filter(Boolean);
+    var parts = state.currentDir.split('/').filter(Boolean);
     parts.pop();
     loadList(parts.join('/'));
   });
 
-  el.refreshBtn.addEventListener('click', function () {
+  el.refreshBtn.addEventListener('click', function(){
     loadList(state.currentDir);
   });
 
-  // ============================================================
-  // CTRL+S
-  // ============================================================
-  document.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', function(e){
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       if (!el.saveBtn.disabled) el.saveBtn.click();
     }
   });
 
-  // ============================================================
-  // MAINTENANCE — STATUS
-  // ============================================================
-  async function updateStatus() {
-    const target = el.targetPath.value.trim() || 'index.html';
-    const backup = backupNameFor(target);
+  // ===== MAINTENANCE STATUS =====
+  function backupNameFor(path){
+    var p = (path || 'index.html').replace(/^\/+/, '');
+    var parts = p.split('/');
+    var last = parts.pop();
+    var dir = parts.length ? parts.join('/') + '/' : '';
+    var dot = last.lastIndexOf('.');
+    if (dot === -1) return dir + last + '.backup';
+    return dir + last.slice(0, dot) + '.backup' + last.slice(dot);
+  }
 
+  function updateStatus(){
+    var target = el.targetPath.value.trim() || 'index.html';
+    var backup = backupNameFor(target);
     el.backupPathLabel.textContent = backup;
     el.statusText.textContent = 'Memeriksa...';
     el.statusPill.className = 'status-pill';
     el.statusPill.innerHTML =
-      '<div class="spinner" style="width:10px;height:10px;border-width:1.5px"></div>' +
-      '<span>Checking</span>';
+      '<div class="spinner" style="width:10px;height:10px;border-width:1.5px"></div><span>Checking</span>';
 
-    const r = await api('exists', { path: target });
-    if (!r.ok) {
-      el.statusText.textContent = 'Gagal cek status';
-      el.statusPill.className = 'status-pill offline';
-      el.statusPill.innerHTML = '<span class="status-dot"></span><span>Error</span>';
-      return;
-    }
-
-    if (!r.exists) {
-      el.statusText.textContent = 'File target tidak ditemukan di repo';
-      el.statusPill.className = 'status-pill offline';
-      el.statusPill.innerHTML = '<span class="status-dot"></span><span>Target missing</span>';
-      return;
-    }
-
-    const b = await api('exists', { path: backup });
-
-    if (b.ok && b.exists) {
-      el.statusText.textContent = 'Backup tersedia — siap restore';
-      el.statusPill.className = 'status-pill';
-      el.statusPill.innerHTML = '<span class="status-dot"></span><span>Backup found</span>';
-      el.restoreBtn.disabled = false;
-    } else {
-      el.statusText.textContent = 'File target OK, belum ada backup';
-      el.statusPill.className = 'status-pill offline';
-      el.statusPill.innerHTML = '<span class="status-dot"></span><span>No backup</span>';
-      el.restoreBtn.disabled = true;
-    }
+    api('exists', { path: target }).then(function(r){
+      if (!r.ok) {
+        el.statusText.textContent = 'Gagal cek status';
+        el.statusPill.className = 'status-pill offline';
+        el.statusPill.innerHTML = '<span class="status-dot"></span><span>Error</span>';
+        return;
+      }
+      if (!r.exists) {
+        el.statusText.textContent = 'File target tidak ditemukan';
+        el.statusPill.className = 'status-pill offline';
+        el.statusPill.innerHTML = '<span class="status-dot"></span><span>Target missing</span>';
+        return;
+      }
+      api('exists', { path: backup }).then(function(b){
+        if (b.ok && b.exists) {
+          el.statusText.textContent = 'Backup tersedia — siap restore';
+          el.statusPill.className = 'status-pill';
+          el.statusPill.innerHTML = '<span class="status-dot"></span><span>Backup found</span>';
+          el.restoreBtn.disabled = false;
+        } else {
+          el.statusText.textContent = 'File OK, belum ada backup';
+          el.statusPill.className = 'status-pill offline';
+          el.statusPill.innerHTML = '<span class="status-dot"></span><span>No backup</span>';
+          el.restoreBtn.disabled = true;
+        }
+      });
+    });
   }
 
   el.targetPath.addEventListener('blur', updateStatus);
   el.targetPath.addEventListener('change', updateStatus);
 
-  function backupNameFor(path) {
-    const p = (path || 'index.html').replace(/^\/+/, '');
-    const parts = p.split('/');
-    const last = parts.pop();
-    const dir = parts.length ? parts.join('/') + '/' : '';
-    const dot = last.lastIndexOf('.');
-    if (dot === -1) return dir + last + '.backup';
-    return dir + last.slice(0, dot) + '.backup' + last.slice(dot);
-  }
+  // ===== MAINTENANCE ACTIVATE =====
+  el.maintenanceBtn.addEventListener('click', function(){
+    var target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
+    var backup = backupNameFor(target);
 
-  // ============================================================
-  // MAINTENANCE — ACTIVATE
-  // ============================================================
-  el.maintenanceBtn.addEventListener('click', async function () {
-    const target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
-    const backup = backupNameFor(target);
-
-    const ok = await confirmModal({
+    confirmModal({
       title: 'Aktifkan Maintenance',
       message:
         'File <b>' + escapeHtml(target) + '</b> akan diganti dengan halaman maintenance.<br><br>' +
@@ -2419,157 +1219,142 @@ textarea#editor::placeholder {
       icon: 'power',
       okText: 'Aktifkan',
       danger: true
-    });
-    if (!ok) return;
+    }).then(function(ok){
+      if (!ok) return;
 
-    el.maintenanceBtn.disabled = true;
-    el.maintenanceBtn.innerHTML =
-      '<div class="spinner" style="width:28px;height:28px;border-width:3px"></div>' +
-      '<span>Memproses...</span>';
-
-    try {
-      const res = await fetch('/maintenance.html?t=' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) throw new Error('File /maintenance.html tidak ditemukan. Buat file itu dulu di folder public/.');
-      const maintContent = await res.text();
-
-      const cur = await api('read', { path: target });
-      if (!cur.ok) throw new Error('Gagal baca file target: ' + (cur.error || ''));
-
-      const b = await api('write', {
-        path: backup,
-        content: cur.content,
-        message: 'Backup ' + target + ' sebelum maintenance'
-      });
-      if (!b.ok) throw new Error('Gagal bikin backup: ' + (b.error || ''));
-
-      const w = await api('write', {
-        path: target,
-        content: maintContent,
-        message: 'Aktifkan maintenance mode pada ' + target
-      });
-      if (!w.ok) throw new Error('Gagal tulis maintenance: ' + (w.error || ''));
-
-      toast('Maintenance aktif. Tunggu deploy ~30 detik.', 'success');
-      await updateStatus();
-      loadList(state.currentDir);
-      setTimeout(refreshPreview, 30000);
-    } catch (err) {
-      toast(err.message || 'Gagal aktifkan maintenance', 'error');
-    } finally {
-      el.maintenanceBtn.disabled = false;
+      el.maintenanceBtn.disabled = true;
       el.maintenanceBtn.innerHTML =
-        '<i data-lucide="power"></i>' +
-        '<span>AKTIFKAN MAINTENANCE</span>' +
-        '<span class="sub">File lama akan di-backup otomatis</span>';
-      refreshIcons();
-    }
+        '<div class="spinner" style="width:28px;height:28px;border-width:3px"></div>' +
+        '<span>Memproses...</span>';
+
+      fetch('/maintenance.html?t=' + Date.now(), { cache: 'no-store' })
+        .then(function(res){
+          if (!res.ok) throw new Error('File /maintenance.html tidak ditemukan di folder public/.');
+          return res.text();
+        })
+        .then(function(maintContent){
+          return api('read', { path: target }).then(function(cur){
+            if (!cur.ok) throw new Error('Gagal baca target: ' + (cur.error || ''));
+            return api('write', {
+              path: backup,
+              content: cur.content,
+              message: 'Backup ' + target + ' sebelum maintenance'
+            });
+          }).then(function(b){
+            if (!b.ok) throw new Error('Gagal backup: ' + (b.error || ''));
+            return api('write', {
+              path: target,
+              content: maintContent,
+              message: 'Aktifkan maintenance pada ' + target
+            });
+          }).then(function(w){
+            if (!w.ok) throw new Error('Gagal tulis: ' + (w.error || ''));
+            toast('Maintenance aktif. Tunggu deploy ~30 detik.', 'success');
+            updateStatus();
+            loadList(state.currentDir);
+            setTimeout(refreshPreview, 30000);
+          });
+        })
+        .catch(function(err){
+          toast(err.message || 'Gagal aktifkan maintenance', 'error');
+        })
+        .then(function(){
+          el.maintenanceBtn.disabled = false;
+          el.maintenanceBtn.innerHTML =
+            '<i data-lucide="power"></i>' +
+            '<span>AKTIFKAN MAINTENANCE</span>' +
+            '<span class="sub">File lama akan di-backup otomatis</span>';
+          refreshIcons();
+        });
+    });
   });
 
-  // ============================================================
-  // MAINTENANCE — RESTORE
-  // ============================================================
-  el.restoreBtn.addEventListener('click', async function () {
-    const target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
-    const backup = backupNameFor(target);
+  // ===== MAINTENANCE RESTORE =====
+  el.restoreBtn.addEventListener('click', function(){
+    var target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
+    var backup = backupNameFor(target);
 
-    const ok = await confirmModal({
+    confirmModal({
       title: 'Restore dari Backup',
-      message:
-        'File <b>' + escapeHtml(target) + '</b> akan dipulihkan dari <b>' +
-        escapeHtml(backup) + '</b>.',
+      message: 'File <b>' + escapeHtml(target) + '</b> akan dipulihkan dari <b>' + escapeHtml(backup) + '</b>.',
       icon: 'rotate-ccw',
       okText: 'Restore',
       info: true
-    });
-    if (!ok) return;
+    }).then(function(ok){
+      if (!ok) return;
 
-    el.restoreBtn.disabled = true;
-    el.restoreBtn.innerHTML = '<div class="spinner"></div><span>Memproses...</span>';
+      el.restoreBtn.disabled = true;
+      el.restoreBtn.innerHTML = '<div class="spinner"></div><span>Memproses...</span>';
 
-    try {
-      const b = await api('read', { path: backup });
-      if (!b.ok) throw new Error('Backup tidak ditemukan');
-
-      const w = await api('write', {
-        path: target,
-        content: b.content,
-        message: 'Restore ' + target + ' dari backup'
+      api('read', { path: backup }).then(function(b){
+        if (!b.ok) throw new Error('Backup tidak ditemukan');
+        return api('write', {
+          path: target,
+          content: b.content,
+          message: 'Restore ' + target + ' dari backup'
+        });
+      }).then(function(w){
+        if (!w.ok) throw new Error('Gagal restore: ' + (w.error || ''));
+        toast('Restore berhasil. Tunggu deploy ~30 detik.', 'success');
+        updateStatus();
+        loadList(state.currentDir);
+        setTimeout(refreshPreview, 30000);
+      }).catch(function(err){
+        toast(err.message || 'Gagal restore', 'error');
+      }).then(function(){
+        el.restoreBtn.disabled = false;
+        el.restoreBtn.innerHTML = '<i data-lucide="rotate-ccw"></i><span>Restore dari Backup</span>';
+        refreshIcons();
+        updateStatus();
       });
-      if (!w.ok) throw new Error('Gagal restore: ' + (w.error || ''));
-
-      toast('Restore berhasil. Tunggu deploy ~30 detik.', 'success');
-      await updateStatus();
-      loadList(state.currentDir);
-      setTimeout(refreshPreview, 30000);
-    } catch (err) {
-      toast(err.message || 'Gagal restore', 'error');
-    } finally {
-      el.restoreBtn.disabled = false;
-      el.restoreBtn.innerHTML = '<i data-lucide="rotate-ccw"></i><span>Restore dari Backup</span>';
-      refreshIcons();
-      updateStatus();
-    }
+    });
   });
 
-  // ============================================================
-  // PHONE PREVIEW
-  // ============================================================
-  function initPreview() {
-    // Restore URL dari localStorage, default = origin (URL panel ini)
-    const savedUrl = localStorage.getItem(LS_PREVIEW_URL);
-    const defaultUrl = window.location.origin;
-    el.previewUrl.value = savedUrl || defaultUrl;
-
-    // Restore collapse state
-    const collapsed = localStorage.getItem(LS_PREVIEW_COLLAPSED) === '1';
+  // ===== PREVIEW =====
+  function initPreview(){
+    var savedUrl = localStorage.getItem(LS_PREVIEW_URL);
+    el.previewUrl.value = savedUrl || '';
+    var collapsed = localStorage.getItem(LS_PREVIEW_COLLAPSED) === '1';
     if (collapsed) el.previewBar.classList.add('collapsed');
     updateToggleIcon();
-
-    // Load preview
     refreshPreview();
 
-    // Event listeners
-    el.previewRefresh.addEventListener('click', function () {
+    el.previewRefresh.addEventListener('click', function(){
       el.previewRefresh.classList.add('spin');
       refreshPreview();
-      setTimeout(function () {
-        el.previewRefresh.classList.remove('spin');
-      }, 700);
+      setTimeout(function(){ el.previewRefresh.classList.remove('spin'); }, 700);
     });
 
-    el.previewToggle.addEventListener('click', function () {
+    el.previewToggle.addEventListener('click', function(){
       el.previewBar.classList.toggle('collapsed');
-      const isCollapsed = el.previewBar.classList.contains('collapsed');
-      localStorage.setItem(LS_PREVIEW_COLLAPSED, isCollapsed ? '1' : '0');
+      var c = el.previewBar.classList.contains('collapsed');
+      localStorage.setItem(LS_PREVIEW_COLLAPSED, c ? '1' : '0');
       updateToggleIcon();
     });
 
-    el.previewUrl.addEventListener('change', function () {
-      let val = el.previewUrl.value.trim();
+    el.previewUrl.addEventListener('change', function(){
+      var val = el.previewUrl.value.trim();
       if (val && !/^https?:\/\//i.test(val)) val = 'https://' + val;
       el.previewUrl.value = val;
       localStorage.setItem(LS_PREVIEW_URL, val);
       refreshPreview();
     });
 
-    el.previewUrl.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        el.previewUrl.blur();
-      }
+    el.previewUrl.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') { e.preventDefault(); el.previewUrl.blur(); }
     });
   }
 
-  function updateToggleIcon() {
-    const isCollapsed = el.previewBar.classList.contains('collapsed');
+  function updateToggleIcon(){
+    var isCollapsed = el.previewBar.classList.contains('collapsed');
     el.previewToggle.innerHTML =
       '<i data-lucide="' + (isCollapsed ? 'chevron-up' : 'chevron-down') + '"></i>';
     el.previewToggle.title = isCollapsed ? 'Tampilkan' : 'Sembunyikan';
     refreshIcons();
   }
 
-  function refreshPreview() {
-    let url = el.previewUrl.value.trim();
+  function refreshPreview(){
+    var url = el.previewUrl.value.trim();
     if (!url) {
       el.previewIframe.classList.add('hidden');
       el.phoneFrame.classList.add('hidden');
@@ -2577,24 +1362,17 @@ textarea#editor::placeholder {
       refreshIcons();
       return;
     }
-
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-
     el.phoneFrame.classList.remove('hidden');
     el.previewIframe.classList.remove('hidden');
     el.previewPlaceholder.classList.add('hidden');
-
-    const sep = url.includes('?') ? '&' : '?';
+    var sep = url.indexOf('?') !== -1 ? '&' : '?';
     el.previewIframe.src = url + sep + '_t=' + Date.now();
   }
 
-  // ============================================================
-  // INIT ICONS
-  // ============================================================
   window.addEventListener('load', refreshIcons);
   refreshIcons();
-
 })();
 </script>
 </body>
-</html>
+       </html>
