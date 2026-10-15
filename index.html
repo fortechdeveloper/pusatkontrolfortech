@@ -74,7 +74,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;
   font-weight:800;font-size:15px;letter-spacing:.3px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all .15s;box-shadow:0 8px 24px rgba(56,189,248,.3);margin-top:16px}
+  transition:all .15s;box-shadow:0 8px 24px rgba(56,189,248,.3)}
 .btn-login:hover:not(:disabled){box-shadow:0 12px 32px rgba(56,189,248,.45);transform:translateY(-1px)}
 .btn-login:active:not(:disabled){transform:scale(.98)}
 .btn-login:disabled{opacity:.7;cursor:not-allowed}
@@ -129,10 +129,6 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 .empty-state{padding:40px 20px;text-align:center;color:var(--mute);font-size:13px;
   display:flex;flex-direction:column;align-items:center;gap:12px}
 .empty-state svg{width:32px;height:32px;opacity:.4}
-.btn-ghost{padding:8px 14px;background:var(--surface);border:1px solid var(--line);
-  border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);
-  display:inline-flex;align-items:center;gap:6px;transition:all .15s}
-.btn-ghost:hover{color:var(--text);border-color:var(--mute)}
 
 /* APP */
 #app{position:relative;z-index:2;display:flex;flex-direction:column;
@@ -247,6 +243,8 @@ textarea#editor::placeholder{color:var(--dim)}
 .preview-tools .icon-btn{width:34px;height:34px;border:1px solid var(--line);background:var(--surface)}
 .preview-tools .icon-btn:hover{background:var(--surface2)}
 .preview-tools .icon-btn.spin svg{animation:spin .7s linear infinite}
+.preview-tools .icon-btn.external{color:var(--accent)}
+.preview-tools .icon-btn.external:hover{background:rgba(56,189,248,.15);border-color:rgba(56,189,248,.5)}
 .preview-body{height:calc(100% - 52px);overflow:hidden;display:flex;
   align-items:center;justify-content:center;padding:14px;position:relative}
 .preview-bg-glow{position:absolute;inset:0;
@@ -255,7 +253,7 @@ textarea#editor::placeholder{color:var(--dim)}
 .phone-frame{width:240px;height:100%;max-height:100%;aspect-ratio:9/19;background:#000;
   border:8px solid #10141c;border-radius:32px;position:relative;
   box-shadow:0 0 0 2px #1a1f2b,0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(56,189,248,.15);
-  overflow:hidden;flex-shrink:0}
+  overflow:hidden;flex-shrink:0;transition:opacity .3s}
 @media(max-height:600px){.phone-frame{width:180px}}
 .phone-notch{position:absolute;top:6px;left:50%;transform:translateX(-50%);
   width:90px;height:20px;background:#000;border-radius:999px;z-index:5}
@@ -271,8 +269,16 @@ textarea#editor::placeholder{color:var(--dim)}
 .phone-home-bar{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
   width:60px;height:3px;background:rgba(255,255,255,.4);border-radius:2px;z-index:5}
 .preview-placeholder{text-align:center;color:var(--mute);font-size:13px;
-  display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px}
-.preview-placeholder svg{width:28px;height:28px;opacity:.4}
+  display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px;max-width:280px}
+.preview-placeholder svg{width:32px;height:32px;opacity:.5;flex-shrink:0}
+.preview-placeholder .ph-title{font-size:14px;font-weight:700;color:var(--text2)}
+.preview-placeholder .ph-desc{font-size:12px;line-height:1.6;color:var(--mute)}
+.preview-placeholder .ph-btn{margin-top:8px;padding:10px 16px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;
+  font-weight:700;font-size:12px;border-radius:8px;display:inline-flex;
+  align-items:center;gap:6px;transition:all .15s}
+.preview-placeholder .ph-btn:hover{box-shadow:0 6px 20px rgba(56,189,248,.4)}
+.preview-placeholder .ph-btn svg{width:14px;height:14px;opacity:1;color:#050810}
 @media(max-width:640px){.preview-label span{display:none}.phone-frame{width:200px}}
 
 /* MAINTENANCE */
@@ -404,7 +410,6 @@ textarea#editor::placeholder{color:var(--dim)}
     <div class="login-logo"><i data-lucide="zap"></i></div>
     <h1 class="login-title">Fortech Panel</h1>
     <p class="login-sub">Masukkan password untuk melanjutkan</p>
-
     <div class="input-wrap">
       <i data-lucide="lock" class="icon-left"></i>
       <input id="password" type="password" placeholder="Password" autocomplete="current-password" required />
@@ -412,10 +417,8 @@ textarea#editor::placeholder{color:var(--dim)}
         <i data-lucide="eye"></i>
       </button>
     </div>
-
     <button type="submit" class="btn-login" id="loginBtn">
-      <i data-lucide="log-in"></i>
-      <span>Masuk</span>
+      <i data-lucide="log-in"></i><span>Masuk</span>
     </button>
     <div class="login-err" id="loginErr"></div>
   </form>
@@ -435,7 +438,6 @@ textarea#editor::placeholder{color:var(--dim)}
       <i data-lucide="log-out"></i>
     </button>
   </header>
-
   <div class="repo-body">
     <div class="repo-search-wrap">
       <i data-lucide="search"></i>
@@ -542,18 +544,15 @@ textarea#editor::placeholder{color:var(--dim)}
                 <p>Ganti file dengan halaman maintenance. File lama di-backup otomatis.</p>
               </div>
             </div>
-
             <div class="field-inline">
               <label for="targetPath">Target File</label>
               <input id="targetPath" type="text" value="index.html" spellcheck="false" />
             </div>
-
             <button class="huge-btn" id="maintenanceBtn">
               <i data-lucide="power"></i>
               <span>AKTIFKAN MAINTENANCE</span>
               <span class="sub">File lama akan di-backup otomatis</span>
             </button>
-
             <button class="restore-btn" id="restoreBtn">
               <i data-lucide="rotate-ccw"></i>
               <span>Restore dari Backup</span>
@@ -584,6 +583,9 @@ textarea#editor::placeholder{color:var(--dim)}
         <input id="previewUrl" type="text" placeholder="https://website-lu.com" spellcheck="false" />
       </div>
       <div class="preview-tools">
+        <button class="icon-btn external" id="previewExternal" title="Buka di tab baru">
+          <i data-lucide="external-link"></i>
+        </button>
         <button class="icon-btn" id="previewRefresh" title="Refresh">
           <i data-lucide="refresh-cw"></i>
         </button>
@@ -597,12 +599,13 @@ textarea#editor::placeholder{color:var(--dim)}
       <div class="phone-frame" id="phoneFrame">
         <div class="phone-notch"></div>
         <div class="phone-screen">
-          <iframe id="previewIframe" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+          <iframe id="previewIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="phone-home-bar"></div>
       </div>
       <div class="preview-placeholder hidden" id="previewPlaceholder">
-        <i data-lucide="link"></i><span>Masukkan URL untuk preview</span>
+        <i data-lucide="link"></i>
+        <span>Masukkan URL untuk preview</span>
       </div>
     </div>
   </div>
@@ -653,6 +656,7 @@ textarea#editor::placeholder{color:var(--dim)}
     previewUrl: document.getElementById('previewUrl'),
     previewRefresh: document.getElementById('previewRefresh'),
     previewToggle: document.getElementById('previewToggle'),
+    previewExternal: document.getElementById('previewExternal'),
     previewIframe: document.getElementById('previewIframe'),
     previewPlaceholder: document.getElementById('previewPlaceholder'),
     phoneFrame: document.getElementById('phoneFrame'),
@@ -669,7 +673,8 @@ textarea#editor::placeholder{color:var(--dim)}
     items: [],
     repos: [],
     repo: null,
-    branch: 'main'
+    branch: 'main',
+    previewTimer: null
   };
 
   function refreshIcons(){
@@ -772,7 +777,6 @@ textarea#editor::placeholder{color:var(--dim)}
     el.loginErr.textContent = '';
     el.loginBtn.disabled = true;
     el.loginBtn.innerHTML = '<div class="spinner"></div><span>Memproses...</span>';
-
     api('login', { password: el.password.value }).then(function(r){
       el.loginBtn.disabled = false;
       el.loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
@@ -810,14 +814,9 @@ textarea#editor::placeholder{color:var(--dim)}
         el.loginView.classList.add('hidden');
         var last = localStorage.getItem(LS_LAST_REPO);
         if (last) {
-          try {
-            var parts = last.split('/');
-            state.repo = last;
-            state.branch = 'main';
-            openApp(last);
-          } catch(e){
-            showRepoPicker();
-          }
+          state.repo = last;
+          state.branch = 'main';
+          openApp(last);
         } else {
           showRepoPicker();
         }
@@ -832,7 +831,6 @@ textarea#editor::placeholder{color:var(--dim)}
     el.app.classList.add('hidden');
     el.repoList.innerHTML = '<div class="empty-state"><div class="spinner"></div><span>Memuat repo...</span></div>';
     refreshIcons();
-
     api('listRepos').then(function(r){
       if (!r.ok) {
         el.repoList.innerHTML =
@@ -855,7 +853,6 @@ textarea#editor::placeholder{color:var(--dim)}
       return r.full_name.toLowerCase().indexOf(query) !== -1 ||
              (r.description || '').toLowerCase().indexOf(query) !== -1;
     });
-
     if (list.length === 0) {
       el.repoList.innerHTML =
         '<div class="empty-state">' +
@@ -865,7 +862,6 @@ textarea#editor::placeholder{color:var(--dim)}
       refreshIcons();
       return;
     }
-
     el.repoList.innerHTML = '';
     list.forEach(function(r){
       var card = document.createElement('div');
@@ -964,9 +960,7 @@ textarea#editor::placeholder{color:var(--dim)}
       if (a.type === b.type) return a.name.localeCompare(b.name);
       return a.type === 'dir' ? -1 : 1;
     });
-
     el.fileList.innerHTML = '';
-
     if (state.currentDir) {
       var up = document.createElement('div');
       up.className = 'file-item';
@@ -978,7 +972,6 @@ textarea#editor::placeholder{color:var(--dim)}
       });
       el.fileList.appendChild(up);
     }
-
     if (items.length === 0) {
       el.fileList.innerHTML =
         '<div class="empty-state">' +
@@ -988,7 +981,6 @@ textarea#editor::placeholder{color:var(--dim)}
       refreshIcons();
       return;
     }
-
     items.forEach(function(item){
       var div = document.createElement('div');
       div.className = 'file-item';
@@ -1014,7 +1006,6 @@ textarea#editor::placeholder{color:var(--dim)}
     el.saveBtn.disabled = true;
     el.deleteBtn.disabled = true;
     refreshIcons();
-
     api('read', { path: path }).then(function(r){
       el.editor.placeholder = 'Pilih file dari daftar, atau buat file baru...';
       if (!r.ok) {
@@ -1101,7 +1092,6 @@ textarea#editor::placeholder{color:var(--dim)}
     var clean = name.trim().replace(/^\/+/, '');
     if (!clean) return;
     var fullPath = state.currentDir ? state.currentDir + '/' + clean : clean;
-
     api('exists', { path: fullPath }).then(function(check){
       var proceed = function(){
         state.currentFile = fullPath;
@@ -1117,7 +1107,6 @@ textarea#editor::placeholder{color:var(--dim)}
         renderList();
         refreshIcons();
       };
-
       if (check.ok && check.exists) {
         confirmModal({
           title: 'File Sudah Ada',
@@ -1154,7 +1143,7 @@ textarea#editor::placeholder{color:var(--dim)}
     }
   });
 
-  // ===== MAINTENANCE STATUS =====
+  // ===== MAINTENANCE =====
   function backupNameFor(path){
     var p = (path || 'index.html').replace(/^\/+/, '');
     var parts = p.split('/');
@@ -1173,7 +1162,6 @@ textarea#editor::placeholder{color:var(--dim)}
     el.statusPill.className = 'status-pill';
     el.statusPill.innerHTML =
       '<div class="spinner" style="width:10px;height:10px;border-width:1.5px"></div><span>Checking</span>';
-
     api('exists', { path: target }).then(function(r){
       if (!r.ok) {
         el.statusText.textContent = 'Gagal cek status';
@@ -1206,27 +1194,21 @@ textarea#editor::placeholder{color:var(--dim)}
   el.targetPath.addEventListener('blur', updateStatus);
   el.targetPath.addEventListener('change', updateStatus);
 
-  // ===== MAINTENANCE ACTIVATE =====
   el.maintenanceBtn.addEventListener('click', function(){
     var target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
     var backup = backupNameFor(target);
-
     confirmModal({
       title: 'Aktifkan Maintenance',
-      message:
-        'File <b>' + escapeHtml(target) + '</b> akan diganti dengan halaman maintenance.<br><br>' +
+      message: 'File <b>' + escapeHtml(target) + '</b> akan diganti dengan halaman maintenance.<br><br>' +
         'File lama akan disimpan sebagai <b>' + escapeHtml(backup) + '</b>.',
       icon: 'power',
       okText: 'Aktifkan',
       danger: true
     }).then(function(ok){
       if (!ok) return;
-
       el.maintenanceBtn.disabled = true;
       el.maintenanceBtn.innerHTML =
-        '<div class="spinner" style="width:28px;height:28px;border-width:3px"></div>' +
-        '<span>Memproses...</span>';
-
+        '<div class="spinner" style="width:28px;height:28px;border-width:3px"></div><span>Memproses...</span>';
       fetch('/maintenance.html?t=' + Date.now(), { cache: 'no-store' })
         .then(function(res){
           if (!res.ok) throw new Error('File /maintenance.html tidak ditemukan di folder public/.');
@@ -1236,15 +1218,13 @@ textarea#editor::placeholder{color:var(--dim)}
           return api('read', { path: target }).then(function(cur){
             if (!cur.ok) throw new Error('Gagal baca target: ' + (cur.error || ''));
             return api('write', {
-              path: backup,
-              content: cur.content,
+              path: backup, content: cur.content,
               message: 'Backup ' + target + ' sebelum maintenance'
             });
           }).then(function(b){
             if (!b.ok) throw new Error('Gagal backup: ' + (b.error || ''));
             return api('write', {
-              path: target,
-              content: maintContent,
+              path: target, content: maintContent,
               message: 'Aktifkan maintenance pada ' + target
             });
           }).then(function(w){
@@ -1269,28 +1249,21 @@ textarea#editor::placeholder{color:var(--dim)}
     });
   });
 
-  // ===== MAINTENANCE RESTORE =====
   el.restoreBtn.addEventListener('click', function(){
     var target = (el.targetPath.value.trim() || 'index.html').replace(/^\/+/, '');
     var backup = backupNameFor(target);
-
     confirmModal({
       title: 'Restore dari Backup',
       message: 'File <b>' + escapeHtml(target) + '</b> akan dipulihkan dari <b>' + escapeHtml(backup) + '</b>.',
-      icon: 'rotate-ccw',
-      okText: 'Restore',
-      info: true
+      icon: 'rotate-ccw', okText: 'Restore', info: true
     }).then(function(ok){
       if (!ok) return;
-
       el.restoreBtn.disabled = true;
       el.restoreBtn.innerHTML = '<div class="spinner"></div><span>Memproses...</span>';
-
       api('read', { path: backup }).then(function(b){
         if (!b.ok) throw new Error('Backup tidak ditemukan');
         return api('write', {
-          path: target,
-          content: b.content,
+          path: target, content: b.content,
           message: 'Restore ' + target + ' dari backup'
         });
       }).then(function(w){
@@ -1332,6 +1305,13 @@ textarea#editor::placeholder{color:var(--dim)}
       updateToggleIcon();
     });
 
+    el.previewExternal.addEventListener('click', function(){
+      var url = el.previewUrl.value.trim();
+      if (!url) { toast('Isi URL dulu', 'info'); return; }
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+
     el.previewUrl.addEventListener('change', function(){
       var val = el.previewUrl.value.trim();
       if (val && !/^https?:\/\//i.test(val)) val = 'https://' + val;
@@ -1354,20 +1334,60 @@ textarea#editor::placeholder{color:var(--dim)}
   }
 
   function refreshPreview(){
+    clearTimeout(state.previewTimer);
     var url = el.previewUrl.value.trim();
     if (!url) {
       el.previewIframe.classList.add('hidden');
       el.phoneFrame.classList.add('hidden');
-      el.previewPlaceholder.classList.remove('hidden');
-      refreshIcons();
+      showPlaceholder('link', 'URL Preview Kosong', 'Masukkan URL website yang mau di-preview di kolom atas.', false);
       return;
     }
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-    el.phoneFrame.classList.remove('hidden');
     el.previewIframe.classList.remove('hidden');
+    el.phoneFrame.classList.remove('hidden');
     el.previewPlaceholder.classList.add('hidden');
+
+    var target = url;
+    el.previewIframe.onload = function(){
+      clearTimeout(state.previewTimer);
+      state.previewTimer = setTimeout(function(){
+        // Cek kalau iframe accessible (kalau blocked, contentDocument = null)
+        try {
+          var doc = el.previewIframe.contentDocument;
+          if (!doc && !el.previewIframe.contentWindow) {
+            showPreviewBlocked(target);
+          }
+        } catch (e) {
+          // Cross-origin — normal, gak bisa dicek, biarin aja
+        }
+      }, 2500);
+    };
+
     var sep = url.indexOf('?') !== -1 ? '&' : '?';
     el.previewIframe.src = url + sep + '_t=' + Date.now();
+  }
+
+  function showPreviewBlocked(url){
+    el.previewIframe.classList.add('hidden');
+    el.phoneFrame.classList.add('hidden');
+    el.previewPlaceholder.classList.remove('hidden');
+    el.previewPlaceholder.innerHTML =
+      '<i data-lucide="shield-alert"></i>' +
+      '<span class="ph-title">Website blokir preview</span>' +
+      '<span class="ph-desc">Website ini melarang tampil di dalam iframe (X-Frame-Options / CSP). Klik tombol di bawah untuk buka langsung.</span>' +
+      '<a class="ph-btn" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' +
+        '<i data-lucide="external-link"></i> Buka di Tab Baru' +
+      '</a>';
+    refreshIcons();
+  }
+
+  function showPlaceholder(icon, title, desc, showBtn){
+    el.previewPlaceholder.classList.remove('hidden');
+    el.previewPlaceholder.innerHTML =
+      '<i data-lucide="' + icon + '"></i>' +
+      '<span class="ph-title">' + escapeHtml(title) + '</span>' +
+      '<span class="ph-desc">' + escapeHtml(desc) + '</span>';
+    refreshIcons();
   }
 
   window.addEventListener('load', refreshIcons);
@@ -1375,4 +1395,4 @@ textarea#editor::placeholder{color:var(--dim)}
 })();
 </script>
 </body>
-       </html>
+</html>
