@@ -10,26 +10,25 @@ function sign(data) {
     .digest('hex');
 }
 
-function makeToken(user) {
+function makeToken() {
   const payload = Buffer.from(
-    JSON.stringify({ u: user, t: Date.now() })
+    JSON.stringify({ t: Date.now() })
   ).toString('base64url');
-  const sig = sign(payload);
-  return payload + '.' + sig;
+  return payload + '.' + sign(payload);
 }
 
 function verifyToken(token) {
-  if (!token) return null;
+  if (!token) return false;
   const parts = token.split('.');
-  if (parts.length !== 2) return null;
+  if (parts.length !== 2) return false;
   const [payload, sig] = parts;
-  if (sign(payload) !== sig) return null;
+  if (sign(payload) !== sig) return false;
   try {
     const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
-    if (Date.now() - data.t > SESSION_TTL) return null;
-    return data.u;
+    if (Date.now() - data.t > SESSION_TTL) return false;
+    return true;
   } catch (e) {
-    return null;
+    return false;
   }
 }
 
@@ -48,22 +47,17 @@ function parseCookies(req) {
 
 function readRawBody(req) {
   return new Promise(function (resolve) {
-    if (req.readableEnded || req.complete) {
-      return resolve('');
-    }
+    if (req.readableEnded || req.complete) return resolve('');
     let data = '';
-    req.on('data', function (chunk) { data += chunk.toString(); });
+    req.on('data', function (c) { data += c.toString(); });
     req.on('end', function () { resolve(data); });
     req.on('error', function () { resolve(''); });
   });
 }
 
 async function parseBody(req) {
-  // 1. Cek kalau Vercel sudah parse
   if (req.body) {
-    if (typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
-      return req.body;
-    }
+    if (typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
     if (typeof req.body === 'string') {
       try { return JSON.parse(req.body); } catch (e) {}
     }
@@ -71,7 +65,6 @@ async function parseBody(req) {
       try { return JSON.parse(req.body.toString('utf-8')); } catch (e) {}
     }
   }
-  // 2. Fallback: baca stream
   try {
     const raw = await readRawBody(req);
     if (!raw) return {};
@@ -83,8 +76,7 @@ async function parseBody(req) {
 
 async function ghFetch(path, options) {
   options = options || {};
-  const url = GH_API + path;
-  const res = await fetch(url, {
+  const res = await fetch(GH_API + path, {
     method: options.method || 'GET',
     headers: Object.assign(
       {
@@ -104,66 +96,31 @@ async function ghFetch(path, options) {
   return { ok: res.ok, status: res.status, data: data };
 }
 
-function buildContentUrl(base, path) {
-  const clean = (path || '').replace(/^\/+|\/+$/g, '');
-  if (!clean) return base;
-  return base + '/' + clean;
+function cleanPath(p) {
+  return String(p || '').replace(/^\/+|\/+$/g, '');
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
   const body = await parseBody(req);
-  const action = (body && body.action) ? String(body.action) : '';
+  const action = String(body.action || '');
   const cookies = parseCookies(req);
 
-  // ============ DEBUG (HAPUS SETELAH BERES) ============
-  if (action === 'debug') {
-    return res.status(200).json({
-      ok: true,
-      debug: {
-        method: req.method,
-        bodyRaw: req.body,
-        bodyParsed: body,
-        action: action,
-        env: {
-          hasAdminUser: !!process.env.ADMIN_USER,
-          hasAdminPass: !!process.env.ADMIN_PASS,
-          adminUserLength: process.env.ADMIN_USER ? process.env.ADMIN_USER.length : 0,
-          adminPassLength: process.env.ADMIN_PASS ? process.env.ADMIN_PASS.length : 0,
-          adminUserFirst: process.env.ADMIN_USER ? process.env.ADMIN_USER[0] : null,
-          adminUserLast: process.env.ADMIN_USER ? process.env.ADMIN_USER[process.env.ADMIN_USER.length - 1] : null,
-          hasGithubToken: !!process.env.GITHUB_TOKEN,
-          hasOwner: !!process.env.GITHUB_OWNER,
-          hasRepo: !!process.env.GITHUB_REPO,
-          hasSessionSecret: !!process.env.SESSION_SECRET,
-          owner: process.env.GITHUB_OWNER || null,
-          repo: process.env.GITHUB_REPO || null,
-          branch: process.env.GITHUB_BRANCH || null
-        }
-      }
-    });
-  }
-
-  // ============ LOGIN ============
+  // ============ LOGIN (password only) ============
   if (action === 'login') {
-    const username = String(body.username || '').trim();
     const password = String(body.password || '').trim();
+    const expected = String(process.env.AKSES_PW || '').trim();
 
-    const expectedUser = String(process.env.ADMIN_USER || '').trim();
-    const expectedPass = String(process.env.ADMIN_PASS || '').trim();
-
-    if (!expectedUser || !expectedPass) {
+    if (!expected) {
       return res.status(500).json({
         ok: false,
-        error: 'ADMIN_USER atau ADMIN_PASS belum di-set di Vercel Environment Variables. Set dulu lalu Redeploy.'
+        error: 'AKSES_PW belum di-set di Vercel Environment Variables. Set dulu lalu Redeploy (uncheck cache).'
       });
     }
 
-    if (username === expectedUser && password === expectedPass) {
-      const token = makeToken(username);
+    if (password === expected) {
+      const token = makeToken();
       res.setHeader(
         'Set-Cookie',
         'session=' + token +
@@ -172,19 +129,9 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-    // Debug info kalau gagal (jangan expose value asli)
     return res.status(401).json({
       ok: false,
-      error: 'Username atau password salah',
-      debug: {
-        inputUserLength: username.length,
-        inputPassLength: password.length,
-        expectedUserLength: expectedUser.length,
-        expectedPassLength: expectedPass.length,
-        userMatch: username === expectedUser,
-        passMatch: password === expectedPass,
-        hint: 'Panjang karakter beda? Berarti ada spasi/tipografi di env. Cek ulang.'
-      }
+      error: 'Password salah'
     });
   }
 
@@ -199,59 +146,80 @@ module.exports = async function handler(req, res) {
 
   // ============ CHECK ============
   if (action === 'check') {
-    const user = verifyToken(cookies.session);
-    return res.status(200).json({
-      ok: true,
-      loggedIn: !!user,
-      user: user
-    });
+    const loggedIn = verifyToken(cookies.session);
+    return res.status(200).json({ ok: true, loggedIn: loggedIn });
   }
 
   // ============ PROTECTED ============
-  const user = verifyToken(cookies.session);
-  if (!user) {
+  if (!verifyToken(cookies.session)) {
     return res.status(401).json({ ok: false, error: 'Belum login' });
-  }
-
-  if (!action) {
-    return res.status(400).json({ ok: false, error: 'Action wajib diisi' });
-  }
-
-  const owner = process.env.GITHUB_OWNER;
-  const repo = process.env.GITHUB_REPO;
-  const branch = process.env.GITHUB_BRANCH || 'main';
-
-  if (!owner || !repo) {
-    return res.status(500).json({
-      ok: false,
-      error: 'GITHUB_OWNER / GITHUB_REPO belum di-set'
-    });
   }
 
   if (!process.env.GITHUB_TOKEN) {
     return res.status(500).json({
       ok: false,
-      error: 'GITHUB_TOKEN belum di-set'
+      error: 'GITHUB_TOKEN belum di-set di Vercel'
     });
   }
 
-  const base = '/repos/' + owner + '/' + repo + '/contents';
-
   try {
+    // ============ LIST REPOS ============
+    if (action === 'listRepos') {
+      const r = await ghFetch(
+        '/user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member'
+      );
+      if (!r.ok) {
+        return res.status(r.status).json({
+          ok: false,
+          error: r.data.message || 'Gagal ambil daftar repo. Cek scope token (harus `repo`).'
+        });
+      }
+      const items = Array.isArray(r.data) ? r.data : [];
+      return res.status(200).json({
+        ok: true,
+        repos: items.map(function (x) {
+          return {
+            full_name: x.full_name,
+            name: x.name,
+            owner: x.owner ? x.owner.login : '',
+            private: !!x.private,
+            default_branch: x.default_branch || 'main',
+            updated_at: x.updated_at,
+            language: x.language,
+            description: x.description
+          };
+        })
+      });
+    }
+
+    // ============ FILE ACTIONS ============
+    const repoFull = String(body.repo || '').trim();
+    if (!repoFull || repoFull.indexOf('/') === -1) {
+      return res.status(400).json({ ok: false, error: 'Repo belum dipilih' });
+    }
+
+    const parts = repoFull.split('/');
+    const owner = parts[0];
+    const repo = parts.slice(1).join('/');
+    const branch = String(body.branch || 'main');
+    const base = '/repos/' + owner + '/' + repo + '/contents';
+
     if (action === 'list') {
-      const path = String(body.path || '').replace(/^\/+|\/+$/g, '');
-      const url = buildContentUrl(base, path) + '?ref=' + encodeURIComponent(branch);
+      const path = cleanPath(body.path);
+      const url = (path ? base + '/' + path : base) +
+        '?ref=' + encodeURIComponent(branch);
       const r = await ghFetch(url);
       if (!r.ok) {
         return res.status(r.status).json({
           ok: false,
-          error: r.data.message || 'Gagal membaca folder'
+          error: r.data.message || 'Gagal baca folder',
+          notFound: r.status === 404
         });
       }
-      const items = Array.isArray(r.data) ? r.data : [r.data];
+      const arr = Array.isArray(r.data) ? r.data : [r.data];
       return res.status(200).json({
         ok: true,
-        items: items.map(function (i) {
+        items: arr.map(function (i) {
           return {
             name: i.name,
             path: i.path,
@@ -264,15 +232,17 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'read') {
-      const path = String(body.path || '').replace(/^\/+|\/+$/g, '');
-      if (!path) {
-        return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
-      }
-      const r = await ghFetch(base + '/' + path + '?ref=' + encodeURIComponent(branch));
+      const path = cleanPath(body.path);
+      if (!path) return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
+
+      const r = await ghFetch(
+        base + '/' + path + '?ref=' + encodeURIComponent(branch)
+      );
       if (!r.ok) {
         return res.status(r.status).json({
           ok: false,
-          error: r.data.message || 'File tidak ditemukan'
+          error: r.data.message || 'File tidak ditemukan',
+          notFound: r.status === 404
         });
       }
       if (r.data.type !== 'file') {
@@ -288,13 +258,11 @@ module.exports = async function handler(req, res) {
     }
 
     if (action === 'write') {
-      const path = String(body.path || '').replace(/^\/+|\/+$/g, '');
+      const path = cleanPath(body.path);
       const content = body.content === undefined ? '' : String(body.content);
       const message = String(body.message || 'Update ' + path + ' via Fortech Panel');
 
-      if (!path) {
-        return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
-      }
+      if (!path) return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
 
       let sha;
       const g = await ghFetch(base + '/' + path + '?ref=' + encodeURIComponent(branch));
@@ -315,21 +283,19 @@ module.exports = async function handler(req, res) {
       if (!r.ok) {
         return res.status(r.status).json({
           ok: false,
-          error: r.data.message || 'Gagal menyimpan'
+          error: r.data.message || 'Gagal simpan'
         });
       }
       return res.status(200).json({ ok: true });
     }
 
     if (action === 'delete') {
-      const path = String(body.path || '').replace(/^\/+|\/+$/g, '');
-      if (!path) {
-        return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
-      }
+      const path = cleanPath(body.path);
+      if (!path) return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
+
       const g = await ghFetch(base + '/' + path + '?ref=' + encodeURIComponent(branch));
-      if (!g.ok) {
-        return res.status(404).json({ ok: false, error: 'File tidak ditemukan' });
-      }
+      if (!g.ok) return res.status(404).json({ ok: false, error: 'File tidak ditemukan' });
+
       const r = await ghFetch(base + '/' + path, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -342,25 +308,20 @@ module.exports = async function handler(req, res) {
       if (!r.ok) {
         return res.status(r.status).json({
           ok: false,
-          error: r.data.message || 'Gagal menghapus'
+          error: r.data.message || 'Gagal hapus'
         });
       }
       return res.status(200).json({ ok: true });
     }
 
     if (action === 'exists') {
-      const path = String(body.path || '').replace(/^\/+|\/+$/g, '');
-      if (!path) {
-        return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
-      }
+      const path = cleanPath(body.path);
+      if (!path) return res.status(400).json({ ok: false, error: 'Path file wajib diisi' });
       const g = await ghFetch(base + '/' + path + '?ref=' + encodeURIComponent(branch));
       return res.status(200).json({ ok: true, exists: !!g.ok });
     }
 
-    return res.status(400).json({
-      ok: false,
-      error: 'Action tidak dikenal: ' + action
-    });
+    return res.status(400).json({ ok: false, error: 'Action tidak dikenal' });
 
   } catch (e) {
     return res.status(500).json({
