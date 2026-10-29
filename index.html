@@ -22,36 +22,24 @@
   --prev-h:420px;
 }
 html,body{height:100%;width:100%;overscroll-behavior:none}
-body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   color:var(--text);font-size:14px;line-height:1.5;
-  -webkit-font-smoothing:antialiased;overflow:hidden;background:var(--bg);
-}
+  -webkit-font-smoothing:antialiased;overflow:hidden;background:var(--bg)}
 
-/* =============================================================
-   ANIMATED BACKGROUND
-   ============================================================= */
+/* BG */
 .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
-.bg-base{
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(56,189,248,.08) 0%,transparent 55%),
-    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(129,140,248,.05) 0%,transparent 55%),
-    linear-gradient(180deg,#050810 0%,#03050a 40%,#000 100%);
-}
-.bg-grid{
-  background-image:
-    linear-gradient(rgba(56,189,248,.028) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(56,189,248,.028) 1px,transparent 1px);
+.bg-base{background:
+  radial-gradient(ellipse 80% 60% at 50% -10%,rgba(56,189,248,.08) 0%,transparent 55%),
+  radial-gradient(ellipse 60% 50% at 100% 100%,rgba(129,140,248,.05) 0%,transparent 55%),
+  linear-gradient(180deg,#050810 0%,#03050a 40%,#000 100%)}
+.bg-grid{background-image:
+  linear-gradient(rgba(56,189,248,.028) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(56,189,248,.028) 1px,transparent 1px);
   background-size:64px 64px;
   mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 0%,transparent 85%);
   -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 0%,transparent 85%);
-  animation:gridDrift 60s linear infinite;
-}
-@keyframes gridDrift{
-  from{background-position:0 0,0 0}
-  to{background-position:64px 64px,64px 64px}
-}
-
+  animation:gridDrift 60s linear infinite}
+@keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:64px 64px,64px 64px}}
 .bg-orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none;z-index:0;will-change:transform}
 .orb-1{width:520px;height:520px;top:-180px;left:-180px;
   background:radial-gradient(circle,#38bdf8 0%,transparent 70%);
@@ -62,37 +50,18 @@ body{
 .orb-3{width:380px;height:380px;top:40%;left:45%;
   background:radial-gradient(circle,#60a5fa 0%,transparent 70%);
   opacity:.22;animation:orbMove3 40s ease-in-out infinite}
-@keyframes orbMove1{
-  0%,100%{transform:translate(0,0) scale(1)}
-  33%{transform:translate(180px,120px) scale(1.15)}
-  66%{transform:translate(80px,220px) scale(.9)}
-}
-@keyframes orbMove2{
-  0%,100%{transform:translate(0,0) scale(1)}
-  33%{transform:translate(-160px,-140px) scale(1.1)}
-  66%{transform:translate(-60px,-220px) scale(.95)}
-}
-@keyframes orbMove3{
-  0%,100%{transform:translate(-50%,-50%) scale(1)}
-  50%{transform:translate(-30%,-70%) scale(1.25)}
-}
-
+@keyframes orbMove1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(180px,120px) scale(1.15)}66%{transform:translate(80px,220px) scale(.9)}}
+@keyframes orbMove2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-160px,-140px) scale(1.1)}66%{transform:translate(-60px,-220px) scale(.95)}}
+@keyframes orbMove3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-30%,-70%) scale(1.25)}}
 .bg-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-particle{
-  position:absolute;width:2px;height:2px;border-radius:50%;
+.bg-particle{position:absolute;width:2px;height:2px;border-radius:50%;
   background:rgba(56,189,248,.6);box-shadow:0 0 6px rgba(56,189,248,.8);
-  animation:particleFloat linear infinite;
-}
+  animation:particleFloat linear infinite}
 @keyframes particleFloat{
   0%{transform:translateY(100vh) translateX(0);opacity:0}
   10%{opacity:1}
   90%{opacity:1}
-  100%{transform:translateY(-100px) translateX(40px);opacity:0}
-}
-
-@media(prefers-reduced-motion:reduce){
-  .bg-orb,.bg-grid,.bg-particle{animation:none!important}
-}
+  100%{transform:translateY(-100px) translateX(40px);opacity:0}}
 
 button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;outline:none}
 button{cursor:pointer;user-select:none;-webkit-user-select:none}
@@ -237,7 +206,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 /* FILES */
 .workbench{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .file-sidebar{display:flex;flex-direction:column;background:rgba(5,8,16,.4);
-  border-bottom:1px solid var(--line);max-height:38%;flex-shrink:0;overflow:hidden;min-height:0}
+  border-bottom:1px solid var(--line);max-height:42%;flex-shrink:0;overflow:hidden;min-height:0}
 .sidebar-head{padding:10px 12px;display:flex;gap:6px;
   border-bottom:1px solid var(--line);flex-shrink:0;background:rgba(7,11,20,.6)}
 .btn-mini{padding:8px 12px;background:var(--surface);border:1px solid var(--line);
@@ -253,18 +222,59 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   background:rgba(239,68,68,.08)}
 .btn-mini.grow{flex:1}
 .btn-mini:disabled{opacity:.4;cursor:not-allowed}
-.file-list{overflow-y:auto;padding:8px;flex:1;-webkit-overflow-scrolling:touch;
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;padding:8px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);
+  border-bottom:1px solid var(--line);flex-shrink:0;
+  background:rgba(0,0,0,.2);overflow-x:auto;white-space:nowrap;
+  scrollbar-width:none}
+.breadcrumb::-webkit-scrollbar{display:none}
+.breadcrumb svg{width:12px;height:12px;opacity:.6}
+.breadcrumb .crumb{color:var(--text2);cursor:pointer;padding:2px 4px;border-radius:4px}
+.breadcrumb .crumb:hover{color:var(--accent);background:rgba(56,189,248,.1)}
+.breadcrumb .crumb.active{color:var(--accent);font-weight:600}
+.breadcrumb .sep{color:var(--dim);opacity:.5}
+
+/* FILE LIST + SECTIONS */
+.file-list{overflow-y:auto;padding:10px;flex:1;-webkit-overflow-scrolling:touch;
   scrollbar-width:thin;scrollbar-color:var(--line) transparent;min-height:0}
 .file-list::-webkit-scrollbar{width:6px}
 .file-list::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
-.file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;
+
+.file-section{margin-bottom:8px;border-radius:10px;overflow:hidden;
+  border:1px solid var(--line);background:rgba(7,11,20,.35)}
+.file-section-header{display:flex;align-items:center;gap:8px;
+  padding:9px 10px;cursor:pointer;transition:all .15s;
+  background:rgba(7,11,20,.6);user-select:none}
+.file-section-header:hover{background:rgba(16,26,46,.8)}
+.file-section-header.collapsed .section-arrow{transform:rotate(-90deg)}
+.section-arrow{display:flex;transition:transform .2s;color:var(--mute)}
+.section-arrow svg{width:14px;height:14px}
+.section-icon{display:flex;flex-shrink:0}
+.section-icon svg{width:15px;height:15px;stroke-width:2.2}
+.section-label{flex:1;font-size:11px;font-weight:700;letter-spacing:.7px;
+  text-transform:uppercase;color:var(--text2)}
+.section-count{font-size:10px;font-weight:700;padding:2px 7px;
+  border-radius:999px;background:var(--surface2);color:var(--text2);
+  letter-spacing:0;min-width:20px;text-align:center}
+.file-section-body{padding:4px 6px 6px 6px;display:flex;flex-direction:column;gap:2px}
+.file-section-body.hidden{display:none}
+
+.file-item{display:flex;align-items:center;gap:10px;padding:8px 10px;
+  border-radius:7px;font-size:13px;color:var(--text2);cursor:pointer;
   transition:all .12s;word-break:break-all;border:1px solid transparent}
 .file-item:hover{background:var(--surface);color:var(--text);border-color:var(--line)}
-.file-item.active{background:linear-gradient(135deg,rgba(56,189,248,.14),rgba(96,165,250,.08));
+.file-item.active{background:linear-gradient(135deg,rgba(56,189,248,.16),rgba(96,165,250,.1));
   color:var(--accent);border-color:rgba(56,189,248,.35)}
-.file-item svg{width:16px;height:16px;flex-shrink:0}
+.file-item svg{width:15px;height:15px;flex-shrink:0}
 .file-item .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-item .fmeta{font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+
+.file-item.up-btn{background:rgba(56,189,248,.05);border:1px dashed rgba(56,189,248,.25);
+  color:var(--accent);margin-bottom:10px;justify-content:center;font-weight:600}
+.file-item.up-btn:hover{background:rgba(56,189,248,.1);border-style:solid}
+
 .editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .editor-head{padding:10px 14px;background:rgba(7,11,20,.6);
   border-bottom:1px solid var(--line);display:flex;align-items:center;
@@ -346,8 +356,7 @@ textarea#editor::placeholder{color:var(--dim)}
 /* MAINTENANCE */
 .maint-wrap{flex:1;overflow-y:auto;padding:20px;
   padding-bottom:calc(20px + var(--safe-b));-webkit-overflow-scrolling:touch;min-height:0}
-.maint-container{max-width:560px;margin:0 auto;display:flex;
-  flex-direction:column;gap:16px}
+.maint-container{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 .card{background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(7,11,20,.7));
   border:1px solid var(--line);border-radius:18px;padding:22px;
   box-shadow:0 4px 20px rgba(0,0,0,.5);position:relative;overflow:hidden}
@@ -356,12 +365,9 @@ textarea#editor::placeholder{color:var(--dim)}
 .card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:8px}
 .card-icon{width:44px;height:44px;border-radius:12px;display:flex;
   align-items:center;justify-content:center;flex-shrink:0;border:1px solid}
-.card-icon.warning{background:rgba(245,158,11,.12);color:var(--warning);
-  border-color:rgba(245,158,11,.25)}
-.card-icon.info{background:rgba(56,189,248,.12);color:var(--accent);
-  border-color:rgba(56,189,248,.25)}
-.card-icon.success{background:rgba(34,197,94,.12);color:var(--success);
-  border-color:rgba(34,197,94,.25)}
+.card-icon.warning{background:rgba(245,158,11,.12);color:var(--warning);border-color:rgba(245,158,11,.25)}
+.card-icon.info{background:rgba(56,189,248,.12);color:var(--accent);border-color:rgba(56,189,248,.25)}
+.card-icon.success{background:rgba(34,197,94,.12);color:var(--success);border-color:rgba(34,197,94,.25)}
 .card-icon svg{width:22px;height:22px}
 .card h2{font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:4px}
 .card p{font-size:13px;color:var(--text2);line-height:1.6}
@@ -398,8 +404,7 @@ textarea#editor::placeholder{color:var(--dim)}
   background:rgba(34,197,94,.12);color:var(--success);border-radius:999px;
   font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
   margin-top:14px;border:1px solid rgba(34,197,94,.25)}
-.status-pill.offline{background:rgba(239,68,68,.12);color:var(--danger);
-  border-color:rgba(239,68,68,.25)}
+.status-pill.offline{background:rgba(239,68,68,.12);color:var(--danger);border-color:rgba(239,68,68,.25)}
 .status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;
   animation:pulse 1.8s ease-in-out infinite;box-shadow:0 0 8px currentColor}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -418,12 +423,9 @@ textarea#editor::placeholder{color:var(--dim)}
   background:linear-gradient(90deg,transparent,var(--accent),transparent)}
 .modal-icon{width:56px;height:56px;border-radius:16px;display:flex;
   align-items:center;justify-content:center;margin:0 auto 16px;border:1px solid}
-.modal-icon.warning{background:rgba(245,158,11,.14);color:var(--warning);
-  border-color:rgba(245,158,11,.3)}
-.modal-icon.danger{background:rgba(239,68,68,.14);color:var(--danger);
-  border-color:rgba(239,68,68,.3)}
-.modal-icon.info{background:rgba(56,189,248,.14);color:var(--accent);
-  border-color:rgba(56,189,248,.3)}
+.modal-icon.warning{background:rgba(245,158,11,.14);color:var(--warning);border-color:rgba(245,158,11,.3)}
+.modal-icon.danger{background:rgba(239,68,68,.14);color:var(--danger);border-color:rgba(239,68,68,.3)}
+.modal-icon.info{background:rgba(56,189,248,.14);color:var(--accent);border-color:rgba(56,189,248,.3)}
 .modal-icon svg{width:28px;height:28px}
 .modal h3{font-size:18px;font-weight:700;text-align:center;
   margin-bottom:10px;letter-spacing:-.3px}
@@ -441,22 +443,18 @@ textarea#editor::placeholder{color:var(--dim)}
 .modal-btn.confirm.danger:hover{box-shadow:0 8px 24px rgba(239,68,68,.4)}
 .modal-btn:active{transform:scale(.97)}
 .modal-btn:disabled{opacity:.6;cursor:not-allowed}
-
-/* NEW FILE MODAL */
 .new-file-input-wrap{margin-bottom:8px;text-align:left}
 .new-file-input-wrap label{display:block;font-size:11px;font-weight:700;
   color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .new-file-input-wrap input{width:100%;padding:12px 14px;
   background:rgba(7,11,20,.8);border:1px solid var(--line);border-radius:10px;
   font-family:'JetBrains Mono',monospace;font-size:14px;transition:all .18s}
-.new-file-input-wrap input:focus{border-color:var(--accent);
-  box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.new-file-input-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(56,189,248,.12)}
 .new-file-hint{font-size:11px;color:var(--mute);line-height:1.5;
   text-align:left;margin-bottom:16px}
 .new-file-hint code{font-family:'JetBrains Mono',monospace;
   padding:1px 5px;background:var(--surface2);border-radius:3px;color:var(--accent)}
 
-/* TOAST */
 #toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));
   transform:translateX(-50%) translateY(120%);
   background:linear-gradient(180deg,rgba(16,26,46,.98),rgba(7,11,20,.98));
@@ -475,16 +473,13 @@ textarea#editor::placeholder{color:var(--dim)}
 #toast.info{border-color:rgba(56,189,248,.5)}
 #toast.info svg{color:var(--accent)}
 
-/* =============================================================
-   DESKTOP LAYOUT
-   ============================================================= */
+/* DESKTOP */
 @media(min-width:900px){
   :root{--prev-h:360px}
   .workbench{flex-direction:row}
   .file-sidebar{width:320px;max-height:none;border-bottom:none;
     border-right:1px solid var(--line);flex-shrink:0}
-  .file-list{padding:10px}
-  .file-item{padding:11px 14px;font-size:13.5px}
+  .file-list{padding:12px}
   .sidebar-head{padding:12px 14px;gap:8px}
   .btn-mini{padding:9px 14px;font-size:12.5px}
   .editor-head{padding:12px 20px}
@@ -501,24 +496,24 @@ textarea#editor::placeholder{color:var(--dim)}
   .phone-frame{width:200px}
   .maint-wrap{padding:28px}
   .card{padding:26px}
-  .card h2{font-size:17px}
-  .card p{font-size:13.5px}
   .huge-btn{font-size:17px;padding:32px 24px}
-  .huge-btn svg{width:42px;height:42px}
   .login-card{padding:48px 36px 40px;max-width:400px}
   .login-title{font-size:26px}
   .login-logo{width:76px;height:76px}
   .login-logo svg{width:36px;height:36px}
+  .file-section-header{padding:10px 12px}
+  .section-label{font-size:11.5px}
+  .file-item{padding:9px 12px;font-size:13.5px}
 }
 @media(min-width:1280px){
-  .file-sidebar{width:340px}
+  .file-sidebar{width:360px}
   :root{--prev-h:400px}
   .phone-frame{width:220px}
   .maint-container{max-width:720px}
   .maint-wrap{padding:32px}
 }
 @media(min-width:1600px){
-  .file-sidebar{width:380px}
+  .file-sidebar{width:400px}
   .maint-container{max-width:800px}
   textarea#editor{padding:24px 32px;font-size:14px}
 }
@@ -530,7 +525,6 @@ textarea#editor::placeholder{color:var(--dim)}
 </head>
 <body>
 
-<!-- ANIMATED BG -->
 <div class="bg-layer bg-base"></div>
 <div class="bg-layer bg-grid"></div>
 <div class="bg-orb orb-1"></div>
@@ -538,7 +532,6 @@ textarea#editor::placeholder{color:var(--dim)}
 <div class="bg-orb orb-3"></div>
 <div class="bg-particles" id="particles"></div>
 
-<!-- LOGIN -->
 <div id="loginView">
   <form class="login-card" id="loginForm">
     <div class="login-logo"><i data-lucide="zap"></i></div>
@@ -558,7 +551,6 @@ textarea#editor::placeholder{color:var(--dim)}
   </form>
 </div>
 
-<!-- REPO PICKER -->
 <div id="repoView" class="hidden">
   <header class="repo-header">
     <div class="repo-header-left">
@@ -583,7 +575,6 @@ textarea#editor::placeholder{color:var(--dim)}
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" class="hidden">
   <header class="app-header">
     <div class="brand">
@@ -629,6 +620,10 @@ textarea#editor::placeholder{color:var(--dim)}
             <button class="btn-mini primary grow" id="newBtn">
               <i data-lucide="file-plus"></i><span>File Baru</span>
             </button>
+          </div>
+          <div class="breadcrumb" id="breadcrumb">
+            <i data-lucide="folder"></i>
+            <span class="crumb active">root</span>
           </div>
           <div class="file-list" id="fileList">
             <div class="empty-state"><div class="spinner"></div><span>Memuat...</span></div>
@@ -754,6 +749,41 @@ textarea#editor::placeholder{color:var(--dim)}
   var LS_PREVIEW_URL = 'fortech_preview_url';
   var LS_PREVIEW_COLLAPSED = 'fortech_preview_collapsed';
   var LS_LAST_REPO = 'fortech_last_repo';
+  var LS_COLLAPSED_SECTIONS = 'fortech_collapsed_sections';
+
+  // ===== CATEGORIES =====
+  var CATEGORIES = [
+    { key: 'folders',  label: 'Folder',     icon: 'folder',    color: '#38bdf8' },
+    { key: 'html',     label: 'HTML',       icon: 'file-code-2', color: '#e34c26' },
+    { key: 'css',      label: 'CSS',        icon: 'palette',   color: '#3b82f6' },
+    { key: 'js',       label: 'JavaScript', icon: 'file-code-2', color: '#eab308' },
+    { key: 'config',   label: 'Config',     icon: 'settings',  color: '#94a3b8' },
+    { key: 'text',     label: 'Text',       icon: 'file-text', color: '#94a3b8' },
+    { key: 'image',    label: 'Gambar',     icon: 'image',     color: '#a855f7' },
+    { key: 'video',    label: 'Video',      icon: 'video',     color: '#ef4444' },
+    { key: 'audio',    label: 'Audio',      icon: 'music',     color: '#22c55e' },
+    { key: 'archive',  label: 'Arsip',      icon: 'archive',   color: '#f59e0b' },
+    { key: 'other',    label: 'Lainnya',    icon: 'file',      color: '#94a3b8' }
+  ];
+
+  function categorizeFile(name, type){
+    if (type === 'dir') return 'folders';
+    var idx = name.lastIndexOf('.');
+    var ext = idx > 0 ? name.slice(idx + 1).toLowerCase() : '';
+    if (ext === 'html' || ext === 'htm') return 'html';
+    if (ext === 'css' || ext === 'scss' || ext === 'sass' || ext === 'less') return 'css';
+    if (ext === 'js' || ext === 'mjs' || ext === 'cjs' ||
+        ext === 'ts' || ext === 'tsx' || ext === 'jsx') return 'js';
+    if (ext === 'json' || ext === 'yml' || ext === 'yaml' || ext === 'toml' ||
+        ext === 'ini' || ext === 'env' || ext === 'lock' || ext === 'xml') return 'config';
+    if (ext === 'md' || ext === 'mdx' || ext === 'txt' || ext === 'log' || ext === 'csv') return 'text';
+    if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif' ||
+        ext === 'svg' || ext === 'webp' || ext === 'ico' || ext === 'bmp') return 'image';
+    if (ext === 'mp4' || ext === 'mov' || ext === 'webm' || ext === 'avi' || ext === 'mkv') return 'video';
+    if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'm4a' || ext === 'flac') return 'audio';
+    if (ext === 'zip' || ext === 'rar' || ext === '7z' || ext === 'tar' || ext === 'gz') return 'archive';
+    return 'other';
+  }
 
   var el = {
     loginView: document.getElementById('loginView'),
@@ -775,6 +805,7 @@ textarea#editor::placeholder{color:var(--dim)}
     refreshBtn: document.getElementById('refreshBtn'),
     newBtn: document.getElementById('newBtn'),
     fileList: document.getElementById('fileList'),
+    breadcrumb: document.getElementById('breadcrumb'),
     currentPath: document.getElementById('currentPath'),
     editor: document.getElementById('editor'),
     saveBtn: document.getElementById('saveBtn'),
@@ -819,15 +850,11 @@ textarea#editor::placeholder{color:var(--dim)}
     for (var i = 0; i < count; i++) {
       var p = document.createElement('div');
       p.className = 'bg-particle';
-      var left = Math.random() * 100;
-      var delay = Math.random() * 20;
-      var dur = 15 + Math.random() * 20;
-      var op = 0.2 + Math.random() * 0.5;
-      p.style.left = left + '%';
+      p.style.left = (Math.random() * 100) + '%';
       p.style.bottom = '-10px';
-      p.style.opacity = op;
-      p.style.animationDuration = dur + 's';
-      p.style.animationDelay = '-' + delay + 's';
+      p.style.opacity = (0.2 + Math.random() * 0.5);
+      p.style.animationDuration = (15 + Math.random() * 20) + 's';
+      p.style.animationDelay = '-' + (Math.random() * 20) + 's';
       el.particles.appendChild(p);
     }
   })();
@@ -842,20 +869,6 @@ textarea#editor::placeholder{color:var(--dim)}
     return String(s).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
-  }
-
-  function iconFor(name, type){
-    if (type === 'dir') return 'folder';
-    if (/\.(html?|htm)$/i.test(name)) return 'file-code-2';
-    if (/\.(js|mjs|cjs|ts|tsx|jsx)$/i.test(name)) return 'file-code-2';
-    if (/\.(css|scss|sass|less)$/i.test(name)) return 'palette';
-    if (/\.(json|yml|yaml|toml|ini|env)$/i.test(name)) return 'settings';
-    if (/\.(md|mdx|txt)$/i.test(name)) return 'file-text';
-    if (/\.(png|jpe?g|gif|svg|webp|ico|bmp)$/i.test(name)) return 'image';
-    if (/\.(mp4|mov|webm|avi|mkv)$/i.test(name)) return 'video';
-    if (/\.(mp3|wav|ogg|m4a|flac)$/i.test(name)) return 'music';
-    if (/\.(zip|rar|7z|tar|gz)$/i.test(name)) return 'archive';
-    return 'file';
   }
 
   function toast(msg, type){
@@ -877,13 +890,34 @@ textarea#editor::placeholder{color:var(--dim)}
       credentials: 'same-origin',
       body: JSON.stringify(payload)
     }).then(function(res){
-      return res.json().catch(function(){
-        return { ok: false, error: 'Respon tidak valid' };
-      });
+      return res.json().catch(function(){ return { ok: false, error: 'Respon tidak valid' }; });
     }).then(function(data){
       if (!data.error && !data.ok) data.error = 'Gagal';
       return data;
     });
+  }
+
+  // ===== COLLAPSED STATE =====
+  function getCollapsed(){
+    try {
+      var arr = JSON.parse(localStorage.getItem(LS_COLLAPSED_SECTIONS) || '[]');
+      return Array.isArray(arr) ? arr : [];
+    } catch(e) { return []; }
+  }
+
+  function setCollapsed(arr){
+    try { localStorage.setItem(LS_COLLAPSED_SECTIONS, JSON.stringify(arr)); } catch(e) {}
+  }
+
+  function expandSection(key){
+    var c = getCollapsed();
+    var idx = c.indexOf(key);
+    if (idx !== -1) {
+      c.splice(idx, 1);
+      setCollapsed(c);
+      return true;
+    }
+    return false;
   }
 
   // ===== MODAL CONFIRM =====
@@ -969,7 +1003,6 @@ textarea#editor::placeholder{color:var(--dim)}
           close(input.value.trim());
         }
       });
-
       setTimeout(function(){ input.focus(); }, 100);
 
       function close(val){
@@ -1035,7 +1068,6 @@ textarea#editor::placeholder{color:var(--dim)}
   el.logoutBtn1.addEventListener('click', logout);
   el.logoutBtn2.addEventListener('click', logout);
 
-  // ===== SESSION =====
   (function init(){
     api('check').then(function(r){
       if (r.ok && r.loggedIn) {
@@ -1062,10 +1094,8 @@ textarea#editor::placeholder{color:var(--dim)}
     api('listRepos').then(function(r){
       if (!r.ok) {
         el.repoList.innerHTML =
-          '<div class="empty-state">' +
-          '<i data-lucide="alert-circle"></i>' +
-          '<span>' + escapeHtml(r.error || 'Gagal memuat repo') + '</span>' +
-          '</div>';
+          '<div class="empty-state"><i data-lucide="alert-circle"></i><span>' +
+          escapeHtml(r.error || 'Gagal memuat repo') + '</span></div>';
         refreshIcons();
         return;
       }
@@ -1083,10 +1113,8 @@ textarea#editor::placeholder{color:var(--dim)}
     });
     if (list.length === 0) {
       el.repoList.innerHTML =
-        '<div class="empty-state">' +
-        '<i data-lucide="folder-open"></i>' +
-        '<span>' + (state.repos.length === 0 ? 'Tidak ada repo' : 'Tidak ada hasil') + '</span>' +
-        '</div>';
+        '<div class="empty-state"><i data-lucide="folder-open"></i><span>' +
+        (state.repos.length === 0 ? 'Tidak ada repo' : 'Tidak ada hasil') + '</span></div>';
       refreshIcons();
       return;
     }
@@ -1098,8 +1126,7 @@ textarea#editor::placeholder{color:var(--dim)}
         '<div class="repo-card-icon"><i data-lucide="' +
           (r.private ? 'lock' : 'book') + '"></i></div>' +
         '<div class="repo-card-main">' +
-        '  <div class="repo-card-name">' +
-             escapeHtml(r.name) +
+        '  <div class="repo-card-name">' + escapeHtml(r.name) +
              (r.private ? '<span class="repo-tag private">Private</span>' : '') +
         '  </div>' +
         '  <div class="repo-card-owner">' + escapeHtml(r.owner) + '</div>' +
@@ -1130,7 +1157,6 @@ textarea#editor::placeholder{color:var(--dim)}
     showRepoPicker();
   });
 
-  // ===== APP =====
   function openApp(repoFull){
     el.app.classList.remove('hidden');
     el.repoName.textContent = repoFull;
@@ -1166,17 +1192,50 @@ textarea#editor::placeholder{color:var(--dim)}
     });
   });
 
+  // ===== BREADCRUMB =====
+  function updateBreadcrumb(){
+    var path = state.currentDir;
+    el.breadcrumb.innerHTML = '<i data-lucide="folder"></i>';
+    var rootSpan = document.createElement('span');
+    rootSpan.className = 'crumb' + (path ? '' : ' active');
+    rootSpan.textContent = 'root';
+    rootSpan.addEventListener('click', function(){ if (path) loadList(''); });
+    el.breadcrumb.appendChild(rootSpan);
+
+    if (path) {
+      var parts = path.split('/').filter(Boolean);
+      var accumulated = '';
+      parts.forEach(function(part, idx){
+        var sep = document.createElement('span');
+        sep.className = 'sep';
+        sep.textContent = '/';
+        el.breadcrumb.appendChild(sep);
+
+        accumulated += (accumulated ? '/' : '') + part;
+        var crumbPath = accumulated;
+        var isLast = idx === parts.length - 1;
+        var span = document.createElement('span');
+        span.className = 'crumb' + (isLast ? ' active' : '');
+        span.textContent = part;
+        if (!isLast) {
+          span.addEventListener('click', function(){ loadList(crumbPath); });
+        }
+        el.breadcrumb.appendChild(span);
+      });
+    }
+    refreshIcons();
+  }
+
   // ===== FILE LIST =====
   function loadList(dir){
     state.currentDir = dir || '';
+    updateBreadcrumb();
     el.fileList.innerHTML = '<div class="empty-state"><div class="spinner"></div><span>Memuat...</span></div>';
-    api('list', { path: state.currentDir }).then(function(r){
+    return api('list', { path: state.currentDir }).then(function(r){
       if (!r.ok) {
         el.fileList.innerHTML =
-          '<div class="empty-state">' +
-          '<i data-lucide="alert-circle"></i>' +
-          '<span>' + escapeHtml(r.error || 'Gagal memuat') + '</span>' +
-          '</div>';
+          '<div class="empty-state"><i data-lucide="alert-circle"></i><span>' +
+          escapeHtml(r.error || 'Gagal memuat') + '</span></div>';
         refreshIcons();
         return;
       }
@@ -1186,15 +1245,14 @@ textarea#editor::placeholder{color:var(--dim)}
   }
 
   function renderList(){
-    var items = state.items.slice().sort(function(a, b){
-      if (a.type === b.type) return a.name.localeCompare(b.name);
-      return a.type === 'dir' ? -1 : 1;
-    });
+    var items = state.items;
     el.fileList.innerHTML = '';
+
+    // UP button if in subfolder
     if (state.currentDir) {
       var up = document.createElement('div');
-      up.className = 'file-item';
-      up.innerHTML = '<i data-lucide="corner-left-up"></i><span class="fname">..</span>';
+      up.className = 'file-item up-btn';
+      up.innerHTML = '<i data-lucide="corner-left-up"></i><span>Kembali ke atas</span>';
       up.addEventListener('click', function(){
         var parts = state.currentDir.split('/').filter(Boolean);
         parts.pop();
@@ -1202,34 +1260,128 @@ textarea#editor::placeholder{color:var(--dim)}
       });
       el.fileList.appendChild(up);
     }
+
     if (items.length === 0) {
-      el.fileList.innerHTML =
-        '<div class="empty-state">' +
-        '<i data-lucide="folder-open"></i>' +
-        '<span>' + (state.currentDir ? 'Folder kosong' : 'Repo kosong') + '</span>' +
-        '</div>';
+      el.fileList.innerHTML +=
+        '<div class="empty-state"><i data-lucide="folder-open"></i><span>' +
+        (state.currentDir ? 'Folder kosong' : 'Repo kosong') + '</span></div>';
       refreshIcons();
       return;
     }
+
+    // Group items
+    var grouped = {};
     items.forEach(function(item){
-      var div = document.createElement('div');
-      div.className = 'file-item';
-      var iconName = iconFor(item.name, item.type);
-      div.innerHTML =
-        '<i data-lucide="' + iconName + '"></i>' +
-        '<span class="fname">' + escapeHtml(item.name) + '</span>';
-      if (state.currentFile === item.path) div.classList.add('active');
-      div.addEventListener('click', function(){
-        if (item.type === 'dir') loadList(item.path);
-        else openFile(item.path);
-      });
-      el.fileList.appendChild(div);
+      var cat = categorizeFile(item.name, item.type);
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(item);
     });
+
+    Object.keys(grouped).forEach(function(k){
+      grouped[k].sort(function(a, b){ return a.name.localeCompare(b.name); });
+    });
+
+    var collapsedList = getCollapsed();
+
+    // Render each category present
+    CATEGORIES.forEach(function(cat){
+      var catItems = grouped[cat.key];
+      if (!catItems || catItems.length === 0) return;
+
+      var isCollapsed = collapsedList.indexOf(cat.key) !== -1;
+
+      var section = document.createElement('div');
+      section.className = 'file-section';
+
+      var header = document.createElement('div');
+      header.className = 'file-section-header' + (isCollapsed ? ' collapsed' : '');
+      header.innerHTML =
+        '<span class="section-arrow"><i data-lucide="chevron-down"></i></span>' +
+        '<span class="section-icon" style="color:' + cat.color + '">' +
+          '<i data-lucide="' + cat.icon + '"></i></span>' +
+        '<span class="section-label">' + cat.label + '</span>' +
+        '<span class="section-count">' + catItems.length + '</span>';
+
+      var body = document.createElement('div');
+      body.className = 'file-section-body' + (isCollapsed ? ' hidden' : '');
+
+      header.addEventListener('click', function(){
+        var isNowCollapsed = !header.classList.contains('collapsed');
+        header.classList.toggle('collapsed');
+        body.classList.toggle('hidden');
+
+        var c = getCollapsed();
+        var idx = c.indexOf(cat.key);
+        if (isNowCollapsed) {
+          if (idx === -1) c.push(cat.key);
+        } else {
+          if (idx !== -1) c.splice(idx, 1);
+        }
+        setCollapsed(c);
+      });
+
+      catItems.forEach(function(item){
+        var div = document.createElement('div');
+        div.className = 'file-item';
+        var iconName = cat.key === 'folders' ? 'folder' : iconNameForFile(item.name);
+        var meta = '';
+        if (item.type === 'file' && item.size != null) {
+          meta = formatSize(item.size);
+        }
+        div.innerHTML =
+          '<i data-lucide="' + iconName + '" style="color:' + cat.color + '"></i>' +
+          '<span class="fname">' + escapeHtml(item.name) + '</span>' +
+          (meta ? '<span class="fmeta">' + meta + '</span>' : '');
+        if (state.currentFile === item.path) div.classList.add('active');
+        div.addEventListener('click', function(){
+          if (item.type === 'dir') loadList(item.path);
+          else openFile(item.path);
+        });
+        body.appendChild(div);
+      });
+
+      section.appendChild(header);
+      section.appendChild(body);
+      el.fileList.appendChild(section);
+    });
+
     refreshIcons();
+  }
+
+  function formatSize(bytes){
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function iconNameForFile(name){
+    var idx = name.lastIndexOf('.');
+    var ext = idx > 0 ? name.slice(idx + 1).toLowerCase() : '';
+    if (ext === 'html' || ext === 'htm') return 'file-code-2';
+    if (ext === 'css' || ext === 'scss' || ext === 'sass' || ext === 'less') return 'palette';
+    if (ext === 'js' || ext === 'mjs' || ext === 'cjs' ||
+        ext === 'ts' || ext === 'tsx' || ext === 'jsx') return 'file-code-2';
+    if (ext === 'json' || ext === 'yml' || ext === 'yaml' || ext === 'toml' ||
+        ext === 'ini' || ext === 'env' || ext === 'lock' || ext === 'xml') return 'settings';
+    if (ext === 'md' || ext === 'mdx' || ext === 'txt' || ext === 'log' || ext === 'csv') return 'file-text';
+    if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif' ||
+        ext === 'svg' || ext === 'webp' || ext === 'ico' || ext === 'bmp') return 'image';
+    if (ext === 'mp4' || ext === 'mov' || ext === 'webm' || ext === 'avi' || ext === 'mkv') return 'video';
+    if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'm4a' || ext === 'flac') return 'music';
+    if (ext === 'zip' || ext === 'rar' || ext === '7z' || ext === 'tar' || ext === 'gz') return 'archive';
+    return 'file';
   }
 
   // ===== OPEN FILE =====
   function openFile(path){
+    // Auto-expand section for this file
+    var fileName = path.split('/').pop();
+    var cat = categorizeFile(fileName, 'file');
+    if (expandSection(cat)) {
+      // re-render to expand
+      renderList();
+    }
+
     el.editor.value = '';
     el.editor.placeholder = 'Memuat...';
     el.currentPath.innerHTML = '<i data-lucide="loader"></i><span>' + escapeHtml(path) + '</span>';
@@ -1237,6 +1389,7 @@ textarea#editor::placeholder{color:var(--dim)}
     el.deleteBtn.disabled = true;
     state.isNewFile = false;
     refreshIcons();
+
     api('read', { path: path }).then(function(r){
       el.editor.placeholder = 'Pilih file dari daftar, atau buat file baru...';
       if (!r.ok) {
@@ -1328,10 +1481,8 @@ textarea#editor::placeholder{color:var(--dim)}
       var prefix = state.currentDir ? state.currentDir + '/' : '';
       var fullPath = prefix + clean;
 
-      // Check exists
       api('exists', { path: fullPath }).then(function(check){
         var proceed = function(){
-          // Create empty file immediately
           api('write', {
             path: fullPath,
             content: '',
@@ -1357,9 +1508,7 @@ textarea#editor::placeholder{color:var(--dim)}
             okText: 'Timpa',
             danger: true
           }).then(function(ok){
-            if (ok) {
-              openFile(fullPath);
-            }
+            if (ok) openFile(fullPath);
           });
         } else {
           proceed();
@@ -1533,9 +1682,7 @@ textarea#editor::placeholder{color:var(--dim)}
     el.previewUrl.value = savedUrl || '';
     var collapsed = localStorage.getItem(LS_PREVIEW_COLLAPSED);
     if (collapsed === null) {
-      // default collapsed on mobile, expanded on desktop
-      var isDesktop = window.innerWidth >= 900;
-      if (isDesktop) el.previewBar.classList.remove('collapsed');
+      if (window.innerWidth >= 900) el.previewBar.classList.remove('collapsed');
     } else if (collapsed === '0') {
       el.previewBar.classList.remove('collapsed');
     }
