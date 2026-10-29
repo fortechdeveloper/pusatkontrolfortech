@@ -12,24 +12,88 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#000;--surface:#0b1220;--surface2:#101a2e;
+  --bg:#000;--surface:#0b1220;--surface2:#101a2e;--surface3:#16223a;
   --line:#1c2a44;--text:#eaf0fa;--text2:#a8b6d0;--mute:#5f6d8c;--dim:#3d4a68;
   --accent:#38bdf8;--accent2:#60a5fa;--accent3:#818cf8;
   --success:#22c55e;--danger:#ef4444;--warning:#f59e0b;
   --shl:0 20px 60px rgba(0,0,0,.7);
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
-  --prev-h:460px;
+  --prev-h:420px;
 }
 html,body{height:100%;width:100%;overscroll-behavior:none}
-body{font-family:'Inter',sans-serif;color:var(--text);font-size:14px;line-height:1.5;
-  -webkit-font-smoothing:antialiased;overflow:hidden;background:var(--bg)}
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--text);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow:hidden;background:var(--bg);
+}
+
+/* =============================================================
+   ANIMATED BACKGROUND
+   ============================================================= */
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-base{
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(56,189,248,.1) 0%,transparent 55%),
-    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(129,140,248,.06) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 40% at 0% 80%,rgba(96,165,250,.05) 0%,transparent 55%),
-    linear-gradient(180deg,#050810 0%,#03050a 40%,#000 100%)}
+    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(56,189,248,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(129,140,248,.05) 0%,transparent 55%),
+    linear-gradient(180deg,#050810 0%,#03050a 40%,#000 100%);
+}
+.bg-grid{
+  background-image:
+    linear-gradient(rgba(56,189,248,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(56,189,248,.028) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 0%,transparent 85%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 0%,transparent 85%);
+  animation:gridDrift 60s linear infinite;
+}
+@keyframes gridDrift{
+  from{background-position:0 0,0 0}
+  to{background-position:64px 64px,64px 64px}
+}
+
+.bg-orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none;z-index:0;will-change:transform}
+.orb-1{width:520px;height:520px;top:-180px;left:-180px;
+  background:radial-gradient(circle,#38bdf8 0%,transparent 70%);
+  animation:orbMove1 26s ease-in-out infinite}
+.orb-2{width:460px;height:460px;bottom:-200px;right:-160px;
+  background:radial-gradient(circle,#818cf8 0%,transparent 70%);
+  animation:orbMove2 32s ease-in-out infinite}
+.orb-3{width:380px;height:380px;top:40%;left:45%;
+  background:radial-gradient(circle,#60a5fa 0%,transparent 70%);
+  opacity:.22;animation:orbMove3 40s ease-in-out infinite}
+@keyframes orbMove1{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(180px,120px) scale(1.15)}
+  66%{transform:translate(80px,220px) scale(.9)}
+}
+@keyframes orbMove2{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(-160px,-140px) scale(1.1)}
+  66%{transform:translate(-60px,-220px) scale(.95)}
+}
+@keyframes orbMove3{
+  0%,100%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-30%,-70%) scale(1.25)}
+}
+
+.bg-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-particle{
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:rgba(56,189,248,.6);box-shadow:0 0 6px rgba(56,189,248,.8);
+  animation:particleFloat linear infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) translateX(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-100px) translateX(40px);opacity:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .bg-orb,.bg-grid,.bg-particle{animation:none!important}
+}
+
 button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;outline:none}
 button{cursor:pointer;user-select:none;-webkit-user-select:none}
 .hidden{display:none!important}
@@ -45,10 +109,10 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   min-height:100vh;min-height:100dvh;padding:20px;
   padding-top:calc(20px + var(--safe-t));padding-bottom:calc(20px + var(--safe-b))}
 .login-card{width:100%;max-width:380px;
-  background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(7,11,20,.95));
+  background:linear-gradient(180deg,rgba(16,26,46,.85),rgba(7,11,20,.92));
   border:1px solid var(--line);border-radius:24px;padding:40px 28px 32px;
   box-shadow:var(--shl),inset 0 1px 0 rgba(255,255,255,.04);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   position:relative;overflow:hidden;animation:cardIn .6s cubic-bezier(.2,.8,.2,1)}
 .login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.6}
@@ -56,8 +120,8 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   border-radius:20px;display:flex;align-items:center;justify-content:center;
   margin:0 auto 20px;color:#050810;box-shadow:0 12px 32px rgba(56,189,248,.35)}
 .login-logo svg{width:32px;height:32px;stroke-width:2.5}
-.login-title{font-size:24px;font-weight:800;text-align:center;letter-spacing:-.6px;
-  margin-bottom:6px;background:linear-gradient(135deg,#fff,#cbd5e1);
+.login-title{font-size:24px;font-weight:800;text-align:center;letter-spacing:-.6px;margin-bottom:6px;
+  background:linear-gradient(135deg,#fff,#cbd5e1);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .login-sub{font-size:13px;color:var(--mute);text-align:center;margin-bottom:28px}
 .input-wrap{position:relative}
@@ -86,7 +150,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   height:100vh;height:100dvh;overflow:hidden}
 .repo-header{display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;padding-top:calc(14px + var(--safe-t));
-  background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+  background:rgba(5,8,16,.5);backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
   flex-shrink:0;gap:12px}
 .repo-header-left{display:flex;align-items:center;gap:12px}
@@ -110,7 +174,8 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 .repo-card{background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(7,11,20,.7));
   border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;
   transition:all .15s;display:flex;align-items:flex-start;gap:12px}
-.repo-card:hover{border-color:rgba(56,189,248,.5);background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(7,11,20,.95))}
+.repo-card:hover{border-color:rgba(56,189,248,.5);
+  background:linear-gradient(180deg,rgba(16,26,46,.9),rgba(7,11,20,.95))}
 .repo-card:active{transform:scale(.99)}
 .repo-card-icon{width:38px;height:38px;flex-shrink:0;border-radius:10px;
   background:var(--surface2);display:flex;align-items:center;justify-content:center;
@@ -135,7 +200,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   height:100vh;height:100dvh;overflow:hidden}
 .app-header{display:flex;align-items:center;justify-content:space-between;
   padding:12px 16px;padding-top:calc(12px + var(--safe-t));
-  background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+  background:rgba(5,8,16,.5);backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
   flex-shrink:0;gap:10px;z-index:10}
 .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
@@ -156,7 +221,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 .icon-btn:hover{color:var(--text);background:var(--surface);border-color:var(--line)}
 .icon-btn.danger:hover{color:var(--danger);border-color:rgba(239,68,68,.4);
   background:rgba(239,68,68,.08)}
-.tab-bar{display:flex;background:rgba(5,8,16,.6);backdrop-filter:blur(20px);
+.tab-bar{display:flex;background:rgba(5,8,16,.5);backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
   padding:0 12px;flex-shrink:0;gap:4px;z-index:9}
 .tab-btn{flex:1;padding:14px 8px;display:flex;align-items:center;justify-content:center;
@@ -165,17 +230,14 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 .tab-btn:hover{color:var(--text2)}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-btn svg{width:16px;height:16px}
-.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
-.tab-panel{flex:1;overflow:hidden;display:none;flex-direction:column}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;min-height:0}
+.tab-panel{flex:1;overflow:hidden;display:none;flex-direction:column;min-height:0}
 .tab-panel.active{display:flex}
 
 /* FILES */
-.workbench{flex:1;display:flex;flex-direction:column;overflow:hidden}
-@media(min-width:900px){.workbench{flex-direction:row}}
+.workbench{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .file-sidebar{display:flex;flex-direction:column;background:rgba(5,8,16,.4);
-  border-bottom:1px solid var(--line);max-height:38%;flex-shrink:0;overflow:hidden}
-@media(min-width:900px){.file-sidebar{width:300px;max-height:none;
-  border-bottom:none;border-right:1px solid var(--line);flex-shrink:0}}
+  border-bottom:1px solid var(--line);max-height:38%;flex-shrink:0;overflow:hidden;min-height:0}
 .sidebar-head{padding:10px 12px;display:flex;gap:6px;
   border-bottom:1px solid var(--line);flex-shrink:0;background:rgba(7,11,20,.6)}
 .btn-mini{padding:8px 12px;background:var(--surface);border:1px solid var(--line);
@@ -192,7 +254,7 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
 .btn-mini.grow{flex:1}
 .btn-mini:disabled{opacity:.4;cursor:not-allowed}
 .file-list{overflow-y:auto;padding:8px;flex:1;-webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;min-height:0}
 .file-list::-webkit-scrollbar{width:6px}
 .file-list::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 .file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
@@ -211,22 +273,24 @@ svg.lucide{width:18px;height:18px;stroke-width:2;flex-shrink:0}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;
   display:flex;align-items:center;gap:6px}
 .path-label.has-file{color:var(--accent)}
+.path-label .unsaved{color:var(--warning);font-size:10px;font-weight:700;
+  padding:2px 6px;background:rgba(245,158,11,.15);border-radius:4px;
+  text-transform:uppercase;letter-spacing:.5px;margin-left:6px}
 .editor-actions{display:flex;gap:6px}
 textarea#editor{flex:1;width:100%;background:rgba(0,0,0,.4);padding:16px;
   font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;
   resize:none;color:var(--text);-webkit-overflow-scrolling:touch;
-  border:none;scrollbar-width:thin;tab-size:2}
+  border:none;scrollbar-width:thin;tab-size:2;min-height:0}
 textarea#editor::-webkit-scrollbar{width:8px}
 textarea#editor::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
 textarea#editor::placeholder{color:var(--dim)}
 
 /* PREVIEW */
-.preview-bar{flex-shrink:0;background:rgba(5,8,16,.8);backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);
+.preview-bar{flex-shrink:0;background:rgba(5,8,16,.75);backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);border-top:1px solid var(--line);
   transition:height .3s cubic-bezier(.2,.8,.2,1);position:relative;z-index:8;overflow:hidden}
 .preview-bar.collapsed{height:52px}
 .preview-bar:not(.collapsed){height:var(--prev-h)}
-@media(max-height:700px){.preview-bar:not(.collapsed){height:380px}}
 .preview-header{display:flex;align-items:center;gap:8px;padding:10px 14px;
   height:52px;border-bottom:1px solid var(--line);flex-shrink:0}
 .preview-label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
@@ -253,8 +317,7 @@ textarea#editor::placeholder{color:var(--dim)}
 .phone-frame{width:240px;height:100%;max-height:100%;aspect-ratio:9/19;background:#000;
   border:8px solid #10141c;border-radius:32px;position:relative;
   box-shadow:0 0 0 2px #1a1f2b,0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(56,189,248,.15);
-  overflow:hidden;flex-shrink:0;transition:opacity .3s}
-@media(max-height:600px){.phone-frame{width:180px}}
+  overflow:hidden;flex-shrink:0}
 .phone-notch{position:absolute;top:6px;left:50%;transform:translateX(-50%);
   width:90px;height:20px;background:#000;border-radius:999px;z-index:5}
 .phone-notch::before{content:'';position:absolute;right:10px;top:50%;
@@ -279,11 +342,10 @@ textarea#editor::placeholder{color:var(--dim)}
   align-items:center;gap:6px;transition:all .15s}
 .preview-placeholder .ph-btn:hover{box-shadow:0 6px 20px rgba(56,189,248,.4)}
 .preview-placeholder .ph-btn svg{width:14px;height:14px;opacity:1;color:#050810}
-@media(max-width:640px){.preview-label span{display:none}.phone-frame{width:200px}}
 
 /* MAINTENANCE */
 .maint-wrap{flex:1;overflow-y:auto;padding:20px;
-  padding-bottom:calc(20px + var(--safe-b));-webkit-overflow-scrolling:touch}
+  padding-bottom:calc(20px + var(--safe-b));-webkit-overflow-scrolling:touch;min-height:0}
 .maint-container{max-width:560px;margin:0 auto;display:flex;
   flex-direction:column;gap:16px}
 .card{background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(7,11,20,.7));
@@ -322,8 +384,7 @@ textarea#editor::placeholder{color:var(--dim)}
 .huge-btn:active:not(:disabled){transform:translateY(0) scale(.98)}
 .huge-btn:disabled{opacity:.6;cursor:not-allowed}
 .huge-btn svg{width:36px;height:36px;stroke-width:2.2}
-.huge-btn .sub{font-size:11px;font-weight:500;opacity:.9;
-  letter-spacing:.5px;text-transform:none}
+.huge-btn .sub{font-size:11px;font-weight:500;opacity:.9;letter-spacing:.5px;text-transform:none}
 .restore-btn{width:100%;padding:14px;margin-top:10px;border-radius:10px;
   background:var(--surface2);border:1px solid var(--line);color:var(--text2);
   font-weight:600;font-size:13px;display:flex;align-items:center;
@@ -348,9 +409,9 @@ textarea#editor::placeholder{color:var(--dim)}
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   display:flex;align-items:center;justify-content:center;padding:20px;
   animation:fadeIn .2s}
-.modal{width:100%;max-width:400px;
-  background:linear-gradient(180deg,rgba(16,26,46,.95),rgba(7,11,20,.98));
-  border:1px solid var(--line);border-radius:24px;padding:26px;
+.modal{width:100%;max-width:420px;
+  background:linear-gradient(180deg,rgba(16,26,46,.97),rgba(7,11,20,.98));
+  border:1px solid var(--line);border-radius:20px;padding:26px;
   box-shadow:var(--shl);animation:cardIn .3s cubic-bezier(.2,.8,.2,1);
   position:relative;overflow:hidden}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
@@ -367,7 +428,7 @@ textarea#editor::placeholder{color:var(--dim)}
 .modal h3{font-size:18px;font-weight:700;text-align:center;
   margin-bottom:10px;letter-spacing:-.3px}
 .modal p{font-size:13px;color:var(--text2);text-align:center;
-  line-height:1.6;margin-bottom:22px}
+  line-height:1.6;margin-bottom:20px}
 .modal p b{color:var(--accent);font-weight:600}
 .modal-actions{display:flex;gap:8px}
 .modal-btn{flex:1;padding:13px;border-radius:10px;font-weight:700;
@@ -379,6 +440,21 @@ textarea#editor::placeholder{color:var(--dim)}
 .modal-btn.confirm.danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:white}
 .modal-btn.confirm.danger:hover{box-shadow:0 8px 24px rgba(239,68,68,.4)}
 .modal-btn:active{transform:scale(.97)}
+.modal-btn:disabled{opacity:.6;cursor:not-allowed}
+
+/* NEW FILE MODAL */
+.new-file-input-wrap{margin-bottom:8px;text-align:left}
+.new-file-input-wrap label{display:block;font-size:11px;font-weight:700;
+  color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.new-file-input-wrap input{width:100%;padding:12px 14px;
+  background:rgba(7,11,20,.8);border:1px solid var(--line);border-radius:10px;
+  font-family:'JetBrains Mono',monospace;font-size:14px;transition:all .18s}
+.new-file-input-wrap input:focus{border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.new-file-hint{font-size:11px;color:var(--mute);line-height:1.5;
+  text-align:left;margin-bottom:16px}
+.new-file-hint code{font-family:'JetBrains Mono',monospace;
+  padding:1px 5px;background:var(--surface2);border-radius:3px;color:var(--accent)}
 
 /* TOAST */
 #toast{position:fixed;left:50%;bottom:calc(20px + var(--safe-b));
@@ -398,11 +474,69 @@ textarea#editor::placeholder{color:var(--dim)}
 #toast.error svg{color:var(--danger)}
 #toast.info{border-color:rgba(56,189,248,.5)}
 #toast.info svg{color:var(--accent)}
+
+/* =============================================================
+   DESKTOP LAYOUT
+   ============================================================= */
+@media(min-width:900px){
+  :root{--prev-h:360px}
+  .workbench{flex-direction:row}
+  .file-sidebar{width:320px;max-height:none;border-bottom:none;
+    border-right:1px solid var(--line);flex-shrink:0}
+  .file-list{padding:10px}
+  .file-item{padding:11px 14px;font-size:13.5px}
+  .sidebar-head{padding:12px 14px;gap:8px}
+  .btn-mini{padding:9px 14px;font-size:12.5px}
+  .editor-head{padding:12px 20px}
+  .path-label{font-size:13px}
+  textarea#editor{padding:20px 24px;font-size:13.5px;line-height:1.75}
+  .app-header{padding:14px 24px;padding-top:calc(14px + var(--safe-t))}
+  .brand-title{font-size:15px}
+  .brand-repo{font-size:12.5px}
+  .brand-icon{width:38px;height:38px}
+  .brand-icon svg{width:20px;height:20px}
+  .icon-btn{width:40px;height:40px}
+  .tab-btn{padding:16px 12px;font-size:14px}
+  .preview-label span{display:inline}
+  .phone-frame{width:200px}
+  .maint-wrap{padding:28px}
+  .card{padding:26px}
+  .card h2{font-size:17px}
+  .card p{font-size:13.5px}
+  .huge-btn{font-size:17px;padding:32px 24px}
+  .huge-btn svg{width:42px;height:42px}
+  .login-card{padding:48px 36px 40px;max-width:400px}
+  .login-title{font-size:26px}
+  .login-logo{width:76px;height:76px}
+  .login-logo svg{width:36px;height:36px}
+}
+@media(min-width:1280px){
+  .file-sidebar{width:340px}
+  :root{--prev-h:400px}
+  .phone-frame{width:220px}
+  .maint-container{max-width:720px}
+  .maint-wrap{padding:32px}
+}
+@media(min-width:1600px){
+  .file-sidebar{width:380px}
+  .maint-container{max-width:800px}
+  textarea#editor{padding:24px 32px;font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;
+    animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
+<!-- ANIMATED BG -->
+<div class="bg-layer bg-base"></div>
+<div class="bg-layer bg-grid"></div>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+<div class="bg-particles" id="particles"></div>
 
 <!-- LOGIN -->
 <div id="loginView">
@@ -535,7 +669,6 @@ textarea#editor::placeholder{color:var(--dim)}
               <span class="status-dot"></span><span>Checking</span>
             </div>
           </div>
-
           <div class="card">
             <div class="card-header">
               <div class="card-icon warning"><i data-lucide="alert-triangle"></i></div>
@@ -558,7 +691,6 @@ textarea#editor::placeholder{color:var(--dim)}
               <span>Restore dari Backup</span>
             </button>
           </div>
-
           <div class="card">
             <div class="card-header">
               <div class="card-icon success"><i data-lucide="shield-check"></i></div>
@@ -573,7 +705,7 @@ textarea#editor::placeholder{color:var(--dim)}
     </section>
   </main>
 
-  <div class="preview-bar" id="previewBar">
+  <div class="preview-bar collapsed" id="previewBar">
     <div class="preview-header">
       <div class="preview-label">
         <i data-lucide="smartphone"></i><span>Preview</span>
@@ -589,23 +721,24 @@ textarea#editor::placeholder{color:var(--dim)}
         <button class="icon-btn" id="previewRefresh" title="Refresh">
           <i data-lucide="refresh-cw"></i>
         </button>
-        <button class="icon-btn" id="previewToggle" title="Sembunyikan">
-          <i data-lucide="chevron-down"></i>
+        <button class="icon-btn" id="previewToggle" title="Tampilkan">
+          <i data-lucide="chevron-up"></i>
         </button>
       </div>
     </div>
     <div class="preview-body">
       <div class="preview-bg-glow"></div>
-      <div class="phone-frame" id="phoneFrame">
+      <div class="phone-frame hidden" id="phoneFrame">
         <div class="phone-notch"></div>
         <div class="phone-screen">
           <iframe id="previewIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="preview-placeholder hidden" id="previewPlaceholder">
+      <div class="preview-placeholder" id="previewPlaceholder">
         <i data-lucide="link"></i>
-        <span>Masukkan URL untuk preview</span>
+        <span class="ph-title">Preview Website</span>
+        <span class="ph-desc">Masukkan URL website yang mau di-preview</span>
       </div>
     </div>
   </div>
@@ -663,19 +796,41 @@ textarea#editor::placeholder{color:var(--dim)}
     toast: document.getElementById('toast'),
     tabBtns: document.querySelectorAll('.tab-btn'),
     filesTab: document.getElementById('filesTab'),
-    maintenanceTab: document.getElementById('maintenanceTab')
+    maintenanceTab: document.getElementById('maintenanceTab'),
+    particles: document.getElementById('particles')
   };
 
   var state = {
     currentDir: '',
     currentFile: null,
     currentSha: null,
+    isNewFile: false,
     items: [],
     repos: [],
     repo: null,
-    branch: 'main',
-    previewTimer: null
+    branch: 'main'
   };
+
+  // ===== PARTICLES =====
+  (function initParticles(){
+    if (!el.particles) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var count = window.innerWidth < 900 ? 12 : 24;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'bg-particle';
+      var left = Math.random() * 100;
+      var delay = Math.random() * 20;
+      var dur = 15 + Math.random() * 20;
+      var op = 0.2 + Math.random() * 0.5;
+      p.style.left = left + '%';
+      p.style.bottom = '-10px';
+      p.style.opacity = op;
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = '-' + delay + 's';
+      el.particles.appendChild(p);
+    }
+  })();
 
   function refreshIcons(){
     if (window.lucide && window.lucide.createIcons) {
@@ -731,6 +886,7 @@ textarea#editor::placeholder{color:var(--dim)}
     });
   }
 
+  // ===== MODAL CONFIRM =====
   function confirmModal(opts){
     return new Promise(function(resolve){
       var overlay = document.createElement('div');
@@ -760,6 +916,77 @@ textarea#editor::placeholder{color:var(--dim)}
         var btn = e.target.closest('[data-act]');
         if (!btn) return;
         close(btn.dataset.act === 'ok');
+      });
+    });
+  }
+
+  // ===== NEW FILE MODAL =====
+  function newFileModal(){
+    return new Promise(function(resolve){
+      var overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      var prefix = state.currentDir ? state.currentDir + '/' : '';
+      overlay.innerHTML =
+        '<div class="modal">' +
+        '  <div class="modal-icon info"><i data-lucide="file-plus"></i></div>' +
+        '  <h3>File Baru</h3>' +
+        '  <p>Masukkan nama file. Bisa pakai folder, contoh: <b>src/app.js</b></p>' +
+        '  <div class="new-file-input-wrap">' +
+        '    <label for="newFileName">Nama File</label>' +
+        '    <input id="newFileName" type="text" placeholder="contoh: styles.css" spellcheck="false" autocomplete="off" />' +
+        '  </div>' +
+        '  <div class="new-file-hint" id="newFileHint">' +
+        '    File akan dibuat di folder: <code>' + escapeHtml(prefix || '/') + '</code>' +
+        '  </div>' +
+        '  <div class="modal-actions">' +
+        '    <button class="modal-btn cancel" data-act="cancel">Batal</button>' +
+        '    <button class="modal-btn confirm" data-act="ok" id="newFileOk" disabled>Buat File</button>' +
+        '  </div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      refreshIcons();
+
+      var input = overlay.querySelector('#newFileName');
+      var okBtn = overlay.querySelector('#newFileOk');
+      var hint = overlay.querySelector('#newFileHint');
+
+      function updateHint(){
+        var v = input.value.trim().replace(/^\/+/, '');
+        if (!v) {
+          hint.innerHTML = 'File akan dibuat di folder: <code>' + escapeHtml(prefix || '/') + '</code>';
+          okBtn.disabled = true;
+          return;
+        }
+        var full = prefix + v;
+        hint.innerHTML = 'File akan dibuat: <code>' + escapeHtml(full) + '</code>';
+        okBtn.disabled = false;
+      }
+
+      input.addEventListener('input', updateHint);
+      input.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !okBtn.disabled) {
+          e.preventDefault();
+          close(input.value.trim());
+        }
+      });
+
+      setTimeout(function(){ input.focus(); }, 100);
+
+      function close(val){
+        overlay.style.opacity = '0';
+        setTimeout(function(){ overlay.remove(); }, 200);
+        resolve(val || null);
+      }
+
+      overlay.addEventListener('click', function(e){
+        if (e.target === overlay) return close(null);
+        var btn = e.target.closest('[data-act]');
+        if (!btn) return;
+        if (btn.dataset.act === 'ok') {
+          if (!okBtn.disabled) close(input.value.trim());
+        } else {
+          close(null);
+        }
       });
     });
   }
@@ -795,6 +1022,7 @@ textarea#editor::placeholder{color:var(--dim)}
       state.repo = null;
       state.currentFile = null;
       state.currentSha = null;
+      state.isNewFile = false;
       el.editor.value = '';
       el.app.classList.add('hidden');
       el.repoView.classList.add('hidden');
@@ -897,6 +1125,7 @@ textarea#editor::placeholder{color:var(--dim)}
     state.repo = null;
     state.currentFile = null;
     state.currentSha = null;
+    state.isNewFile = false;
     el.editor.value = '';
     showRepoPicker();
   });
@@ -908,6 +1137,7 @@ textarea#editor::placeholder{color:var(--dim)}
     state.currentDir = '';
     state.currentFile = null;
     state.currentSha = null;
+    state.isNewFile = false;
     el.editor.value = '';
     el.currentPath.classList.remove('has-file');
     el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
@@ -1005,6 +1235,7 @@ textarea#editor::placeholder{color:var(--dim)}
     el.currentPath.innerHTML = '<i data-lucide="loader"></i><span>' + escapeHtml(path) + '</span>';
     el.saveBtn.disabled = true;
     el.deleteBtn.disabled = true;
+    state.isNewFile = false;
     refreshIcons();
     api('read', { path: path }).then(function(r){
       el.editor.placeholder = 'Pilih file dari daftar, atau buat file baru...';
@@ -1036,13 +1267,15 @@ textarea#editor::placeholder{color:var(--dim)}
     el.saveBtn.innerHTML = '<div class="spinner"></div>';
     api('write', {
       path: state.currentFile,
-      content: el.editor.value
+      content: el.editor.value,
+      isNew: state.isNewFile
     }).then(function(r){
       el.saveBtn.disabled = false;
       el.saveBtn.innerHTML = '<i data-lucide="save"></i><span>Simpan</span>';
       refreshIcons();
       if (r.ok) {
-        toast('Tersimpan — preview refresh nanti', 'success');
+        toast(state.isNewFile ? 'File dibuat' : 'Tersimpan', 'success');
+        state.isNewFile = false;
         loadList(state.currentDir);
         if (/index\.html?$/i.test(state.currentFile)) {
           setTimeout(refreshPreview, 3000);
@@ -1071,6 +1304,7 @@ textarea#editor::placeholder{color:var(--dim)}
           toast('File terhapus', 'success');
           state.currentFile = null;
           state.currentSha = null;
+          state.isNewFile = false;
           el.editor.value = '';
           el.currentPath.classList.remove('has-file');
           el.currentPath.innerHTML = '<i data-lucide="file"></i><span>Belum ada file dipilih</span>';
@@ -1087,40 +1321,50 @@ textarea#editor::placeholder{color:var(--dim)}
 
   // ===== NEW FILE =====
   el.newBtn.addEventListener('click', function(){
-    var name = prompt('Nama file (boleh dengan folder, contoh: src/app.js):');
-    if (!name) return;
-    var clean = name.trim().replace(/^\/+/, '');
-    if (!clean) return;
-    var fullPath = state.currentDir ? state.currentDir + '/' + clean : clean;
-    api('exists', { path: fullPath }).then(function(check){
-      var proceed = function(){
-        state.currentFile = fullPath;
-        state.currentSha = null;
-        el.currentPath.classList.add('has-file');
-        el.currentPath.innerHTML =
-          '<i data-lucide="file-plus"></i><span>' + escapeHtml(fullPath) + '</span>';
-        el.editor.value = '';
-        el.saveBtn.disabled = false;
-        el.deleteBtn.disabled = true;
-        el.editor.focus();
-        toast('Isi konten lalu klik Simpan', 'info');
-        renderList();
-        refreshIcons();
-      };
-      if (check.ok && check.exists) {
-        confirmModal({
-          title: 'File Sudah Ada',
-          message: '<b>' + escapeHtml(fullPath) + '</b> sudah ada. Timpa?',
-          icon: 'alert-triangle',
-          okText: 'Timpa',
-          danger: true
-        }).then(function(ok){
-          if (ok) proceed();
-          else openFile(fullPath);
-        });
-      } else {
-        proceed();
-      }
+    newFileModal().then(function(name){
+      if (!name) return;
+      var clean = name.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
+      if (!clean) { toast('Nama file tidak valid', 'error'); return; }
+      var prefix = state.currentDir ? state.currentDir + '/' : '';
+      var fullPath = prefix + clean;
+
+      // Check exists
+      api('exists', { path: fullPath }).then(function(check){
+        var proceed = function(){
+          // Create empty file immediately
+          api('write', {
+            path: fullPath,
+            content: '',
+            isNew: true,
+            message: 'Create ' + fullPath + ' via Fortech Panel'
+          }).then(function(r){
+            if (r.ok) {
+              toast('File dibuat', 'success');
+              loadList(state.currentDir).then(function(){
+                openFile(fullPath);
+              });
+            } else {
+              toast('Gagal buat file: ' + (r.error || ''), 'error');
+            }
+          });
+        };
+
+        if (check.ok && check.exists) {
+          confirmModal({
+            title: 'File Sudah Ada',
+            message: '<b>' + escapeHtml(fullPath) + '</b> sudah ada. Timpa isinya?',
+            icon: 'alert-triangle',
+            okText: 'Timpa',
+            danger: true
+          }).then(function(ok){
+            if (ok) {
+              openFile(fullPath);
+            }
+          });
+        } else {
+          proceed();
+        }
+      });
     });
   });
 
@@ -1287,8 +1531,14 @@ textarea#editor::placeholder{color:var(--dim)}
   function initPreview(){
     var savedUrl = localStorage.getItem(LS_PREVIEW_URL);
     el.previewUrl.value = savedUrl || '';
-    var collapsed = localStorage.getItem(LS_PREVIEW_COLLAPSED) === '1';
-    if (collapsed) el.previewBar.classList.add('collapsed');
+    var collapsed = localStorage.getItem(LS_PREVIEW_COLLAPSED);
+    if (collapsed === null) {
+      // default collapsed on mobile, expanded on desktop
+      var isDesktop = window.innerWidth >= 900;
+      if (isDesktop) el.previewBar.classList.remove('collapsed');
+    } else if (collapsed === '0') {
+      el.previewBar.classList.remove('collapsed');
+    }
     updateToggleIcon();
     refreshPreview();
 
@@ -1334,60 +1584,24 @@ textarea#editor::placeholder{color:var(--dim)}
   }
 
   function refreshPreview(){
-    clearTimeout(state.previewTimer);
     var url = el.previewUrl.value.trim();
     if (!url) {
       el.previewIframe.classList.add('hidden');
       el.phoneFrame.classList.add('hidden');
-      showPlaceholder('link', 'URL Preview Kosong', 'Masukkan URL website yang mau di-preview di kolom atas.', false);
+      el.previewPlaceholder.classList.remove('hidden');
+      el.previewPlaceholder.innerHTML =
+        '<i data-lucide="link"></i>' +
+        '<span class="ph-title">Preview Website</span>' +
+        '<span class="ph-desc">Masukkan URL website yang mau di-preview</span>';
+      refreshIcons();
       return;
     }
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-    el.previewIframe.classList.remove('hidden');
     el.phoneFrame.classList.remove('hidden');
+    el.previewIframe.classList.remove('hidden');
     el.previewPlaceholder.classList.add('hidden');
-
-    var target = url;
-    el.previewIframe.onload = function(){
-      clearTimeout(state.previewTimer);
-      state.previewTimer = setTimeout(function(){
-        // Cek kalau iframe accessible (kalau blocked, contentDocument = null)
-        try {
-          var doc = el.previewIframe.contentDocument;
-          if (!doc && !el.previewIframe.contentWindow) {
-            showPreviewBlocked(target);
-          }
-        } catch (e) {
-          // Cross-origin — normal, gak bisa dicek, biarin aja
-        }
-      }, 2500);
-    };
-
     var sep = url.indexOf('?') !== -1 ? '&' : '?';
     el.previewIframe.src = url + sep + '_t=' + Date.now();
-  }
-
-  function showPreviewBlocked(url){
-    el.previewIframe.classList.add('hidden');
-    el.phoneFrame.classList.add('hidden');
-    el.previewPlaceholder.classList.remove('hidden');
-    el.previewPlaceholder.innerHTML =
-      '<i data-lucide="shield-alert"></i>' +
-      '<span class="ph-title">Website blokir preview</span>' +
-      '<span class="ph-desc">Website ini melarang tampil di dalam iframe (X-Frame-Options / CSP). Klik tombol di bawah untuk buka langsung.</span>' +
-      '<a class="ph-btn" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' +
-        '<i data-lucide="external-link"></i> Buka di Tab Baru' +
-      '</a>';
-    refreshIcons();
-  }
-
-  function showPlaceholder(icon, title, desc, showBtn){
-    el.previewPlaceholder.classList.remove('hidden');
-    el.previewPlaceholder.innerHTML =
-      '<i data-lucide="' + icon + '"></i>' +
-      '<span class="ph-title">' + escapeHtml(title) + '</span>' +
-      '<span class="ph-desc">' + escapeHtml(desc) + '</span>';
-    refreshIcons();
   }
 
   window.addEventListener('load', refreshIcons);
